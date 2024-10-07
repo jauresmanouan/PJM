@@ -2,24 +2,16 @@ import { useState } from "react";
 import { Button } from "@/components/ui/reusable-ui/button";
 import { Input } from "@/components/ui/reusable-ui/input";
 import { Label } from "@/components/ui/reusable-ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/reusable-ui/select";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/reusable-ui/card";
+import ReactFlagsSelect from "react-flags-select";
 
-export default function Component() {
+import { Select } from "@/components/ui/reusable-ui/select";
+import { Card, CardContent } from "@/components/ui/reusable-ui/card";
+
+export default function Component({actionId, actionName, actionQuantity }) {
   const [contactMethod, setContactMethod] = useState<"whatsapp" | "telegram">(
     "whatsapp"
   );
+  const [selected, setSelected] = useState("");
 
   return (
     <Card className="w-full max-w-lg mx-auto pt-8">
@@ -36,12 +28,12 @@ export default function Component() {
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="roses">Nombre de roses</Label>
+            <Label htmlFor={actionId}>{actionName}</Label>
             <Input
-              id="roses"
+              id={actionId}
               type="number"
               min="1"
-              placeholder="Quantité"
+              placeholder={actionQuantity}
               required
             />
           </div>
@@ -57,23 +49,20 @@ export default function Component() {
           <div className="space-y-2">
             <Label htmlFor="pays">Pays</Label>
             <Select>
-              <SelectTrigger id="pays">
-                <SelectValue placeholder="Sélectionnez votre pays" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="france">France</SelectItem>
-                <SelectItem value="belgique">Belgique</SelectItem>
-                <SelectItem value="suisse">Suisse</SelectItem>
-                <SelectItem value="canada">Canada</SelectItem>
-                {/* Ajoutez d'autres pays selon vos besoins */}
-              </SelectContent>
+              <ReactFlagsSelect
+                id="flags-select"
+                selected={selected}
+                onSelect={(code) => setSelected(code)}
+                placeholder="Selectionner votre pays"
+                searchable
+                searchPlaceholder="Rechercher votre pays"
+              />
             </Select>
           </div>
           <div className="space-y-2">
             <Label>Méthode de contact préférée</Label>
             <div className="flex space-x-4">
               <Button
-                className=""
                 type="button"
                 variant={contactMethod === "whatsapp" ? "default" : "outline"}
                 onClick={() => setContactMethod("whatsapp")}
@@ -102,10 +91,7 @@ export default function Component() {
               required
             />
           </div>
-          <Button
-            type="submit"
-            className="w-full bg-bleu hover:bg-jaune hover:border-none focus:border-none"
-          >
+          <Button type="submit" className="w-full bg-bleu">
             Réjouir Marie
           </Button>
         </form>
