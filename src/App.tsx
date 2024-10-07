@@ -2,7 +2,7 @@ import FormPage from "./components/ui/pages/FormPage.tsx";
 
 function App() {
   return (
-    <div className="bg-black">
+    <div className="flex justify-center items-center h-screen w-screen">
       <FormPage />
     </div>
   );

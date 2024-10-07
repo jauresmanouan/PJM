@@ -1,18 +1,28 @@
-import { useState } from 'react'
-import { Button } from "@/components/ui/reusable-ui/button"
-import { Input } from "@/components/ui/reusable-ui/input"
-import { Label } from "@/components/ui/reusable-ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/reusable-ui/select"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/reusable-ui/card"
+import { useState } from "react";
+import { Button } from "@/components/ui/reusable-ui/button";
+import { Input } from "@/components/ui/reusable-ui/input";
+import { Label } from "@/components/ui/reusable-ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/reusable-ui/select";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/reusable-ui/card";
 
 export default function Component() {
-  const [contactMethod, setContactMethod] = useState<'whatsapp' | 'telegram'>('whatsapp')
+  const [contactMethod, setContactMethod] = useState<"whatsapp" | "telegram">(
+    "whatsapp"
+  );
 
   return (
-    <Card className="w-full max-w-lg mx-auto">
-      <CardHeader>
-        <CardTitle>Participation</CardTitle>
-      </CardHeader>
+    <Card className="w-full max-w-lg mx-auto pt-8">
       <CardContent>
         <form className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
@@ -27,11 +37,22 @@ export default function Component() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="roses">Nombre de roses</Label>
-            <Input id="roses" type="number" min="1" placeholder="Quantité" required />
+            <Input
+              id="roses"
+              type="number"
+              min="1"
+              placeholder="Quantité"
+              required
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" placeholder="votre@email.com" required />
+            <Input
+              id="email"
+              type="email"
+              placeholder="votre@email.com"
+              required
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="pays">Pays</Label>
@@ -52,16 +73,17 @@ export default function Component() {
             <Label>Méthode de contact préférée</Label>
             <div className="flex space-x-4">
               <Button
+                className=""
                 type="button"
-                variant={contactMethod === 'whatsapp' ? 'default' : 'outline'}
-                onClick={() => setContactMethod('whatsapp')}
+                variant={contactMethod === "whatsapp" ? "default" : "outline"}
+                onClick={() => setContactMethod("whatsapp")}
               >
                 WhatsApp
               </Button>
               <Button
                 type="button"
-                variant={contactMethod === 'telegram' ? 'default' : 'outline'}
-                onClick={() => setContactMethod('telegram')}
+                variant={contactMethod === "telegram" ? "default" : "outline"}
+                onClick={() => setContactMethod("telegram")}
               >
                 Telegram
               </Button>
@@ -69,20 +91,25 @@ export default function Component() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="numero">
-              Numéro {contactMethod === 'whatsapp' ? 'WhatsApp' : 'Telegram'}
+              Numéro {contactMethod === "whatsapp" ? "WhatsApp" : "Telegram"}
             </Label>
             <Input
               id="numero"
               type="tel"
-              placeholder={`Votre numéro ${contactMethod === 'whatsapp' ? 'WhatsApp' : 'Telegram'}`}
+              placeholder={`Votre numéro ${
+                contactMethod === "whatsapp" ? "WhatsApp" : "Telegram"
+              }`}
               required
             />
           </div>
-          <Button type="submit" className="w-full">
-            Envoyer la commande
+          <Button
+            type="submit"
+            className="w-full bg-bleu hover:bg-jaune hover:border-none focus:border-none"
+          >
+            Réjouir Marie
           </Button>
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }
