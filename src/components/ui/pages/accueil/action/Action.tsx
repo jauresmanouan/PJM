@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/reusable-ui/button";
+import FormPage from "../../FormPage.tsx";
+import { useState } from "react";
 
 export default function Action({
   number,
@@ -7,6 +9,12 @@ export default function Action({
   number: number;
   action: string;
 }) {
+  const [showForm, setShowForm] = useState(false);
+
+  const handleForm = () => {
+    setShowForm(true);
+  };
+
   return (
     <div className="flex flex-col justify-center items-center">
       <img
@@ -30,11 +38,12 @@ export default function Action({
         </div>
       </div>
       <Button
-        onClick={() => {}}
+        onClick={handleForm}
         className="font-intro w-60 transition duration-300 ease-in-out transform hover:scale-105"
       >
         Participer
       </Button>
+      {showForm && <FormPage />}
     </div>
   );
 }
