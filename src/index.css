@@ -1,3 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Intro";
+  src: url("./assets/fonts/Intro Black Alt.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Intro";
+  src: url("./assets/fonts/Intro Bold Alt.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Intro";
+  src: url("./assets/fonts/Intro Book Alt.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Intro";
+  src: url("./assets/fonts/Intro Light Alt.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Intro";
+  src: url("./assets/fonts/Intro Regular Alt.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Intro";
+  src: url("./assets/fonts/Intro Thin Alt.otf") format("opentype");
+  font-weight: 100;
+  font-style: normal;
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -66,9 +112,7 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
 @layer base {
   :root {
     --background: 0 0% 100%;
