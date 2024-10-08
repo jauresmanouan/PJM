@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/reusable-ui/button";
-import FormPage from "../../FormPage.tsx";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import context from "@/context/context.tsx";
 
 export default function Action({
@@ -10,11 +9,7 @@ export default function Action({
   number: number;
   action: string;
 }) {
-  const { setIsClicked } = useContext(context);
-
-  const handleClicked = () => {
-    setIsClicked(true);
-  };
+  const {handleClicked } = useContext(context);
 
   return (
     <div className="flex flex-col justify-center items-center">

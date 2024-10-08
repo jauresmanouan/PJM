@@ -1,4 +1,4 @@
-import {useState } from "react";
+import { useState } from "react";
 import FormPage from "./components/ui/pages/FormPage.tsx";
 import Accueil from "./components/ui/pages/accueil/Accueil.tsx";
 import Context from "./context/context.tsx";
@@ -6,9 +6,13 @@ import Context from "./context/context.tsx";
 function App() {
   const [isClicked, setIsClicked] = useState(false);
 
+  const handleClicked = () => {
+    setIsClicked(true);
+  };
   const contextValue = {
     isClicked,
-    setIsClicked
+    setIsClicked,
+    handleClicked,
   };
 
   return (
