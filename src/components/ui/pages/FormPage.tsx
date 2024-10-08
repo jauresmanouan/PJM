@@ -21,7 +21,7 @@ export default function Component({
   const [selected, setSelected] = useState("");
 
   return (
-    <Card className="w-full max-w-lg mx-auto p-4 sm:p-6 md:p-8">
+    <Card className="w-full max-w-lg font-intro font-normal mx-auto p-4 sm:p-6 md:p-8">
       <CardContent>
         <form className="space-y-4">
           {/* Form Layout with Responsive Grid */}

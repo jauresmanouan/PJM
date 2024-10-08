@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/reusable-ui/button";
 import FormPage from "../../FormPage.tsx";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import context from "@/context/context.tsx";
 
 export default function Action({
   number,
@@ -9,10 +10,10 @@ export default function Action({
   number: number;
   action: string;
 }) {
-  const [showForm, setShowForm] = useState(false);
+  const { setIsClicked } = useContext(context);
 
-  const handleForm = () => {
-    setShowForm(true);
+  const handleClicked = () => {
+    setIsClicked(true);
   };
 
   return (
@@ -38,12 +39,11 @@ export default function Action({
         </div>
       </div>
       <Button
-        onClick={handleForm}
+        onClick={handleClicked}
         className="font-intro w-60 transition duration-300 ease-in-out transform hover:scale-105"
       >
         Participer
       </Button>
-      {showForm && <FormPage />}
     </div>
   );
 }
