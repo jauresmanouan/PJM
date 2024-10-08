@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/reusable-ui/button";
 import { useContext } from "react";
-import context from "@/context/context.tsx";
+import context from "@/context/Context.tsx";
 
 export default function Action({
   number,
@@ -9,7 +9,7 @@ export default function Action({
   number: number;
   action: string;
 }) {
-  const {handleClicked } = useContext(context);
+  const { handleClicked } = useContext(context);
 
   return (
     <div className="flex flex-col justify-center items-center">
