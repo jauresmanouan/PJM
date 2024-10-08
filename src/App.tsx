@@ -3,7 +3,7 @@ import Accueil from "./components/ui/pages/accueil/Accueil.tsx";
 
 function App() {
   return (
-    <div className="flex justify-center items-center h-screen w-screen">
+    <div className="flex justify-center items-center h-screen w-screen bg-bleu">
       <Accueil />
       {/* <div className="flex justify-center items-center h-screen w-screen">
         <FormPage

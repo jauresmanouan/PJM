@@ -18,7 +18,7 @@ export default function Action({
   return (
     <div className="flex flex-col justify-center items-center">
       <img
-        src="../../../../../../public/logoPJM1.svg"
+        src="../../../../../../public/logoPJM3.svg"
         alt="logo"
         className="w-40 h-full mb-4"
       />
@@ -28,11 +28,11 @@ export default function Action({
             <div className="font-intro font-black text-7xl md:text-7xl text-jaune">
               {number}
             </div>
-            <div className="font-intro font-black text-5xl md:text-6xl text-bleu">
+            <div className="font-intro font-black text-5xl md:text-6xl text-white">
               {action}
             </div>
           </h1>
-          <p className="font-intro font-light  md:text-2xl text-bleu mb-4">
+          <p className="font-intro font-medium  md:text-2xl text-white mb-4">
             Pour la Joie de Marie
           </p>
         </div>
