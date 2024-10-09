@@ -1,6 +1,11 @@
+import { getUser } from "@/api/users";
 import { Users, Heart, Flower, Calendar } from "lucide-react";
+import { useState } from "react";
 
 export default function StatsAndDate() {
+  const [participants, setParticipants] = useState(0);
+  const [quantities, setQuantities] = useState(0);
+
   return (
     <div className="p-5 font-intro bg-white rounded-3xl mb-10 gap-5 flex justify-center items-center text-bleu">
       <div className="flex items-center space-x-4">

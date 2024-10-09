@@ -22,6 +22,7 @@ export default function Component({
 
   return (
     <Card className="w-full max-w-lg font-intro font-normal mx-auto p-4 sm:p-6 md:p-8">
+      {/* @TODO : Add canceled button */}
       <CardContent>
         <form className="space-y-4">
           {/* Form Layout with Responsive Grid */}
@@ -107,9 +108,11 @@ export default function Component({
           </div>
 
           {/* Submit Button */}
-          <Button type="submit" className="w-full bg-bleu">
-            Réjouir Marie
-          </Button>
+          <div className="flex flex-col justify-center items-center gap-2">
+            <Button type="submit" className="w-full bg-bleu">
+              Réjouir Marie
+            </Button>
+          </div>
         </form>
       </CardContent>
     </Card>
