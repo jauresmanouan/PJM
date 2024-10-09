@@ -17,20 +17,18 @@ function App() {
 
   return (
     <Context.Provider value={contextValue}>
-      <div className="h-screen w-screen overflow-hidden">
-        <div className="flex justify-center items-center bg-bleu">
-          {isClicked ? (
-            <div className="flex justify-center items-center h-screen w-screen">
-              <FormPage
-                actionId={"Roses"}
-                actionName={"Nombres de roses"}
-                actionQuantity={"Quantité"}
-              />
-            </div>
-          ) : (
-            <Accueil />
-          )}
-        </div>
+      <div className="flex justify-center items-center h-screen w-screen bg-bleu">
+        {isClicked ? (
+          <div className="flex justify-center items-center h-screen w-screen">
+            <FormPage
+              actionId={"Roses"}
+              actionName={"Nombres de roses"}
+              actionQuantity={"Quantité"}
+            />
+          </div>
+        ) : (
+          <Accueil />
+        )}
       </div>
     </Context.Provider>
   );
