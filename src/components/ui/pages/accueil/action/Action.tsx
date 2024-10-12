@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/reusable-ui/button";
 import { useContext } from "react";
 import context from "@/context/Context.tsx";
+import logoPJM3 from "../../../../../../public/images/logoPJM3.svg"
 
 export default function Action({
   number,
@@ -14,7 +15,7 @@ export default function Action({
   return (
     <div className="flex flex-col justify-center items-center">
       <img
-        src="../../../../../../public/logoPJM3.svg"
+        src={logoPJM3}
         alt="logo"
         className="w-40 h-full mb-4"
       />

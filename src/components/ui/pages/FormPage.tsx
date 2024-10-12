@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/reusable-ui/label";
 import ReactFlagsSelect from "react-flags-select";
 import { Select } from "@/components/ui/reusable-ui/select";
 import { Card, CardContent } from "@/components/ui/reusable-ui/card";
+import { creatUser } from "@/api/users";
 
 export default function Component({
   actionId,
@@ -20,20 +21,52 @@ export default function Component({
   );
   const [selected, setSelected] = useState("");
 
+  const [firstname, setFirstname] = useState("");
+  const [name, setName] = useState("");
+  const [quantity, setQuantity] = useState<number | undefined>(undefined);
+  const [email, setEmail] = useState("");
+  const [contact, setContact] = useState<string>("");
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+
+    const formData = {
+      firstname,
+      name,
+      quantity,
+      email,
+      country: selected,
+      contactMethod,
+      contact,
+    };
+
+    creatUser({ newUser: formData });
+  };
+
   return (
     <Card className="w-full max-w-lg font-intro font-normal mx-auto p-4 sm:p-6 md:p-8">
-      {/* @TODO : Add canceled button */}
       <CardContent>
-        <form className="space-y-4">
-          {/* Form Layout with Responsive Grid */}
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="nom">Nom</Label>
-              <Input id="nom" placeholder="Votre nom" required />
+              <Input
+                id="nom"
+                placeholder="Votre nom"
+                required
+                value={firstname}
+                onChange={(event) => setFirstname(event.target.value)}
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="prenom">Prénom</Label>
-              <Input id="prenom" placeholder="Votre prénom" required />
+              <Input
+                id="prenom"
+                placeholder="Votre prénom"
+                required
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+              />
             </div>
           </div>
 
@@ -45,6 +78,8 @@ export default function Component({
               min="1"
               placeholder={actionQuantity}
               required
+              value={quantity}
+              onChange={(event) => setQuantity(Number(event.target.value))}
             />
           </div>
 
@@ -55,6 +90,8 @@ export default function Component({
               type="email"
               placeholder="votre@email.com"
               required
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
             />
           </div>
 
@@ -72,7 +109,6 @@ export default function Component({
             </Select>
           </div>
 
-          {/* Contact Method Section */}
           <div className="space-y-2">
             <Label>Méthode de contact préférée</Label>
             <div className="flex space-x-4">
@@ -93,7 +129,6 @@ export default function Component({
             </div>
           </div>
 
-          {/* Phone Input */}
           <div className="space-y-2">
             <Label htmlFor="numero">
               Numéro {contactMethod === "whatsapp" ? "WhatsApp" : "Telegram"}
@@ -104,10 +139,11 @@ export default function Component({
               placeholder={`Votre numéro ${
                 contactMethod === "whatsapp" ? "WhatsApp" : "Telegram"
               }`}
+              value={contact}
+              onChange={(event) => setContact(event.target.value)}
             />
           </div>
 
-          {/* Submit Button */}
           <div className="flex flex-col justify-center items-center gap-2">
             <Button type="submit" className="w-full bg-bleu">
               Réjouir Marie
