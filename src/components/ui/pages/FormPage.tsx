@@ -29,7 +29,7 @@ export default function Component({
   const [email, setEmail] = useState("");
   const [contact, setContact] = useState<string>("");
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
     const formData = {
@@ -42,7 +42,9 @@ export default function Component({
       contact,
     };
 
-    creatUser({ newUser: formData });
+    await creatUser({ newUser: formData });
+    window.location.reload();
+
   };
   const { setIsClosedForm, setIsClicked } = useContext(context);
 
@@ -52,7 +54,7 @@ export default function Component({
   };
 
   return (
-    <Card className="w-full max-w-lg font-intro font-normal mx-auto p-4 sm:p-6 md:p-8">
+    <Card className="w-full max-w-lg font-intro font-normal mx-auto p-4 sm:p-6 md:p-8 m-5 md:m-0">
       <CardContent className="relative p-8">
         <CircleX
           onClick={handleClosedForm}

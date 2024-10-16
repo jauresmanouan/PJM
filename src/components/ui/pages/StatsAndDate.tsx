@@ -20,9 +20,9 @@ export default function StatsAndDate() {
   const reste = restePromesse({ objectif: 1000, promesses: totalQuantity });
 
   return (
-    <div className="p-5 font-intro bg-white rounded-3xl mb-10 gap-5 flex justify-center items-center text-bleu">
+    <div className="p-5 m-12 md:m-0 md:relative md:bottom-10 font-intro bg-white rounded-3xl mb-10 gap-5 grid grid-cols-2 md:flex justify-center items-center text-bleu">
       <div className="flex items-center space-x-4">
-        <Users className="h-6 w-6 text-jaune" />
+        <Users className="h-8 md:h-6 w-8md:w-6 text-jaune" />
         <div>
           <p className="text-2xl font-semibold">{participants}</p>{" "}
           {/* Nombre de participants */}
