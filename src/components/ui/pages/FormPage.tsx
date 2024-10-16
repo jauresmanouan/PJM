@@ -44,7 +44,6 @@ export default function Component({
 
     await creatUser({ newUser: formData });
     window.location.reload();
-
   };
   const { setIsClosedForm, setIsClicked } = useContext(context);
 
@@ -54,13 +53,13 @@ export default function Component({
   };
 
   return (
-    <Card className="w-full max-w-lg font-intro font-normal mx-auto p-4 sm:p-6 md:p-8 m-5 md:m-0">
+    <Card className="w-full max-w-xs md:max-w-lg font-intro font-normal mx-auto p-1 md:p-8 m-5 md:m-0">
       <CardContent className="relative p-8">
         <CircleX
           onClick={handleClosedForm}
-          className="text-red-600 absolute right-0 top-0 hover:scale-125 cursor-pointer transition ease-out"
+          className="text-red-500 absolute w-6 md:w-8 h-6 md:h-8 right-3 md:right-0 top-3 md:top-0 hover:scale-125 cursor-pointer transition ease-out"
         />
-        <form className="space-y-4" onSubmit={handleSubmit}>
+        <form className="space-y-3 md:space-y-4" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="nom">Nom</Label>
