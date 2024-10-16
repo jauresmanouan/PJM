@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getUser } from "@/api/users"; // Importer la fonction pour récupérer les données
 import { Users, Heart, Flower, Calendar } from "lucide-react";
+import restePromesse from "@/utils/restePromesse";
 
 export default function StatsAndDate() {
   const [participants, setParticipants] = useState(0);
@@ -15,6 +16,8 @@ export default function StatsAndDate() {
 
     fetchData();
   }, []);
+
+  const reste = restePromesse({ objectif: 1000, promesses: totalQuantity });
 
   return (
     <div className="p-5 font-intro bg-white rounded-3xl mb-10 gap-5 flex justify-center items-center text-bleu">
@@ -37,7 +40,7 @@ export default function StatsAndDate() {
       <div className="flex items-center space-x-4">
         <Flower className="h-6 w-6 text-jaune" />
         <div>
-          <p className="text-2xl font-semibold">50</p>{" "}
+          <p className="text-2xl font-semibold">{reste}</p>{" "}
           {/* Statique pour les roses */}
           <p className="text-sm text-bleu">Total roses restantes</p>
         </div>
