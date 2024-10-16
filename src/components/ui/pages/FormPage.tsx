@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Button } from "@/components/ui/reusable-ui/button";
 import { Input } from "@/components/ui/reusable-ui/input";
 import { Label } from "@/components/ui/reusable-ui/label";
@@ -6,6 +6,8 @@ import ReactFlagsSelect from "react-flags-select";
 import { Select } from "@/components/ui/reusable-ui/select";
 import { Card, CardContent } from "@/components/ui/reusable-ui/card";
 import { creatUser } from "@/api/users";
+import { CircleX } from "lucide-react";
+import context from "@/context/Context";
 
 export default function Component({
   actionId,
@@ -42,10 +44,20 @@ export default function Component({
 
     creatUser({ newUser: formData });
   };
+  const { setIsClosedForm, setIsClicked } = useContext(context);
+
+  const handleClosedForm = () => {
+    setIsClosedForm(true);
+    setIsClicked(false);
+  };
 
   return (
     <Card className="w-full max-w-lg font-intro font-normal mx-auto p-4 sm:p-6 md:p-8">
-      <CardContent>
+      <CardContent className="relative p-8">
+        <CircleX
+          onClick={handleClosedForm}
+          className="text-red-600 absolute right-0 top-0 hover:scale-125 cursor-pointer transition ease-out"
+        />
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">

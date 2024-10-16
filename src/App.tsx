@@ -5,20 +5,25 @@ import Context from "./context/Context.tsx";
 
 function App() {
   const [isClicked, setIsClicked] = useState(false);
+  const [isClosedForm, setIsClosedForm] = useState(true);
 
   const handleClicked = () => {
     setIsClicked(true);
+    setIsClosedForm(false);
+
   };
   const contextValue = {
     isClicked,
     setIsClicked,
     handleClicked,
+    isClosedForm,
+    setIsClosedForm,
   };
 
   return (
     <Context.Provider value={contextValue}>
       <div className="flex justify-center items-center h-screen w-screen bg-bleu">
-        {isClicked ? (
+        {isClicked && (
           <div className="flex justify-center items-center h-screen w-screen">
             <FormPage
               actionId={"Roses"}
@@ -26,9 +31,8 @@ function App() {
               actionQuantity={"Quantité"}
             />
           </div>
-        ) : (
-          <Accueil />
-        )}
+        ) }
+        {isClosedForm && <Accueil/>}
       </div>
     </Context.Provider>
   );
