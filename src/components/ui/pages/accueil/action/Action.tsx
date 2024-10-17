@@ -13,7 +13,7 @@ export default function Action({
   const { handleClicked } = useContext(context);
 
   return (
-    <div className="flex flex-col max-md:relative max-md:bottom-10 justify-center items-center overflow-y-hidden">
+    <div className="flex flex-col max-md:relative max-md:bottom-10 justify-center items-center">
       <img
         src={logoPJM3}
         alt="logo"
