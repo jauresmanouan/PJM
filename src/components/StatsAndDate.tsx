@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getUser } from "@/api/users"; // Importer la fonction pour récupérer les données
+import { getUser } from "../../pages/api/users.tsx"; // Importer la fonction pour récupérer les données
 import { Users, Heart, Flower, Calendar } from "lucide-react";
 import restePromesse from "@/utils/restePromesse";
 

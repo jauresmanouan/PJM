@@ -5,7 +5,7 @@ import { Label } from "@/components/reusable-ui/label";
 import ReactFlagsSelect from "react-flags-select";
 import { Select } from "@/components/reusable-ui/select";
 import { Card, CardContent } from "@/components/reusable-ui/card";
-import { creatUser } from "@/api/users";
+import { creatUser } from "../../pages/api/users.tsx";
 import { CircleX } from "lucide-react";
 import context from "@/context/Context";
 
@@ -43,9 +43,8 @@ export default function Component({
       contact,
     };
 
-    await creatUser({ newUser: formData });
-
     try {
+      await creatUser({ newUser: formData });
       const response = await fetch("http://localhost:3000/api/route", {
         method: "POST",
       });
@@ -57,7 +56,7 @@ export default function Component({
       console.error("Error sending email:", error);
     }
 
-     window.location.reload();
+    window.location.reload();
   };
 
   const handleClosedForm = () => {
