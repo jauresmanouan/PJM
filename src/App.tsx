@@ -1,6 +1,6 @@
 import { useState } from "react";
-import FormPage from "./components/ui/pages/FormPage.tsx";
-import Accueil from "./components/ui/pages/accueil/Accueil.tsx";
+import FormPage from "./components/FormPage.jsx";
+import Accueil from "../pages/Accueil.tsx";
 import Context from "./context/Context.tsx";
 
 function App() {
@@ -10,7 +10,6 @@ function App() {
   const handleClicked = () => {
     setIsClicked(true);
     setIsClosedForm(false);
-
   };
   const contextValue = {
     isClicked,
@@ -31,8 +30,8 @@ function App() {
               actionQuantity={"Quantité"}
             />
           </div>
-        ) }
-        {isClosedForm && <Accueil/>}
+        )}
+        {isClosedForm && <Accueil />}
       </div>
     </Context.Provider>
   );
