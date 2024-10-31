@@ -1,3 +1,4 @@
+"use client";
 import { useContext, useState } from "react";
 import { Button } from "@/components/reusable-ui/button";
 import { Input } from "@/components/reusable-ui/input";
@@ -45,18 +46,23 @@ export default function Component({
 
     try {
       await creatUser({ newUser: formData });
-      const response = await fetch("http://localhost:3000/api/route", {
-        method: "POST",
-      });
-      if (!response.ok) {
-        throw new Error("Failed to send email");
-      }
-      console.log("Email sent successfully");
+      await sendToAPI(formData.name, formData.quantity);
+      window.location.reload();
     } catch (error) {
-      console.error("Error sending email:", error);
+      console.error("Error submitting form:", error);
     }
+  };
 
-    window.location.reload();
+  const sendToAPI = async (name: string, quantity: number | undefined) => {
+    try {
+      await fetch("/api/route", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, quantity, email }),
+      });
+    } catch (error) {
+      console.error("API error:", error);
+    }
   };
 
   const handleClosedForm = () => {
