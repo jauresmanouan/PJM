@@ -54,7 +54,7 @@ export default function Component({
 
   const sendToAPI = async (name: string, quantity: number | undefined) => {
     try {
-      await fetch("/api/route", {
+      await fetch("http://localhost:3001/api/route", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, quantity, email }),
