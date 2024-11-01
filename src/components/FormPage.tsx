@@ -1,4 +1,3 @@
-"use client";
 import { useContext, useState } from "react";
 import { Button } from "@/components/reusable-ui/button";
 import { Input } from "@/components/reusable-ui/input";
@@ -46,8 +45,10 @@ export default function Component({
 
     try {
       await creatUser({ newUser: formData });
+      console.log("creatUser is okay")
       await sendToAPI(formData.name, formData.quantity);
-      window.location.reload();
+      console.log("sendToAPI is okay")
+      // window.location.reload();
     } catch (error) {
       console.error("Error submitting form:", error);
     }
@@ -55,7 +56,7 @@ export default function Component({
 
   const sendToAPI = async (name: string, quantity: number | undefined) => {
     try {
-      await fetch("/api/route", {
+      await fetch("http://localhost:3000/api/route", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, quantity, email }),
