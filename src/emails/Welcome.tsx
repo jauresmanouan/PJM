@@ -24,7 +24,6 @@ export default function Welcome({
           rel="stylesheet"
         />
       </Head>
-      <Preview>Roses transmis</Preview>
       <Tailwind
         config={{
           theme: {
@@ -35,22 +34,28 @@ export default function Welcome({
               colors: {
                 jaune: "#F39200",
                 bleu: "#0A71B8",
+                grisClair: "#f0f4f8",
               },
             },
           },
         }}
       >
-        <Body className="bg-bleu font-roboto font-medium text-white">
-          <Container className="mt-8 border border-black p-10 mx-auto">
-            <Heading>
-              Merci {name} de participer à cette action communautaire
+        <Body className="font-roboto text-bleu">
+          <Container className="pl-8 pr-8 mx-auto mt-10 max-w-md">
+            <Heading as="h2" className="text-2xl font-bold mb-4 text-bleu">
+              Merci <span className="text-jaune">{name}</span> de participer à cette action communautaire
             </Heading>
-            <Text className="text-base">
-              Vos {quantity} rose(s) se joignent à celles de nombreux autres
-              participants, formant un bouquet de bonheur qui saura toucher le
+            <Text className="text-base text-gray-700 mb-4">
+              Vos <span className="font-semibold text-jaune">{quantity}</span> rose(s) se joignent à celles de nombreux autres
+              participants, formant un bouquet de bonheur qui saura réjouir le
               Cœur de Notre Chère Mère.
             </Text>
-            <Text>Merci pour cette promesse</Text>
+            <Text className="text-base text-gray-700 mb-4">
+              Merci encore pour cet engagement.
+            </Text>
+            <Text className="text-sm font-light text-gray-500 italic mt-20 text-end">
+              "Portée par la Petite Thérèse 🌹"
+            </Text>
           </Container>
         </Body>
       </Tailwind>

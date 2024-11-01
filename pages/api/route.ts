@@ -33,9 +33,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { email, name, quantity } = req.body;
 
     await resend.emails.send({
-      from: "Acme <onboarding@resend.dev>",
+      from: "Pour la joie de Marie <onboarding@resend.dev>",
       to: [email],
-      subject: "Hello World",
+      subject: `Merci pour votre promesse ${name} 🤩`,
       react: Welcome({ name, quantity })
     });
     console.log("Resend Response:", res)
