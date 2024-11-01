@@ -45,10 +45,8 @@ export default function Component({
 
     try {
       await creatUser({ newUser: formData });
-      console.log("creatUser is okay")
       await sendToAPI(formData.name, formData.quantity);
-      console.log("sendToAPI is okay")
-      // window.location.reload();
+      window.location.reload();
     } catch (error) {
       console.error("Error submitting form:", error);
     }

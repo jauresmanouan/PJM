@@ -1,10 +1,30 @@
+import Cors from 'cors';
 import { Resend } from "resend";
 import Welcome from "@/emails/Welcome";
 import { NextApiRequest, NextApiResponse } from "next";
 
+
+const cors = Cors({origin : "http://localhost:5173", methods: "POST"})
+
+function runMiddleware(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  fn: (req: NextApiRequest, res: NextApiResponse, callback: (result: any) => void) => void
+): Promise<any> {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      return resolve(result);
+    });
+  });
+}
+
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  await runMiddleware(req, res, cors);
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method not allowed" });
   }
