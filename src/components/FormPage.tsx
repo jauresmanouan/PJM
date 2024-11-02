@@ -8,6 +8,8 @@ import { Card, CardContent } from "@/components/reusable-ui/card";
 import { creatUser } from "../../pages/api/users.tsx";
 import { CircleX } from "lucide-react";
 import context from "@/context/Context";
+import { Toaster, toast } from 'sonner';
+
 
 export default function Component({
   actionId,
@@ -43,18 +45,22 @@ export default function Component({
       contact,
     };
 
-    try {
-      await creatUser({ newUser: formData });
-      await sendToAPI(formData.name, formData.quantity);
-      window.location.reload();
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    }
-  };
+    await toast.promise(
+      creatUser({ newUser: formData }).then(()=> sendToAPI(formData.name, formData.quantity)).then(()=> setTimeout(() => {
+        window.location.reload()
+       }, 2500)), 
+      {
+        loading : "Enregistrement en cours",
+        success: "Nom enregistré et mail envoyé avec succès",
+        error : "Echec veuillez réessayer"
+      }
+    )
 
+   
+  }
   const sendToAPI = async (name: string, quantity: number | undefined) => {
     try {
-      await fetch("http://localhost:3001/api/route", {
+      await fetch("http://localhost:3000/api/route", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, quantity, email }),
@@ -70,7 +76,18 @@ export default function Component({
   };
 
   return (
-    <Card className="w-full max-w-xs md:max-w-lg font-intro font-normal mx-auto p-1 md:p-8 m-5 md:m-0">
+    <>
+          <Toaster  position="top-right" 
+          toastOptions={{
+    unstyled: false,
+  
+    classNames: {
+      toast: 'bg-white',
+      title: 'text-bleu',
+      icon: "text-jaune"
+    },
+  }}/>
+          <Card className="w-full max-w-xs md:max-w-lg font-intro font-normal mx-auto p-1 md:p-8 m-5 md:m-0">
       <CardContent className="relative p-8">
         <CircleX
           onClick={handleClosedForm}
@@ -182,5 +199,8 @@ export default function Component({
         </form>
       </CardContent>
     </Card>
+
+    </>
+
   );
 }
