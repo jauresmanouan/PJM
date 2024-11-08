@@ -50,7 +50,7 @@ export default function Component({
         window.location.reload()
        }, 2500)), 
       {
-        loading : "Enregistrement en cours",
+        loading : "Enregistrement en cours...",
         success: "Nom enregistré et mail envoyé avec succès",
         error : "Echec veuillez réessayer"
       }
@@ -77,7 +77,7 @@ export default function Component({
 
   return (
     <>
-          <Toaster  position="top-right" 
+          <Toaster 
           toastOptions={{
     unstyled: false,
   

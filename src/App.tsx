@@ -2,6 +2,7 @@ import { useState } from "react";
 import FormPage from "./components/FormPage.jsx";
 import Accueil from "../pages/Accueil.tsx";
 import Context from "./context/Context.tsx";
+import Footer from "./components/Footer.tsx";
 
 function App() {
   const [isClicked, setIsClicked] = useState(false);
@@ -21,7 +22,7 @@ function App() {
 
   return (
     <Context.Provider value={contextValue}>
-      <div className="flex justify-center items-center h-screen w-screen bg-bleu">
+      <div className="flex flex-col justify-center items-center h-screen w-screen bg-bleu">
         {isClicked && (
           <div className="flex justify-center items-center h-screen w-screen">
             <FormPage
@@ -32,7 +33,10 @@ function App() {
           </div>
         )}
         {isClosedForm && <Accueil />}
+        <Footer />
       </div>
+      
+     
     </Context.Provider>
   );
 }
