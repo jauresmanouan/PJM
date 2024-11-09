@@ -5,7 +5,7 @@ import { Label } from "@/components/reusable-ui/label";
 import ReactFlagsSelect from "react-flags-select";
 import { Select } from "@/components/reusable-ui/select";
 import { Card, CardContent } from "@/components/reusable-ui/card";
-import { creatUser } from "../../pages/api/users";
+import { creatUser } from "../api/users";
 import { CircleX } from "lucide-react";
 import context from "@/context/Context";
 import { Toaster, toast } from 'sonner';
