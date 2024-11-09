@@ -9,7 +9,7 @@
     "build:vite": "vite build",
     "build:next": "next build",
     "start:next": "next start",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && next build",
     "lint": "eslint .",
     "preview": "vite preview",
     "email": "email dev --dir src/emails"

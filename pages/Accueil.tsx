@@ -1,5 +1,5 @@
-import StatsAndDate from "../src/components/StatsAndDate.jsx";
-import Action from "../src/components/action/Action.jsx";
+import StatsAndDate from "../src/components/StatsAndDate";
+import Action from "../src/components/action/Action";
 
 export default function Accueil() {
   return (

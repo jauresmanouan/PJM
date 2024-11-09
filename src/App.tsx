@@ -1,8 +1,8 @@
 import { useState } from "react";
-import FormPage from "./components/FormPage.jsx";
-import Accueil from "../pages/Accueil.tsx";
-import Context from "./context/Context.tsx";
-import Footer from "./components/Footer.tsx";
+import FormPage from "./components/FormPage";
+import Accueil from "../pages/Accueil";
+import Context from "./context/Context";
+import Footer from "./components/Footer";
 
 function App() {
   const [isClicked, setIsClicked] = useState(false);
@@ -32,8 +32,13 @@ function App() {
             />
           </div>
         )}
-        {isClosedForm && <Accueil />}
-        <Footer />
+        {isClosedForm && (
+          <>
+          <Accueil /> 
+          <Footer />
+          </>
+          )}
+      
       </div>
       
      

@@ -33,6 +33,6 @@ export const creatUser = async ({
     contact: string;
   };
 }) => {
-  const docRef = doc(db, "users", newUser.firstname);
+  const docRef = doc(db, "users", newUser.email);
   await setDoc(docRef, newUser);
 };

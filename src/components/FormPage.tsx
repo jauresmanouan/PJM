@@ -5,7 +5,7 @@ import { Label } from "@/components/reusable-ui/label";
 import ReactFlagsSelect from "react-flags-select";
 import { Select } from "@/components/reusable-ui/select";
 import { Card, CardContent } from "@/components/reusable-ui/card";
-import { creatUser } from "../../pages/api/users.tsx";
+import { creatUser } from "../../pages/api/users";
 import { CircleX } from "lucide-react";
 import context from "@/context/Context";
 import { Toaster, toast } from 'sonner';
@@ -60,7 +60,7 @@ export default function Component({
   }
   const sendToAPI = async (name: string, quantity: number | undefined) => {
     try {
-      await fetch("http://localhost:3000/api/route", {
+      await fetch("api/route", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, quantity, email }),
@@ -77,7 +77,7 @@ export default function Component({
 
   return (
     <>
-          <Toaster 
+      <Toaster 
           toastOptions={{
     unstyled: false,
   

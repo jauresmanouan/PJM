@@ -1,6 +1,6 @@
 import { Button } from "@/components/reusable-ui/button";
 import { useContext } from "react";
-import context from "@/context/Context.tsx";
+import context from "@/context/Context";
 import logoPJM3 from "../../../public/images/logoPJM3.svg";
 
 export default function Action({

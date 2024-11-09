@@ -4,7 +4,7 @@ import Welcome from "@/emails/Welcome";
 import { NextApiRequest, NextApiResponse } from "next";
 
 
-const cors = Cors({origin : "http://localhost:5173", methods: "POST"})
+const cors = Cors({origin : "https://pourlajoiedemarie.com", methods: "POST"})
 
 function runMiddleware(
   req: NextApiRequest,
@@ -21,7 +21,7 @@ function runMiddleware(
   });
 }
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await runMiddleware(req, res, cors);

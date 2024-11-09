@@ -55,6 +55,9 @@ export default function Welcome({
             <Text className="text-sm font-light text-gray-500 italic mt-20 text-end">
               "Portée par la Petite Thérèse 🌹"
             </Text>
+            <Text className="text-xs font-bold text-bleu mt-32 text-center no-underline">
+              contact@pourlajoiedemarie.com
+            </Text>
           </Container>
         </Body>
       </Tailwind>
