@@ -1,6 +1,6 @@
 import { useState } from "react";
 import FormPage from "./components/FormPage";
-import Accueil from "../pages/Accueil";
+import Accueil from "./components/Accueil";
 import Context from "./context/Context";
 import Footer from "./components/Footer";
 

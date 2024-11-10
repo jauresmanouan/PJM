@@ -4,12 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev:vite": "vite",
-    "dev:next": "next dev",
-    "build:vite": "vite build",
-    "build:next": "next build",
-    "start:next": "next start",
-    "build": "tsc -b && vite build && next build",
+    "dev": "vite",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "email": "email dev --dir src/emails"

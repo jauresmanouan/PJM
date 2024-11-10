@@ -28,9 +28,9 @@
   },
   "include": [
     "src",
-    "pages/Accueil.tsx",
-    "pages/emails",
-    "pages/api/route.ts",
+    "src/components/Accueil.tsx",
+    "src/pages/emails",
+    "src/components/route.ts",
     "src/api/firebase-config.ts",
     "src/api/users.tsx"
   ]
