@@ -30,7 +30,7 @@
     "src",
     "src/components/Accueil.tsx",
     "src/pages/emails",
-    "src/components/route.ts",
+    "src/components/SendEmail.tsx",
     "src/api/firebase-config.ts",
     "src/api/users.tsx"
   ]

@@ -9,9 +9,10 @@ import { creatUser } from "../api/users";
 import { CircleX } from "lucide-react";
 import context from "@/context/Context";
 import { Toaster, toast } from 'sonner';
+import { SendEmail } from "./SendEmail";
 
 
-export default function Component({
+export default function FormPage({
   actionId,
   actionName,
   actionQuantity,
@@ -35,6 +36,11 @@ export default function Component({
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
+    if (quantity === undefined) {
+    toast.error("La quantité doit être renseignée.");
+    return;
+  }
+
     const formData = {
       firstname,
       name,
@@ -46,7 +52,7 @@ export default function Component({
     };
 
     await toast.promise(
-      creatUser({ newUser: formData }).then(()=> sendToAPI(formData.name, formData.quantity)).then(()=> setTimeout(() => {
+      creatUser({ newUser: formData }).then(()=> SendEmail({email:formData.email, name:formData.name, quantity:formData.quantity})).then(()=> setTimeout(() => {
         window.location.reload()
        }, 2500)), 
       {
@@ -58,17 +64,6 @@ export default function Component({
 
    
   }
-  const sendToAPI = async (name: string, quantity: number | undefined) => {
-    try {
-      await fetch("api/route", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, quantity, email }),
-      });
-    } catch (error) {
-      console.error("API error:", error);
-    }
-  };
 
   const handleClosedForm = () => {
     setIsClosedForm(true);
