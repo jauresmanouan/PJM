@@ -1,4 +1,4 @@
-import StatsAndDate from "../StatsAndDate.tsx";
+import StatsAndDate from "./StatsAndDate";
 import Action from "./action/Action";
 
 export default function Accueil() {
