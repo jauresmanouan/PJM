@@ -1,19 +1,29 @@
-import { Resend } from "resend";
-import Welcome from "../emails/Welcome.jsx";
+import emailjs from "emailjs-com";
 
-const resend = new Resend(import.meta.env.VITE_RESEND_API_KEY);
-
-export async function SendEmail({ email, name, quantity }: {email:string, name:string, quantity:number }) {
+export const SendEmail = async ({
+  name,
+  quantity,
+  email,
+}: {
+  name: string;
+  quantity: number;
+  email: string;
+}): Promise<void> => {
   try {
-    await resend.emails.send({
-      from: "Pour la joie de Marie <noreply@pourlajoiedemarie.com>",
-      to: [email],
-      subject: `Merci pour votre promesse ${name} 🤩`,
-      react: Welcome({ name, quantity })
-    });
-    console.log("Email sent successfully");
+
+    const response = await emailjs.send(
+      "service_b0f9y9p",
+      "template_cah1wzr",
+      {
+        name,
+        quantity,
+        email,
+      },
+      "UxVsI42f_-yYz95gE"
+    );
+
+    console.log("Email envoyé avec succès :", response.status, response.text);
   } catch (error) {
-    console.error("Error sending email:", error);
-    throw new Error("Failed to send email");
+    console.error("Erreur lors de l'envoi de l'email :", error);
   }
-}
+};

@@ -25,12 +25,12 @@ export default function StatsAndDate() {
           <p className="text-xs md:text-sm text-bleu">Participants</p>
         </div>
       </div>
-     
+
       <div className="flex items-center space-x-4">
         <Heart className="h-6 w-6 text-jaune" />
         <div>
           <p className="text-lg md:text-2xl  font-semibold">{totalQuantity}</p>
-          <p className="text-xs md:text-sm text-bleu">Roses promis</p>
+          <p className="text-xs md:text-sm text-bleu">Roses promises</p>
         </div>
       </div>
       <div className="flex items-center space-x-4">
