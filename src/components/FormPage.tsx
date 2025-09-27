@@ -23,8 +23,7 @@ export default function FormPage({
   const [contactMethod, setContactMethod] = useState<"whatsapp" | "telegram">(
     "whatsapp"
   );
-  const [selected, setSelected] = useState("");
-
+  const [selected, setSelected] = useState<string>(""); // Assurez-vous que selected est bien une chaîne vide par défaut
   const [firstname, setFirstname] = useState("");
   const [name, setName] = useState("");
   const [quantity, setQuantity] = useState<number | undefined>(undefined);
@@ -35,10 +34,16 @@ export default function FormPage({
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
+    // Validation des champs
     if (quantity === undefined) {
       toast.error("La quantité doit être renseignée.");
       return;
     }
+
+    // if (!selected) {
+    //   toast.error("Veuillez sélectionner votre pays.");
+    //   return;
+    // }
 
     const formData = {
       firstname,
@@ -50,6 +55,7 @@ export default function FormPage({
       contact,
     };
 
+    // Enregistrement et envoi du mail
     await toast.promise(
       creatUser({ newUser: formData })
         .then(() =>
@@ -67,7 +73,7 @@ export default function FormPage({
       {
         loading: "Enregistrement en cours...",
         success: "Nom enregistré et mail envoyé avec succès",
-        error: "Echec veuillez réessayer",
+        error: "Échec, veuillez réessayer.",
       }
     );
   };
@@ -82,7 +88,6 @@ export default function FormPage({
       <Toaster
         toastOptions={{
           unstyled: false,
-
           classNames: {
             toast: "bg-white",
             title: "text-bleu",
