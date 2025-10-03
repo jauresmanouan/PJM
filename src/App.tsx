@@ -39,6 +39,7 @@ function App() {
             <div className="bg-bleu">
               <Accueil />
             </div>
+            
             <Footer />
           </div>
         )}
