@@ -11,6 +11,7 @@
     "email": "email dev --dir src/emails"
   },
   "dependencies": {
+    "@number-flow/react": "^0.5.10",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.0",
@@ -22,9 +23,11 @@
     "dotenv": "^16.4.5",
     "emailjs-com": "^3.2.0",
     "firebase": "^10.14.0",
+    "framer-motion": "^12.23.22",
     "lucide-react": "^0.447.0",
     "react-dom": "18.3.1",
     "react-flags-select": "^2.2.3",
+    "react-intersection-observer": "^9.16.0",
     "react-toastify": "^10.0.6",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.5.3",
