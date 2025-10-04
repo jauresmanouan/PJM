@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import HeaderBilan from "./components/HeaderBilan";
 import Bilan from "./components/Bilan";
 import Galerie from "./components/Galerie";
+import CallToAction from "./components/CallToAction";
 
 function App() {
   const [isClicked, setIsClicked] = useState(false);
@@ -42,8 +43,8 @@ function App() {
               <Accueil />
               <Bilan />
               <Galerie />
+              <CallToAction />
             </div>
-
             <Footer />
           </div>
         )}
