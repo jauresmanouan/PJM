@@ -4,6 +4,7 @@ import Accueil from "./components/Accueil";
 import Context from "./context/Context";
 import Footer from "./components/Footer";
 import HeaderBilan from "./components/HeaderBilan";
+import Bilan from "./components/Bilan";
 
 function App() {
   const [isClicked, setIsClicked] = useState(false);
@@ -36,8 +37,9 @@ function App() {
         {isClosedForm && (
           <div className="w-screen flex flex-col justify-between h-screen">
             <HeaderBilan />
-            <div className="bg-bleu">
+            <div>
               <Accueil />
+              <Bilan/>
             </div>
             
             <Footer />
