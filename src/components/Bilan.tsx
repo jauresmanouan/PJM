@@ -8,7 +8,7 @@ export default function Bilan() {
           <AnimatedNumber
             value={1187}
             textColor="text-jaune"
-            textSize="text-[12vw]"
+            textSize="text-[18vw]"
           />
           <p className="text-bleu text-[12vw]"> Roses</p>
         </div>
@@ -16,18 +16,23 @@ export default function Bilan() {
           <AnimatedNumber
             value={123}
             textColor="text-jaune"
-            textSize="text-[4vw]"
+            textSize="text-[5vw]"
           />
-          <p className="text-bleu text-[4vw]">&nbsp;Participants</p>
+          <p className="text-bleu text-[5vw]">&nbsp;Participants</p>
         </div>
         <div className="flex">
           <AnimatedNumber
-            value={27}
+            value={12}
             textColor="text-jaune"
-            textSize="text-[4vw]"
+            textSize="text-[5vw]"
           />
-          <p className="text-bleu text-[4vw]">&nbsp;Pays</p>
+          <p className="text-bleu text-[5vw]">&nbsp;Pays</p>
         </div>
+        <p className="bg-jaune p-2 md:p-5 mt-2 text-white text-lg md:text-5xl">
+          2024 fut beau 🤩
+          <br />
+          Merci pour ce bouquet !
+        </p>
       </div>
     </div>
   );
