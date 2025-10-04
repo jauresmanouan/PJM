@@ -7,6 +7,7 @@ import HeaderBilan from "./components/HeaderBilan";
 import Bilan from "./components/Bilan";
 import Galerie from "./components/Galerie";
 import CallToAction from "./components/CallToAction";
+import FAQ from "./components/FAQ";
 
 function App() {
   const [isClicked, setIsClicked] = useState(false);
@@ -28,7 +29,7 @@ function App() {
     <Context.Provider value={contextValue}>
       <div className="flex flex-col justify-center items-center h-screen w-screen">
         {isClicked && (
-          <div className="flex justify-center items-center h-screen w-screen">
+          <div className="flex justify-center items-center h-screen w-screen bg-bleu">
             <FormPage
               actionId={"Roses"}
               actionName={"Nombres de roses"}
@@ -44,6 +45,7 @@ function App() {
               <Bilan />
               <Galerie />
               <CallToAction />
+              <FAQ />
             </div>
             <Footer />
           </div>
