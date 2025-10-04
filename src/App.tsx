@@ -5,6 +5,7 @@ import Context from "./context/Context";
 import Footer from "./components/Footer";
 import HeaderBilan from "./components/HeaderBilan";
 import Bilan from "./components/Bilan";
+import Galerie from "./components/Galerie";
 
 function App() {
   const [isClicked, setIsClicked] = useState(false);
@@ -39,9 +40,10 @@ function App() {
             <HeaderBilan />
             <div>
               <Accueil />
-              <Bilan/>
+              <Bilan />
+              <Galerie />
             </div>
-            
+
             <Footer />
           </div>
         )}
