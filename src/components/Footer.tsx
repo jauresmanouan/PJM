@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <div className="bg-jaune w-screen h-screen flex flex-col justify-center items-center text-center font-intro text-sm">
+    <div className="bg-jaune w-screen flex flex-col justify-center items-center text-center font-intro text-sm">
       <hr className="w-52 md:w-60 m-2" />
       <div className="text-white font-intro text-sm mb-3">
         Portée par la Petite Thérèse 🌹
