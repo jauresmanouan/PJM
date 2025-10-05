@@ -3,6 +3,11 @@ import FormPage from "./components/FormPage";
 import Accueil from "./components/Accueil";
 import Context from "./context/Context";
 import Footer from "./components/Footer";
+import HeaderBilan from "./components/HeaderBilan";
+import Bilan from "./components/Bilan";
+import Galerie from "./components/Galerie";
+import CallToAction from "./components/CallToAction";
+import FAQ from "./components/FAQ";
 
 function App() {
   const [isClicked, setIsClicked] = useState(false);
@@ -22,9 +27,9 @@ function App() {
 
   return (
     <Context.Provider value={contextValue}>
-      <div className="flex flex-col justify-center items-center h-screen w-screen bg-bleu">
+      <div className="flex flex-col justify-center items-center h-screen w-screen">
         {isClicked && (
-          <div className="flex justify-center items-center h-screen w-screen">
+          <div className="flex justify-center items-center h-screen w-screen bg-bleu">
             <FormPage
               actionId={"Roses"}
               actionName={"Nombres de roses"}
@@ -33,15 +38,19 @@ function App() {
           </div>
         )}
         {isClosedForm && (
-          <>
-          <Accueil /> 
-          <Footer />
-          </>
-          )}
-      
+          <div className="w-screen flex flex-col justify-between h-screen">
+            <HeaderBilan />
+            <div>
+              <Accueil />
+              <Bilan />
+              <Galerie />
+              <CallToAction />
+              <FAQ />
+            </div>
+            <Footer />
+          </div>
+        )}
       </div>
-      
-     
     </Context.Provider>
   );
 }
