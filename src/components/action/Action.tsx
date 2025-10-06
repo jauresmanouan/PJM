@@ -22,21 +22,24 @@ export default function Action({
       <div className="flex flex-col md:flex-row md:justify-center md:items-center md:gap-20">
         <div className="flex flex-col justify-center items-center">
           <h1 className="flex justify-center items-center">
-            <div className="font-intro font-black text-4xl md:text-7xl text-jaune">
+            <div className="font-Raleway font-black text-4xl md:text-7xl text-jaune">
               {number}
             </div>
-            <div className="font-intro font-black text-4xl md:text-6xl text-white">
+            <div className="font-Raleway font-black text-4xl md:text-6xl text-white">
               {action}
             </div>
           </h1>
-          <p className="font-intro font-medium text-lg md:text-2xl text-white mb-4">
+          <p className="font-Raleway font-medium text-lg md:text-2xl text-white mb-2">
             Pour la Joie de Marie
+          </p>
+          <p className="font-Raleway font-medium text-xs text-white mb-2">
+            Edition 2025
           </p>
         </div>
       </div>
       <Button
         onClick={handleClicked}
-        className="font-intro w-48 md:w-60 transition duration-300 ease-in-out transform hover:scale-105"
+        className="font-Raleway w-48 md:w-60 transition duration-300 ease-in-out transform hover:scale-105"
       >
         Participer
       </Button>

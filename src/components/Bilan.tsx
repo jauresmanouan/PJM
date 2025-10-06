@@ -2,7 +2,7 @@ import { AnimatedNumber } from "./ui/skiper-ui/AnimatedNumber";
 
 export default function Bilan() {
   return (
-    <div className="font-intro text-black font-black leading-none flex flex-col justify-center items-center bg-white">
+    <div className="font-Raleway text-black font-black leading-none flex flex-col justify-center items-center bg-white">
       <div className="flex flex-col justify-center h-full p-20 text-black">
         <div className="flex flex-col">
           <AnimatedNumber

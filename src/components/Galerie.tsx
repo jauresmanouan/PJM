@@ -44,14 +44,10 @@ export default function Galerie() {
       >
         Quelques images des participants de 2024
       </Badge>
-      {/* <p className="text-center text-white font-intro mb-3">Merci à chacun </p> */}
+      {/* <p className="text-center text-white font-Raleway mb-3">Merci à chacun </p> */}
 
       {/* ✅ Typage implicite grâce au map sur un tableau de string */}
-<<<<<<< HEAD
-      <div className="grid grid-cols-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 gap-4 w-11/12 md:w-10/12 ">
-=======
       <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 gap-4 w-11/12 md:w-10/12 ">
->>>>>>> 1aa5b58 (🐛 Update Galerie component to improve image display and modal text)
         {images.map((src: string, index: number) => (
           <div
             key={index}

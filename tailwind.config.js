@@ -10,7 +10,7 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        intro: ["Intro", "sans-serif"],
+        raleway: ["Raleway", "sans-serif"],
       },
       colors: {
         background: "hsl(var(--background))",

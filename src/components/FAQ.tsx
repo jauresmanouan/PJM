@@ -13,19 +13,19 @@ export default function FAQ() {
       value: "paiement-roses",
       question: "Dois-je vous transmettre de l'argent pour l'achat de roses ?",
       answer:
-        "Non 💐. Vous achetez vous-même le nombre de roses que vous souhaitez offrir, puis vous les déposez le 8 décembre, jour dédié à l'Immaculée Conception de Marie.",
+        "Non. Vous achetez vous-même le nombre de roses que vous souhaitez offrir, puis vous les déposez le 8 décembre, jour dédié à l'Immaculée Conception de Marie.",
     },
     {
       value: "rencontre-depot",
       question: "Devons-nous nous rencontrer pour le dépôt des roses ?",
       answer:
-        "Non 🌹. Le dépôt des roses se fait directement sur votre paroisse. Chacun participe depuis son lieu de prière, dans un même élan d’amour et de foi.",
+        "Non. Le dépôt des roses se fait directement sur votre paroisse. Nous serons unis spirituellement en ce jour.",
     },
     {
       value: "type-roses",
       question: "Quel type de roses devrais-je offrir ?",
       answer:
-        "Nous vous invitons à choisir des roses fraîches, symboles de beauté, de pureté et de gratitude. La couleur est libre : chaque teinte exprime une tension particulière de votre cœur.",
+        "Nous vous invitons à choisir des roses naturelles, symboles de beauté, de pureté et de gratitude. La couleur est libre, chaque teinte exprime une tension particulière de votre cœur.",
     },
     {
       value: "confirmation-participation",
@@ -35,16 +35,28 @@ export default function FAQ() {
         "Après avoir rempli le formulaire, vous recevrez un email de confirmation. Celui-ci récapitule votre message et confirme votre participation. Si vous ne le recevez pas rapidement, vérifiez votre dossier spam ou contactez-nous.",
     },
     {
-      value: "origine-du-projet",
-      question:
-        "Pourquoi cette initiative s'appelle-t-elle « Pour la Joie de Marie » ?",
+      value: "changement-participation",
+      question: "Comment modifier le nombre de roses que j’ai choisi ?",
       answer:
-        "Ce projet est une offrande de cœur : un élan d’amour vers Jésus ❤️‍🔥, porté par la tendresse que nous avons pour sa Mère. Chaque rose déposée est un mot doux, un geste gratuit. Et tous ensemble, nous formons un seul et même bouquet, celui de nos cœurs unis, offert à Marie pour sa joie et celle de son Fils.",
+        "Il vous suffit de remplir à nouveau le formulaire avec le nouveau nombre de roses 🌹. Votre dernière soumission remplacera la précédente, et un nouvel email de confirmation vous sera envoyé pour valider votre participation.",
+    },
+    {
+      value: "jour-ouvrable",
+      question:
+        "Puis-je déposer mes roses un jour avant, le dimanche 7 décembre, si le 8 décembre tombe un lundi ?",
+      answer:
+        "Oui. Si vous ne pouvez pas déposer vos roses le lundi 8 décembre, vous pouvez les déposer dès le dimanche 7 décembre dans votre paroisse.",
+    },
+    {
+      value: "origine-du-projet",
+      question: "Pourquoi ce projet s’appelle « Pour la Joie de Marie » ?",
+      answer:
+        "Tout simplement pour réjouir le cœur uni de Jésus et Marie 😁. Leur cœur étant uni, la joie de l'un fait celle de l'autre, et Marie a été pour de nombreux saints un excellent chemin vers Jésus.",
     },
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-10 bg-bleu px-4 font-intro">
+    <div className="flex flex-col items-center justify-center min-h-screen py-10 bg-bleu px-4 font-Raleway">
       <div className="flex flex-col justify-center items-center w-full max-w-2xl bg-white rounded-2xl shadow-md p-8 space-y-6">
         <Badge
           variant="jaune"
