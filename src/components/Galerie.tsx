@@ -1,10 +1,13 @@
-import { Badge } from "./ui/badge";
 import { useState, useEffect } from "react";
+import { Badge } from "./ui/badge";
 
 export default function Galerie() {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const images = [
+  // ✅ Typage explicite des états
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  // ✅ Typage du tableau d’images
+  const images: string[] = [
     "images/photos/photo37.JPG",
     "images/photos/photo29.JPG",
     "images/photos/photo2.JPG",
@@ -22,28 +25,29 @@ export default function Galerie() {
     "images/photos/photo38.JPG",
   ];
 
-  // Gestion de l'ouverture/fermeture du modal
   useEffect(() => {
     if (selectedImage) {
       setIsModalOpen(true);
     }
   }, [selectedImage]);
 
-  const closeModal = () => {
+  const closeModal = (): void => {
     setIsModalOpen(false);
-    setTimeout(() => setSelectedImage(null), 300); // Temps pour la transition
+    setTimeout(() => setSelectedImage(null), 300); // délai pour l’animation
   };
 
   return (
     <div className="bg-bleu py-10 flex flex-col items-center">
       <Badge
         variant="jaune"
-        className="mb-6 text-lg px-4 py-2 rounded-full shadow-md"
+        className="mb-6 text-sm md:text-lg px-4 py-2 rounded-full shadow-md"
       >
         Quelques images
       </Badge>
+
+      {/* ✅ Typage implicite grâce au map sur un tableau de string */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 gap-4 w-11/12 md:w-10/12">
-        {images.map((src, index) => (
+        {images.map((src: string, index: number) => (
           <div
             key={index}
             className="overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer"
@@ -53,12 +57,13 @@ export default function Galerie() {
               src={src}
               alt={`Amoureux_${index + 1}`}
               className="w-full h-64 object-cover transform hover:scale-105 transition-transform duration-500"
+              loading="lazy" // 🔹 améliore les performances sur mobile
             />
           </div>
         ))}
       </div>
 
-      {/* Modal avec transition smooth */}
+      {/* ✅ Le rendu du modal reste sûr grâce au typage de selectedImage */}
       {selectedImage && (
         <div
           className={`fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4 transition-opacity duration-300 ${

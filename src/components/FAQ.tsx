@@ -44,18 +44,18 @@ export default function FAQ() {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-bleu px-4 font-intro">
+    <div className="flex flex-col items-center justify-center min-h-screen py-10 bg-bleu px-4 font-intro">
       <div className="flex flex-col justify-center items-center w-full max-w-2xl bg-white rounded-2xl shadow-md p-8 space-y-6">
         <Badge
           variant="jaune"
-          className="mx-auto text-lg px-4 py-2 rounded-full shadow-sm"
+          className="mx-auto text-sm md:text-lg px-4 py-2 rounded-full shadow-sm"
         >
           Questions fréquentes
         </Badge>
-        <p>Ce qu'il faut savoir avant le 8 décembre</p>
+        <p className="text-center">Ce qu'il faut savoir avant le 8 décembre</p>
 
         <Accordion
-          className="w-full space-y-2"
+          className="w-full space-y-2 mb-10"
           transition={{ duration: 0.15, ease: "easeInOut" }}
         >
           {faqs.map((faq) => (
@@ -66,7 +66,7 @@ export default function FAQ() {
             >
               <AccordionTrigger className="bg-white flex items-center justify-between w-full px-5 py-4 text-left hover:border-none focus:outline-none focus:border-none focus:ring-0">
                 <span>{faq.question}</span>
-                <ChevronDown className="h-5 w-5"/>
+                <ChevronDown className="h-5 w-5" />
               </AccordionTrigger>
               <AccordionContent className="px-5 pb-4 pt-4 bg-blue-50 font-medium">
                 {faq.answer}
