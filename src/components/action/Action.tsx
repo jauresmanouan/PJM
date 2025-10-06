@@ -29,8 +29,11 @@ export default function Action({
               {action}
             </div>
           </h1>
-          <p className="font-Raleway font-medium text-lg md:text-2xl text-white mb-4">
+          <p className="font-Raleway font-medium text-lg md:text-2xl text-white mb-2">
             Pour la Joie de Marie
+          </p>
+          <p className="font-Raleway font-medium text-xs text-white mb-2">
+            Edition 2025
           </p>
         </div>
       </div>

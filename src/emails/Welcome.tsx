@@ -53,7 +53,7 @@ export default function Welcome({
               Merci encore pour cet engagement.
             </Text>
             <Text className="text-sm font-light text-gray-500 italic mt-20 text-end">
-              "Portée par la Petite Thérèse 🌹"
+              "Portée par la Petite Thérèse et Carlo Acutis 🌹"
             </Text>
             <Text className="text-xs font-bold text-bleu mt-32 text-center no-underline">
               contact@pourlajoiedemarie.com
