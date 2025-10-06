@@ -46,7 +46,7 @@ export default function Galerie() {
       </Badge>
 
       {/* ✅ Typage implicite grâce au map sur un tableau de string */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 gap-4 w-11/12 md:w-10/12">
+      <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 gap-4 w-11/12 md:w-10/12">
         {images.map((src: string, index: number) => (
           <div
             key={index}
