@@ -33,7 +33,7 @@ export default function Galerie() {
 
   const closeModal = (): void => {
     setIsModalOpen(false);
-    setTimeout(() => setSelectedImage(null), 300); // délai pour l’animation
+    setTimeout(() => setSelectedImage(null), 300);
   };
 
   return (
@@ -42,11 +42,12 @@ export default function Galerie() {
         variant="jaune"
         className="mb-6 text-sm md:text-lg px-4 py-2 rounded-full shadow-md"
       >
-        Quelques images
+        Quelques images des participants de 2024
       </Badge>
+      {/* <p className="text-center text-white font-intro mb-3">Merci à chacun </p> */}
 
       {/* ✅ Typage implicite grâce au map sur un tableau de string */}
-      <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 gap-4 w-11/12 md:w-10/12">
+      <div className="grid grid-cols-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 gap-4 w-11/12 md:w-10/12 ">
         {images.map((src: string, index: number) => (
           <div
             key={index}
