@@ -44,7 +44,7 @@ export default function FAQ() {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-10 bg-bleu px-4 font-intro">
+    <div className="flex flex-col items-center justify-center min-h-screen py-10 bg-bleu px-4 font-Raleway">
       <div className="flex flex-col justify-center items-center w-full max-w-2xl bg-white rounded-2xl shadow-md p-8 space-y-6">
         <Badge
           variant="jaune"

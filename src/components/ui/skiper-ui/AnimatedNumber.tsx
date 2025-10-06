@@ -36,7 +36,7 @@ export const AnimatedNumber = ({
         onViewportLeave={() => {
           springSubCount.set(0);
         }}
-        className={`font-intro ${textSize} ${textColor} tracking-tight`}
+        className={`font-Raleway ${textSize} ${textColor} tracking-tight`}
       >
         {displaySubs}
       </motion.div>

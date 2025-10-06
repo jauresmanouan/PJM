@@ -95,7 +95,7 @@ export default function FormPage({
           },
         }}
       />
-      <Card className="w-full max-w-xs md:max-w-lg font-intro font-normal mx-auto p-1 md:p-8 m-5 md:m-0">
+      <Card className="w-full max-w-xs md:max-w-lg font-Raleway font-normal mx-auto p-1 md:p-8 m-5 md:m-0">
         <CardContent className="relative p-8">
           <CircleX
             onClick={handleClosedForm}

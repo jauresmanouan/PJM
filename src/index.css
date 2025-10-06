@@ -3,43 +3,43 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: "Intro";
-  src: url("./assets/fonts/Intro Black Alt.otf") format("opentype");
+  font-family: "Raleway";
+  src: url("./assets/fonts/Raleway Black Alt.otf") format("opentype");
   font-weight: 900;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "Intro";
-  src: url("./assets/fonts/Intro Bold Alt.otf") format("opentype");
+  font-family: "Raleway";
+  src: url("./assets/fonts/Raleway Bold Alt.otf") format("opentype");
   font-weight: 700;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "Intro";
-  src: url("./assets/fonts/Intro Book Alt.otf") format("opentype");
+  font-family: "Raleway";
+  src: url("./assets/fonts/Raleway Book Alt.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "Intro";
-  src: url("./assets/fonts/Intro Light Alt.otf") format("opentype");
+  font-family: "Raleway";
+  src: url("./assets/fonts/Raleway Light Alt.otf") format("opentype");
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "Intro";
-  src: url("./assets/fonts/Intro Regular Alt.otf") format("opentype");
+  font-family: "Raleway";
+  src: url("./assets/fonts/Raleway Regular Alt.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "Intro";
-  src: url("./assets/fonts/Intro Thin Alt.otf") format("opentype");
+  font-family: "Raleway";
+  src: url("./assets/fonts/Raleway Thin Alt.otf") format("opentype");
   font-weight: 100;
   font-style: normal;
 }
