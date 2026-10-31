@@ -2,15 +2,40 @@ import { useState } from "react";
 import { AnimatedNumber } from "./ui/skiper-ui/AnimatedNumber";
 import { Badge } from "./ui/badge";
 
+type Pays = { code: string; name: string; count: number };
+
+// Drapeau emoji à partir du code pays ISO.
+const flag = (code: string) =>
+  String.fromCodePoint(...[...code].map((c) => 127397 + c.charCodeAt(0)));
+
 // 2024 : chiffres de l'ancien bilan. 2025 : collection Firestore "users" (relevé du 31/10/2026).
 const editions = [
-  { year: 2024, roses: 1187, participants: 123, pays: 12 },
-  { year: 2025, roses: 752, participants: 93, pays: 8 },
+  { year: 2024, roses: 1187, participants: 123, pays: 12, detail: [] as Pays[] },
+  {
+    year: 2025,
+    roses: 752,
+    participants: 93,
+    pays: 8,
+    detail: [
+      { code: "CI", name: "Côte d'Ivoire", count: 80 },
+      { code: "CM", name: "Cameroun", count: 6 },
+      { code: "US", name: "États-Unis", count: 2 },
+      { code: "BF", name: "Burkina Faso", count: 1 },
+      { code: "FR", name: "France", count: 1 },
+      { code: "GA", name: "Gabon", count: 1 },
+      { code: "IT", name: "Italie", count: 1 },
+      { code: "SN", name: "Sénégal", count: 1 },
+    ] as Pays[],
+  },
 ];
 
 export default function Bilan() {
   const [year, setYear] = useState(2025);
   const e = editions.find((x) => x.year === year)!;
+  const [top, ...others] = e.detail;
+  const medium = others.filter((p) => p.count > 1);
+  const singles = others.filter((p) => p.count === 1);
+  const part = (p: Pays) => Math.round((p.count / e.participants) * 100);
 
   return (
     <section
@@ -64,9 +89,59 @@ export default function Bilan() {
             <p className="text-bleu text-sm md:text-2xl mt-2">pays</p>
           </div>
         </div>
+
+        <div className="w-full mt-8 text-left">
+          <p className="text-white text-xl md:text-3xl">D'où venaient les participants</p>
+          {e.detail.length === 0 ? (
+            <p className="text-white/80 font-medium text-sm md:text-lg mt-3 leading-snug">
+              Le détail par pays n'a pas été conservé pour {e.year}.
+            </p>
+          ) : (
+            <div key={year} className="flex flex-col gap-3 mt-5">
+              <div className="bg-white rounded-2xl p-5 md:p-8 flex items-center gap-4 md:gap-8">
+                <span aria-hidden="true" className="text-6xl md:text-8xl leading-none">
+                  {flag(top.code)}
+                </span>
+                <div>
+                  <p className="text-jaune text-5xl md:text-7xl leading-none">{top.count}</p>
+                  <p className="text-bleu text-base md:text-2xl mt-2">{top.name}</p>
+                  <p className="text-bleu/70 font-medium text-xs md:text-lg">
+                    {part(top)} % des participants
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                {medium.map((p) => (
+                  <div key={p.code} className="bg-white rounded-2xl p-4 md:p-6">
+                    <span aria-hidden="true" className="text-4xl md:text-6xl leading-none">
+                      {flag(p.code)}
+                    </span>
+                    <p className="text-jaune text-3xl md:text-5xl leading-none mt-3">{p.count}</p>
+                    <p className="text-bleu text-sm md:text-xl mt-1">{p.name}</p>
+                  </div>
+                ))}
+              </div>
+
+              <p className="text-white/80 font-medium text-xs md:text-base mt-2">
+                1 participant chacun
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {singles.map((p) => (
+                  <span
+                    key={p.code}
+                    className="bg-white/15 text-white rounded-full px-4 py-2 text-sm md:text-lg"
+                  >
+                    <span aria-hidden="true">{flag(p.code)}</span> {p.name}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
-      <p className="bg-jaune p-3 md:p-6 mt-14 text-white text-base md:text-4xl leading-tight">
+      <p className="bg-jaune rounded-2xl p-3 md:p-6 mt-14 text-white text-base md:text-4xl leading-tight">
         Merci pour ces bouquets 🌹
         <br />
         Rendez-vous le 8 décembre 2026
