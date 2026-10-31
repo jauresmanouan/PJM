@@ -9,7 +9,6 @@ import { creatUser } from "../api/users";
 import { CircleX } from "lucide-react";
 import context from "@/context/Context";
 import { Toaster, toast } from "sonner";
-import { SendEmail } from "./SendEmail";
 
 export default function FormPage({
   actionId,
@@ -58,21 +57,18 @@ export default function FormPage({
     // Enregistrement et envoi du mail
     await toast.promise(
       creatUser({ newUser: formData })
-        .then(() =>
-          SendEmail({
-            email: formData.email,
-            name: formData.name,
-            quantity: formData.quantity,
-          })
-        )
-        .then(() =>
+        .then((result) => {
           setTimeout(() => {
             window.location.reload();
-          }, 2500)
-        ),
+          }, 2500);
+          return result;
+        }),
       {
         loading: "Enregistrement en cours...",
-        success: "Nom enregistré et mail envoyé avec succès",
+        success: (result) =>
+          result.emailSent
+            ? "Participation enregistrée, email de confirmation envoyé"
+            : "Participation enregistrée",
         error: "Échec, veuillez réessayer.",
       }
     );

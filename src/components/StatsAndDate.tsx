@@ -8,9 +8,13 @@ export default function StatsAndDate() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { participants, totalQuantity } = await getUser();
-      setParticipants(participants);
-      setTotalQuantity(totalQuantity);
+      try {
+        const { participants, totalQuantity } = await getUser();
+        setParticipants(participants);
+        setTotalQuantity(totalQuantity);
+      } catch {
+        // Statistiques indisponibles : les compteurs restent à 0.
+      }
     };
 
     fetchData();
