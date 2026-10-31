@@ -1,6 +1,6 @@
+import { useState } from "react";
 import { AnimatedNumber } from "./ui/skiper-ui/AnimatedNumber";
 import { Badge } from "./ui/badge";
-import Barre from "./ui/Barre";
 
 // 2024 : chiffres de l'ancien bilan. 2025 : collection Firestore "users" (relevé du 31/10/2026).
 const editions = [
@@ -8,75 +8,66 @@ const editions = [
   { year: 2025, roses: 752, participants: 93, pays: 8 },
 ];
 
-const pays2025 = [
-  { name: "Côte d'Ivoire", count: 80 },
-  { name: "Cameroun", count: 6 },
-  { name: "États-Unis", count: 2 },
-  { name: "Burkina Faso", count: 1 },
-  { name: "France", count: 1 },
-  { name: "Gabon", count: 1 },
-  { name: "Italie", count: 1 },
-  { name: "Sénégal", count: 1 },
-];
-
-const totalRoses = editions.reduce((sum, e) => sum + e.roses, 0);
-const totalParticipations = editions.reduce((sum, e) => sum + e.participants, 0);
-
 export default function Bilan() {
+  const [year, setYear] = useState(2025);
+  const e = editions.find((x) => x.year === year)!;
+
   return (
     <section
       id="bilan"
-      className="scroll-mt-16 font-Raleway font-black leading-none flex flex-col items-center bg-white px-6 md:px-20 py-16 md:py-24"
+      className="scroll-mt-16 font-Raleway font-black leading-none flex flex-col items-center text-center bg-white px-4 md:px-20 py-16 md:py-24"
     >
       <Badge
         variant="jaune"
         className="text-sm md:text-lg px-4 py-2 rounded-full shadow-md"
       >
-        Bilan 2024 · 2025
+        Bilan
       </Badge>
-      <p className="text-jaune font-bold text-sm md:text-2xl mt-4 leading-snug">
-        Revenir sur deux années de ferveur
+      <p className="text-bleu text-2xl md:text-5xl mt-6 leading-tight">
+        Revenir sur nos éditions
       </p>
 
-      <div className="flex flex-col items-center text-center mt-10">
-        <AnimatedNumber
-          value={totalRoses}
-          textColor="text-jaune"
-          textSize="text-[18vw]"
-        />
-        <p className="text-bleu text-[9vw] md:text-[7vw]">roses offertes</p>
-        <p className="text-bleu font-medium text-sm md:text-2xl mt-3 leading-snug">
-          par {totalParticipations} participations, depuis la première édition
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-5 md:gap-8 w-full max-w-5xl mt-14 text-left">
-        <div className="md:col-span-2 bg-jaune text-white rounded-3xl p-8 md:p-10 flex flex-col justify-center items-center text-center md:items-start md:text-left">
-          <p className="text-white text-7xl md:text-8xl leading-none">
-            {Math.round((pays2025[0].count / editions[1].participants) * 100)} %
-          </p>
-          <p className="text-lg md:text-2xl mt-4 leading-snug">
-            des participants de 2025 venaient de {pays2025[0].name}
-          </p>
+      <div className="w-full max-w-3xl mt-10 bg-bleu rounded-3xl p-6 md:p-12 flex flex-col items-center">
+        <div className="flex gap-3">
+          {editions.map((x) => (
+            <button
+              key={x.year}
+              onClick={() => setYear(x.year)}
+              aria-pressed={x.year === year}
+              className={`rounded-full px-6 py-2 text-base md:text-xl transition-colors duration-200 ${
+                x.year === year
+                  ? "bg-jaune text-white"
+                  : "bg-white/15 text-white active:bg-white/25"
+              }`}
+            >
+              {x.year}
+            </button>
+          ))}
         </div>
-        <div className="md:col-span-3 bg-bleu text-white rounded-3xl p-6 md:p-10">
-          <p className="text-white text-2xl md:text-4xl">Les pays en 2025</p>
-          <div className="flex flex-col gap-3 mt-6 text-sm md:text-lg">
-            {pays2025.map((p) => (
-              <div key={p.name} className="flex items-center gap-3">
-                <span className="w-28 md:w-40 shrink-0">{p.name}</span>
-                <div className="flex-1 h-3 md:h-4 rounded-full bg-white/25">
-                  <Barre pct={(p.count / pays2025[0].count) * 100} className="bg-jaune" />
-                </div>
-                <span className="w-8 text-right">{p.count}</span>
-              </div>
-            ))}
+
+        <div key={year} className="flex flex-col items-center mt-8">
+          <AnimatedNumber
+            value={e.roses}
+            textColor="text-jaune"
+            textSize="text-[24vw] md:text-[12vw]"
+          />
+          <p className="text-white text-[9vw] md:text-[4vw] mt-1">roses offertes</p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 md:gap-5 w-full mt-8">
+          <div className="bg-white rounded-2xl py-5 md:py-8">
+            <p className="text-jaune text-4xl md:text-6xl">{e.participants}</p>
+            <p className="text-bleu text-sm md:text-2xl mt-2">participants</p>
+          </div>
+          <div className="bg-white rounded-2xl py-5 md:py-8">
+            <p className="text-jaune text-4xl md:text-6xl">{e.pays}</p>
+            <p className="text-bleu text-sm md:text-2xl mt-2">pays</p>
           </div>
         </div>
       </div>
 
-      <p className="bg-jaune p-3 md:p-6 mt-14 text-white text-base md:text-5xl leading-tight">
-        Merci pour ces deux bouquets 🌹
+      <p className="bg-jaune p-3 md:p-6 mt-14 text-white text-base md:text-4xl leading-tight">
+        Merci pour ces bouquets 🌹
         <br />
         Rendez-vous le 8 décembre 2026
       </p>

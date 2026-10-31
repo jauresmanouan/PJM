@@ -17,8 +17,8 @@ export default function StatsAndDate() {
   }, []);
 
   return (
-    <div className="p-3 md:p-5 m-6 md:m-0 md:relative md:bottom-10 font-Raleway bg-white rounded-3xl mb-10 gap-5 md:gap-5 flex flex-row items-start text-center justify-center text-bleu">
-      <div className="flex flex-col md:flex-row items-center justify-center gap-1 md:gap-4 md:text-left">
+    <div className="p-3 md:p-5 m-12 md:m-0 md:relative md:bottom-10 font-Raleway bg-white rounded-3xl mb-10 gap-2 md:gap-5 md:flex justify-center items-center text-bleu">
+      <div className="flex items-center space-x-4">
         <Users className="h-6 w-6 text-jaune" />
         <div>
           <p className="text-lg md:text-2xl font-semibold">{participants}</p>
@@ -26,14 +26,14 @@ export default function StatsAndDate() {
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row items-center justify-center gap-1 md:gap-4 md:text-left">
+      <div className="flex items-center space-x-4">
         <Heart className="h-6 w-6 text-jaune" />
         <div>
           <p className="text-lg md:text-2xl  font-semibold">{totalQuantity}</p>
           <p className="text-xs md:text-sm text-bleu">Roses promises</p>
         </div>
       </div>
-      <div className="flex flex-col md:flex-row items-center justify-center gap-1 md:gap-4 md:text-left">
+      <div className="flex items-center space-x-4">
         <Calendar className="h-6 w-6 text-jaune" />
         <div>
           <p className="text-lg md:text-2xl  font-semibold">8 Dec</p>

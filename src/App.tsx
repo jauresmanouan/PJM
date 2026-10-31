@@ -10,7 +10,7 @@ import CallToAction from "./components/CallToAction";
 import FAQ from "./components/FAQ";
 import Compte from "./components/Compte";
 import Etapes from "./components/Etapes";
-import BlurReveal from "./components/BlurReveal";
+import RetourHaut from "./components/RetourHaut";
 
 function App() {
   const [isClicked, setIsClicked] = useState(false);
@@ -43,7 +43,7 @@ function App() {
         {isClosedForm && (
           <div className="w-screen flex flex-col justify-between min-h-svh">
             <Header />
-            <BlurReveal>
+            <div>
               <Accueil />
               <Compte />
               <Etapes />
@@ -51,8 +51,9 @@ function App() {
               <Galerie />
               <CallToAction />
               <FAQ />
-            </BlurReveal>
+            </div>
             <Footer />
+            <RetourHaut />
           </div>
         )}
       </div>

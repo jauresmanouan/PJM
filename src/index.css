@@ -74,28 +74,6 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
-.blur-in {
-  opacity: 0;
-  filter: blur(10px);
-  transform: translateY(20px);
-  transition: opacity 0.7s cubic-bezier(0.23, 1, 0.32, 1),
-    filter 0.7s cubic-bezier(0.23, 1, 0.32, 1),
-    transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
-}
-.blur-in.is-visible {
-  opacity: 1;
-  filter: none;
-  transform: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .blur-in {
-    filter: none;
-    transform: none;
-    transition: opacity 0.3s ease;
-  }
-}
-
 button,
 a {
   touch-action: manipulation;

@@ -7,7 +7,7 @@ import logo from "../../public/iconePJM.svg";
 const links = [
   { href: "#accueil", label: "Accueil" },
   { href: "#etapes", label: "Comment participer" },
-  { href: "#bilan", label: "Bilan 2024 · 2025" },
+  { href: "#bilan", label: "Bilan" },
   { href: "#galerie", label: "Galerie" },
   { href: "#participer", label: "Participer" },
   { href: "#faq", label: "Questions" },
@@ -83,10 +83,9 @@ export default function Header() {
                   key={link.href}
                   initial={{
                     opacity: 0,
-                    filter: reduce ? "none" : "blur(8px)",
                     transform: reduce ? "none" : "translateY(24px)",
                   }}
-                  animate={{ opacity: 1, filter: "blur(0px)", transform: "translateY(0px)" }}
+                  animate={{ opacity: 1, transform: "translateY(0px)" }}
                   transition={{ duration: 0.3, ease, delay: 0.05 + index * 0.05 }}
                 >
                   <a
