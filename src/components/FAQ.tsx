@@ -43,9 +43,9 @@ export default function FAQ() {
     {
       value: "jour-ouvrable",
       question:
-        "Puis-je déposer mes roses un jour avant, le dimanche 7 décembre, si le 8 décembre tombe un lundi ?",
+        "Puis-je déposer mes roses la veille, le lundi 7 décembre ?",
       answer:
-        "Oui. Si vous ne pouvez pas déposer vos roses le lundi 8 décembre, vous pouvez les déposer dès le dimanche 7 décembre dans votre paroisse.",
+        "Oui. En 2026, le 8 décembre tombe un mardi. Si vous ne pouvez pas déposer vos roses ce jour-là, vous pouvez les déposer dès le lundi 7 décembre dans votre paroisse.",
     },
     {
       value: "origine-du-projet",
@@ -56,7 +56,7 @@ export default function FAQ() {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-10 bg-bleu px-4 font-Raleway">
+    <section id="faq" className="scroll-mt-16 flex flex-col items-center justify-center min-h-screen py-10 bg-bleu px-4 font-Raleway">
       <div className="flex flex-col justify-center items-center w-full max-w-2xl bg-white rounded-2xl shadow-md p-8 space-y-6">
         <Badge
           variant="jaune"
@@ -87,6 +87,6 @@ export default function FAQ() {
           ))}
         </Accordion>
       </div>
-    </div>
+    </section>
   );
 }

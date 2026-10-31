@@ -1,13 +1,16 @@
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { getDb } from "./firebase-config";
 
+// Une collection par édition : les inscriptions 2025 restent dans "users".
+const COLLECTION = "users2026";
+
 export const getUser = async () => {
   const db = getDb();
   if (!db) {
     throw new Error("Firestore is not initialized. This function should be called client-side.");
   }
 
-  const docRef = collection(db, "users");
+  const docRef = collection(db, COLLECTION);
   const resultat = await getDocs(docRef);
 
   // Nombre de participants
@@ -43,6 +46,6 @@ export const creatUser = async ({
     throw new Error("Firestore is not initialized. This function should be called client-side.");
   }
 
-  const docRef = doc(db, "users", newUser.email);
+  const docRef = doc(db, COLLECTION, newUser.email);
   await setDoc(docRef, newUser);
 };

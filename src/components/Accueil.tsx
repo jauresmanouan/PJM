@@ -3,9 +3,9 @@ import Action from "./action/Action";
 
 export default function Accueil() {
   return (
-    <div className="flex flex-col justify-center items-center h-screen bg-bleu">
+    <section id="accueil" className="scroll-mt-16 flex flex-col justify-center items-center h-screen bg-bleu">
       <StatsAndDate />
       <Action number={1000} action="Roses" />
-    </div>
+    </section>
   );
 }

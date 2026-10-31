@@ -1,29 +1,16 @@
 import { useState, useEffect } from "react";
 import { Badge } from "./ui/badge";
+import { galleryYears } from "@/gallery-data";
+import logo from "../../public/iconePJM.svg";
 
 export default function Galerie() {
   // ✅ Typage explicite des états
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  // ✅ Typage du tableau d’images
-  const images: string[] = [
-    "images/photos/photo37.JPG",
-    "images/photos/photo29.JPG",
-    "images/photos/photo2.JPG",
-    "images/photos/photo36.JPG",
-    "images/photos/photo5.JPG",
-    "images/photos/photo6.JPG",
-    "images/photos/photo9.JPG",
-    "images/photos/photo10.JPG",
-    "images/photos/photo11.JPG",
-    "images/photos/photo12.JPG",
-    "images/photos/photo15.JPG",
-    "images/photos/photo18.JPG",
-    "images/photos/photo23.JPG",
-    "images/photos/photo30.JPG",
-    "images/photos/photo38.JPG",
-  ];
+  const latest = [...galleryYears].reverse().find((g) => g.photos.length);
+  const [year, setYear] = useState(latest?.year ?? galleryYears[0].year);
+  const images = galleryYears.find((g) => g.year === year)?.photos ?? [];
 
   useEffect(() => {
     if (selectedImage) {
@@ -37,16 +24,43 @@ export default function Galerie() {
   };
 
   return (
-    <div className="bg-bleu py-10 flex flex-col items-center">
+    <section id="galerie" className="scroll-mt-16 bg-bleu py-16 flex flex-col items-center font-Raleway">
       <Badge
         variant="jaune"
         className="mb-6 text-sm md:text-lg px-4 py-2 rounded-full shadow-md"
       >
-        Quelques images des participants de 2024
+        Les roses des participants
       </Badge>
-      {/* <p className="text-center text-white font-Raleway mb-3">Merci à chacun </p> */}
 
-      {/* ✅ Typage implicite grâce au map sur un tableau de string */}
+      <div className="flex gap-3 mb-8">
+        {galleryYears.map((g) => (
+          <button
+            key={g.year}
+            onClick={() => setYear(g.year)}
+            className={`rounded-full px-5 py-2 font-bold transition-colors duration-200 ${
+              g.year === year
+                ? "bg-jaune text-white"
+                : "bg-white/15 text-white hover:bg-white/25"
+            }`}
+          >
+            {g.year}
+          </button>
+        ))}
+      </div>
+
+      {images.length === 0 && (
+        <div className="w-11/12 md:w-10/12 rounded-3xl bg-white/10 text-white flex flex-col items-center text-center px-6 py-16 md:py-24">
+          <img src={logo} alt="" className="w-14 md:w-20 mb-6" />
+          <p className="font-black text-2xl md:text-4xl">
+            L'album {year} se prépare
+          </p>
+          <p className="mt-3 text-sm md:text-lg text-white/80 max-w-md">
+            Après le 8 décembre, les photos de vos roses déposées en paroisse
+            prendront place ici.
+          </p>
+        </div>
+      )}
+
       <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 gap-4 w-11/12 md:w-10/12 ">
         {images.map((src: string, index: number) => (
           <div
@@ -85,6 +99,6 @@ export default function Galerie() {
           </div>
         </div>
       )}
-    </div>
+    </section>
   );
 }

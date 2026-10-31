@@ -33,7 +33,7 @@ export default function Action({
             Pour la Joie de Marie
           </p>
           <p className="font-Raleway font-medium text-xs text-white mb-2">
-            Edition 2025
+            Édition 2026
           </p>
         </div>
       </div>

@@ -3,7 +3,7 @@ import FormPage from "./components/FormPage";
 import Accueil from "./components/Accueil";
 import Context from "./context/Context";
 import Footer from "./components/Footer";
-import HeaderBilan from "./components/HeaderBilan";
+import Header from "./components/Header";
 import Bilan from "./components/Bilan";
 import Galerie from "./components/Galerie";
 import CallToAction from "./components/CallToAction";
@@ -27,7 +27,7 @@ function App() {
 
   return (
     <Context.Provider value={contextValue}>
-      <div className="flex flex-col justify-center items-center h-screen w-screen">
+      <div className="flex flex-col justify-center items-center min-h-screen w-screen">
         {isClicked && (
           <div className="flex justify-center items-center h-screen w-screen bg-bleu">
             <FormPage
@@ -38,8 +38,8 @@ function App() {
           </div>
         )}
         {isClosedForm && (
-          <div className="w-screen flex flex-col justify-between h-screen">
-            <HeaderBilan />
+          <div className="w-screen flex flex-col justify-between min-h-screen">
+            <Header />
             <div>
               <Accueil />
               <Bilan />
