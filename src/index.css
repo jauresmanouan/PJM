@@ -70,6 +70,49 @@ a:hover {
 
 html {
   scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+.blur-in {
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(20px);
+  transition: opacity 0.7s cubic-bezier(0.23, 1, 0.32, 1),
+    filter 0.7s cubic-bezier(0.23, 1, 0.32, 1),
+    transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.blur-in.is-visible {
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blur-in {
+    filter: none;
+    transform: none;
+    transition: opacity 0.3s ease;
+  }
+}
+
+button,
+a {
+  touch-action: manipulation;
+}
+
+button {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* iOS zoome la page si le texte d'un champ fait moins de 16px */
+@media (pointer: coarse) {
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

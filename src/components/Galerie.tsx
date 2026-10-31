@@ -61,7 +61,7 @@ export default function Galerie() {
         </div>
       )}
 
-      <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 gap-4 w-11/12 md:w-10/12 ">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 gap-4 w-11/12 md:w-10/12 ">
         {images.map((src: string, index: number) => (
           <div
             key={index}
@@ -71,7 +71,7 @@ export default function Galerie() {
             <img
               src={src}
               alt={`Amoureux_${index + 1}`}
-              className="w-full h-64 object-cover transform hover:scale-105 transition-transform duration-500"
+              className="w-full h-44 md:h-64 object-cover transform hover:scale-105 transition-transform duration-500"
               loading="lazy" // 🔹 améliore les performances sur mobile
             />
           </div>

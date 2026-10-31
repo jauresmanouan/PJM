@@ -6,6 +6,7 @@ import logo from "../../public/iconePJM.svg";
 
 const links = [
   { href: "#accueil", label: "Accueil" },
+  { href: "#etapes", label: "Comment participer" },
   { href: "#bilan", label: "Bilan 2024 · 2025" },
   { href: "#galerie", label: "Galerie" },
   { href: "#participer", label: "Participer" },
@@ -33,7 +34,7 @@ export default function Header() {
   }, [isOpen]);
 
   return (
-    <header className="sticky top-0 z-40 bg-white font-Raleway">
+    <header style={{ paddingTop: "env(safe-area-inset-top)" }} className="sticky top-0 z-40 bg-white font-Raleway">
       <div className="flex justify-between items-center px-5 md:px-10 py-3">
         <a href="#accueil" className="flex items-center gap-3">
           <img src={logo} alt="" className="w-9 md:w-11" />
@@ -45,7 +46,7 @@ export default function Header() {
           onClick={() => setIsOpen(true)}
           aria-label="Ouvrir le menu"
           aria-expanded={isOpen}
-          className="bg-transparent p-2 text-bleu hover:text-jaune"
+          className="bg-transparent p-3 -mr-3 text-bleu hover:text-jaune active:text-jaune"
         >
           <Menu className="h-7 w-7 md:h-8 md:w-8" />
         </button>
@@ -56,7 +57,8 @@ export default function Header() {
           <motion.nav
             key="menu"
             aria-label="Menu principal"
-            className="fixed inset-0 z-50 bg-bleu text-white flex flex-col px-6 md:px-16 py-5 overflow-y-auto"
+            style={{ paddingTop: "max(1.25rem, env(safe-area-inset-top))", paddingBottom: "max(1.25rem, env(safe-area-inset-bottom))" }}
+            className="fixed inset-0 z-50 bg-bleu text-white flex flex-col px-6 md:px-16 overflow-y-auto overscroll-contain"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -69,7 +71,7 @@ export default function Header() {
               <button
                 onClick={() => setIsOpen(false)}
                 aria-label="Fermer le menu"
-                className="bg-transparent p-2 text-white hover:text-jaune"
+                className="bg-transparent p-3 -mr-3 text-white hover:text-jaune active:text-jaune"
               >
                 <X className="h-8 w-8" />
               </button>
@@ -81,9 +83,10 @@ export default function Header() {
                   key={link.href}
                   initial={{
                     opacity: 0,
+                    filter: reduce ? "none" : "blur(8px)",
                     transform: reduce ? "none" : "translateY(24px)",
                   }}
-                  animate={{ opacity: 1, transform: "translateY(0px)" }}
+                  animate={{ opacity: 1, filter: "blur(0px)", transform: "translateY(0px)" }}
                   transition={{ duration: 0.3, ease, delay: 0.05 + index * 0.05 }}
                 >
                   <a

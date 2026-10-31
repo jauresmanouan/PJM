@@ -8,6 +8,9 @@ import Bilan from "./components/Bilan";
 import Galerie from "./components/Galerie";
 import CallToAction from "./components/CallToAction";
 import FAQ from "./components/FAQ";
+import Compte from "./components/Compte";
+import Etapes from "./components/Etapes";
+import BlurReveal from "./components/BlurReveal";
 
 function App() {
   const [isClicked, setIsClicked] = useState(false);
@@ -27,9 +30,9 @@ function App() {
 
   return (
     <Context.Provider value={contextValue}>
-      <div className="flex flex-col justify-center items-center min-h-screen w-screen">
+      <div className="flex flex-col justify-center items-center min-h-svh w-screen">
         {isClicked && (
-          <div className="flex justify-center items-center h-screen w-screen bg-bleu">
+          <div className="flex justify-center items-center min-h-svh w-screen bg-bleu">
             <FormPage
               actionId={"Roses"}
               actionName={"Nombres de roses"}
@@ -38,15 +41,17 @@ function App() {
           </div>
         )}
         {isClosedForm && (
-          <div className="w-screen flex flex-col justify-between min-h-screen">
+          <div className="w-screen flex flex-col justify-between min-h-svh">
             <Header />
-            <div>
+            <BlurReveal>
               <Accueil />
+              <Compte />
+              <Etapes />
               <Bilan />
               <Galerie />
               <CallToAction />
               <FAQ />
-            </div>
+            </BlurReveal>
             <Footer />
           </div>
         )}

@@ -1,5 +1,6 @@
 import { AnimatedNumber } from "./ui/skiper-ui/AnimatedNumber";
 import { Badge } from "./ui/badge";
+import Barre from "./ui/Barre";
 
 // 2024 : chiffres de l'ancien bilan. 2025 : collection Firestore "users" (relevé du 31/10/2026).
 const editions = [
@@ -37,7 +38,7 @@ export default function Bilan() {
         Revenir sur deux années de ferveur
       </p>
 
-      <div className="flex flex-col mt-10">
+      <div className="flex flex-col items-center text-center mt-10">
         <AnimatedNumber
           value={totalRoses}
           textColor="text-jaune"
@@ -49,55 +50,29 @@ export default function Bilan() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8 w-full max-w-5xl mt-14">
-        {editions.map((e) => (
-          <div
-            key={e.year}
-            className="bg-bleu text-white rounded-3xl p-8 md:p-10 text-left"
-          >
-            <p className="text-jaune text-5xl md:text-7xl">{e.year}</p>
-            <div className="flex items-baseline gap-3 mt-6">
-              <AnimatedNumber
-                value={e.roses}
-                textColor="text-white"
-                textSize="text-5xl md:text-6xl"
-              />
-              <span className="text-xl md:text-2xl">roses</span>
-            </div>
-            <div className="flex flex-wrap gap-x-8 gap-y-3 mt-6 font-bold text-base md:text-xl">
-              <p>
-                <span className="text-jaune">{e.participants}</span> participants
-              </p>
-              <p>
-                <span className="text-jaune">{e.pays}</span> pays
-              </p>
-              <p>
-                <span className="text-jaune">
-                  {(e.roses / e.participants).toFixed(1).replace(".", ",")}
-                </span>{" "}
-                roses par personne
-              </p>
-            </div>
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-5 md:gap-8 w-full max-w-5xl mt-14 text-left">
+        <div className="md:col-span-2 bg-jaune text-white rounded-3xl p-8 md:p-10 flex flex-col justify-center items-center text-center md:items-start md:text-left">
+          <p className="text-white text-7xl md:text-8xl leading-none">
+            {Math.round((pays2025[0].count / editions[1].participants) * 100)} %
+          </p>
+          <p className="text-lg md:text-2xl mt-4 leading-snug">
+            des participants de 2025 venaient de {pays2025[0].name}
+          </p>
+        </div>
+        <div className="md:col-span-3 bg-bleu text-white rounded-3xl p-6 md:p-10">
+          <p className="text-white text-2xl md:text-4xl">Les pays en 2025</p>
+          <div className="flex flex-col gap-3 mt-6 text-sm md:text-lg">
+            {pays2025.map((p) => (
+              <div key={p.name} className="flex items-center gap-3">
+                <span className="w-28 md:w-40 shrink-0">{p.name}</span>
+                <div className="flex-1 h-3 md:h-4 rounded-full bg-white/25">
+                  <Barre pct={(p.count / pays2025[0].count) * 100} className="bg-jaune" />
+                </div>
+                <span className="w-8 text-right">{p.count}</span>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-
-      <div className="w-full max-w-5xl mt-14 text-left">
-        <p className="text-bleu text-2xl md:text-4xl">
-          D'où venaient les participants en 2025
-        </p>
-        <ul className="flex flex-wrap gap-3 mt-6 font-bold text-sm md:text-lg">
-          {pays2025.map((p, index) => (
-            <li
-              key={p.name}
-              className={`rounded-full px-4 py-2 ${
-                index === 0 ? "bg-jaune text-white" : "bg-blue-50 text-bleu"
-              }`}
-            >
-              {p.name} <span className={index === 0 ? "" : "text-jaune"}>{p.count}</span>
-            </li>
-          ))}
-        </ul>
+        </div>
       </div>
 
       <p className="bg-jaune p-3 md:p-6 mt-14 text-white text-base md:text-5xl leading-tight">
