@@ -1,0 +1,4 @@
+{
+  "crons": [{ "path": "/api/relances", "schedule": "0 8 * * *" }],
+  "functions": { "api/relances.ts": { "maxDuration": 60 } }
+}
