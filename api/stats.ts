@@ -1,5 +1,5 @@
-import { configured, supabaseRequest } from "./_supabase";
-import { currentEdition } from "./_deliver";
+import { configured, supabaseRequest } from "./_supabase.js";
+import { currentEdition } from "./_deliver.js";
 
 export async function GET() {
   if (!configured()) return Response.json({ error: "Statistiques indisponibles" }, { status: 503 });

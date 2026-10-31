@@ -1,6 +1,6 @@
-import { configured, supabaseRequest } from "./_supabase";
-import { deliver, totalRoses, type Edition, type Recipient } from "./_deliver";
-import { RULES, daysLeft, isCampaignKind, kindForDays } from "./_schedule";
+import { configured, supabaseRequest } from "./_supabase.js";
+import { deliver, totalRoses, type Edition, type Recipient } from "./_deliver.js";
+import { RULES, daysLeft, isCampaignKind, kindForDays } from "./_schedule.js";
 
 // Appelé chaque jour par le cron Vercel (voir vercel.json), qui envoie « Authorization: Bearer $CRON_SECRET ».
 // Options pour tester à la main :  ?dry=1  compte les destinataires sans rien envoyer

@@ -1,5 +1,5 @@
-import { configured, supabaseRequest } from "./_supabase";
-import { currentEdition, deliver, type Recipient } from "./_deliver";
+import { configured, supabaseRequest } from "./_supabase.js";
+import { currentEdition, deliver, type Recipient } from "./_deliver.js";
 
 type Input = {
   firstname?: unknown; name?: unknown; quantity?: unknown; email?: unknown;

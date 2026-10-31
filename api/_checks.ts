@@ -1,9 +1,9 @@
 // Vérifications de la logique d'envoi : npm run check:mail
 import assert from "node:assert/strict";
 import { createHmac } from "node:crypto";
-import { daysLeft, kindForDays, RULES, isCampaignKind } from "./_schedule";
-import { render } from "./_emails";
-import { verifyWebhook } from "./_resend";
+import { daysLeft, kindForDays, RULES, isCampaignKind } from "./_schedule.js";
+import { render } from "./_emails.js";
+import { verifyWebhook } from "./_resend.js";
 
 // Calendrier : une fenêtre par type d'email, sans trou entre J-14 et J+7.
 const expected: Record<number, string | null> = {

@@ -1,5 +1,5 @@
-import { configured, supabaseRequest } from "./_supabase";
-import { verifyWebhook } from "./_resend";
+import { configured, supabaseRequest } from "./_supabase.js";
+import { verifyWebhook } from "./_resend.js";
 
 // À déclarer dans Resend > Webhooks (événements email.bounced et email.complained) vers /api/resend-webhook.
 // Un rebond définitif ou une plainte désabonne automatiquement le destinataire : protège la réputation d'envoi.

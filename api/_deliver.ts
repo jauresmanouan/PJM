@@ -1,7 +1,7 @@
-import { supabaseRequest } from "./_supabase";
-import { render } from "./_emails";
-import { daysLeft, type Kind } from "./_schedule";
-import { mailConfig, sendBatch, type Message } from "./_resend";
+import { supabaseRequest } from "./_supabase.js";
+import { render } from "./_emails.js";
+import { daysLeft, type Kind } from "./_schedule.js";
+import { mailConfig, sendBatch, type Message } from "./_resend.js";
 
 export type Recipient = {
   email: string;

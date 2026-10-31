@@ -1,4 +1,4 @@
-import type { Kind } from "./_schedule";
+import type { Kind } from "./_schedule.js";
 
 const BLEU = "#0A71B8";
 const JAUNE = "#F39200";
