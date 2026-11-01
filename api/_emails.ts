@@ -230,7 +230,7 @@ function content(kind: Kind, c: EmailContext): Content {
           },
           { t: "p", text: "Chaque rose constituera une oraison silencieuse, une action de grâce à Celle qui nous conduit au Verbe." },
           { t: "p", text: "Joignez votre rose aux nôtres : l'inscription prend une minute." },
-          { t: "button", label: "Joindre ma rose aux nôtres", style: "jaune", url: c.siteUrl },
+          { t: "button", label: "Joindre ma rose aux autres", style: "jaune", url: c.siteUrl },
           ...(toussaint ? ([partager(c)] as Block[]) : []),
         ],
       };

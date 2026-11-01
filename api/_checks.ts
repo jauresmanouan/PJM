@@ -35,7 +35,7 @@ for (const kind of ["confirmation", "relance_j14", "relance_j1", "jour_j", "merc
 assert.ok(render("jour_j", { ...ctx, quantity: 3 }).text.includes("3 roses"), "jour J");
 assert.ok(render("merci", { ...ctx, totalRoses: 752, participants: 93 }).text.includes("n'a pas été atteint"), "objectif non atteint");
 assert.ok(render("merci", { ...ctx, totalRoses: 1043, participants: 118 }).text.includes("est atteint"), "objectif atteint");
-assert.ok(render("invitation", ctx).html.includes("Joindre ma rose"), "invitation");
+assert.ok(render("invitation", ctx).html.includes("Joindre ma rose aux autres"), "invitation");
 assert.ok(!isCampaignKind("invitation") && !isCampaignKind("confirmation"), "invitation et confirmation ne sont jamais planifiées");
 
 // Webhook Svix : signature valide acceptée, corps altéré ou vieux timestamp refusés.
