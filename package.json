@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "email": "email dev --dir src/emails",
-    "check:mail": "esbuild api/_checks.ts --bundle --platform=node --format=esm | node --input-type=module"
+    "check:mail": "esbuild api/_checks.ts --bundle --platform=node --format=esm | node --input-type=module",
+    "mail:test": "esbuild api/_send-test.ts --bundle --platform=node --format=esm | node --env-file=.env.local --input-type=module -"
   },
   "dependencies": {
     "@number-flow/react": "^0.5.10",
