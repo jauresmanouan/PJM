@@ -19,6 +19,8 @@ export type EmailContext = {
   siteUrl: string;
   logoUrl: string;
   unsubscribeUrl: string;
+  occasion?: "toussaint"; // vœux ajoutés à l'invitation
+  annees?: number[]; // éditions auxquelles la personne a déjà participé
 };
 
 type Block =
@@ -35,6 +37,12 @@ export function escapeHtml(value: string) {
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] || c
   );
 }
+
+// « MARIE-CLAIRE » ou « jean » deviennent « Marie-Claire » et « Jean » ; « N'Guessan » reste tel quel.
+const titleCase = (nom: string) =>
+  nom === nom.toLocaleUpperCase("fr") || nom === nom.toLocaleLowerCase("fr")
+    ? nom.toLocaleLowerCase("fr").replace(/(^|[\s'’-])(\p{L})/gu, (_, avant, lettre) => avant + lettre.toLocaleUpperCase("fr"))
+    : nom;
 
 const roses = (n: number) => `${n} rose${n > 1 ? "s" : ""}`;
 const nombre = (n: number) => n.toLocaleString("fr-FR");
@@ -186,12 +194,29 @@ function content(kind: Kind, c: EmailContext): Content {
       };
     }
 
-    case "invitation":
+    case "invitation": {
+      const toussaint = c.occasion === "toussaint";
+      const passe = c.annees?.length
+        ? c.annees.length > 1
+          ? `Vous nous avez accompagnés en **${c.annees.join(" et en ")}** : merci pour votre fidélité.`
+          : `Vous avez offert des roses à Marie en **${c.annees[0]}** : merci de tout cœur.`
+        : "";
       return {
-        subject: "Et si on offrait à nouveau 1000 roses à Marie ? 🌹",
-        preheader: `Rendez-vous le ${c.eventLabel} pour l'Immaculée Conception.`,
+        subject: toussaint ? `Belle fête de la Toussaint, ${c.name} 🕊️` : "Et si on offrait à nouveau 1000 roses à Marie ? 🌹",
+        preheader: toussaint
+          ? `Et si nous offrions à nouveau des roses à Marie le ${c.eventLabel} ?`
+          : `Rendez-vous le ${c.eventLabel} pour l'Immaculée Conception.`,
         blocks: [
           salut,
+          ...(toussaint
+            ? ([
+                {
+                  t: "p",
+                  text: "En ce jour de la **Toussaint**, nous vous souhaitons une belle fête, unis à tous les saints du ciel, et en particulier à la Petite Thérèse et à Carlo Acutis, qui portent notre initiative 🕊️",
+                },
+              ] as Block[])
+            : []),
+          ...(passe ? ([{ t: "p", text: passe }] as Block[]) : []),
           {
             t: "p",
             text: `Le **${c.eventLabel}**, nous fêterons l'Immaculée Conception, et nous voulons former un grand bouquet, fait de nos prières et de nos efforts, avec pour seul objectif de réjouir le Cœur uni de Jésus et Marie.`,
@@ -199,8 +224,10 @@ function content(kind: Kind, c: EmailContext): Content {
           { t: "p", text: "Chaque rose constituera une oraison silencieuse, une action de grâce à Celle qui nous conduit au Verbe." },
           { t: "p", text: "Joignez votre rose aux nôtres : l'inscription prend une minute." },
           { t: "button", label: "Joindre ma rose aux nôtres", style: "jaune", url: c.siteUrl },
+          ...(toussaint ? ([partager(c)] as Block[]) : []),
         ],
       };
+    }
   }
 }
 
@@ -252,7 +279,8 @@ function renderText(blocks: Block[]) {
     .join("\n\n");
 }
 
-export function render(kind: Kind, c: EmailContext) {
+export function render(kind: Kind, contexte: EmailContext) {
+  const c = { ...contexte, name: titleCase(contexte.name) };
   const { subject, preheader, blocks } = content(kind, c);
 
   const html = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>${escapeHtml(subject)}</title></head>

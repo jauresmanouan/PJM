@@ -259,3 +259,22 @@ revoke all on function public.infer_country(text, text) from public, anon, authe
 revoke all on function public.edition_breakdown(integer) from public, anon, authenticated;
 grant execute on function public.infer_country(text, text) to service_role;
 grant execute on function public.edition_breakdown(integer) to service_role;
+
+
+-- 7. Invitations envoyées aux anciens participants (hors édition en cours) -----------------
+-- Données minimales : adresse, prénom, éditions passées. Le jeton sert au lien de désabonnement.
+create table if not exists public.invitations (
+  email text primary key,
+  prenom text not null,
+  annees integer[] not null,
+  unsubscribe_token uuid not null default gen_random_uuid() unique,
+  status text not null default 'pending'
+    check (status in ('pending', 'sent', 'failed', 'bounced', 'complained')),
+  resend_id text,
+  error text,
+  sent_at timestamptz,
+  unsubscribed_at timestamptz,
+  created_at timestamptz not null default now()
+);
+alter table public.invitations enable row level security;
+revoke all on public.invitations from anon, authenticated;

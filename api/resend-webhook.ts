@@ -25,6 +25,13 @@ export async function POST(request: Request) {
   });
   if (!logResponse.ok) return Response.json({ error: "Journal illisible" }, { status: 502 });
 
+  // Une invitation qui rebondit ou est signalée est aussi désactivée.
+  await supabaseRequest(`invitations?resend_id=eq.${encodeURIComponent(resendId)}`, {
+    method: "PATCH",
+    headers: { Prefer: "return=minimal" },
+    body: JSON.stringify({ status: complaint ? "complained" : "bounced", unsubscribed_at: new Date().toISOString() }),
+  });
+
   const rows: { edition_year: number; email: string }[] = await logResponse.json();
   for (const row of rows) {
     // Le désabonnement vaut pour toutes les éditions : même adresse, même problème.

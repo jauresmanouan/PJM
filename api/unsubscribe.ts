@@ -34,11 +34,20 @@ export async function POST(request: Request) {
   if (!t) return page("Lien invalide", "Ce lien de désabonnement n'est pas valide.");
   if (!configured()) return page("Service indisponible", "Réessayez dans quelques instants.");
 
-  const response = await supabaseRequest(`participations?unsubscribe_token=eq.${t}&unsubscribed_at=is.null`, {
-    method: "PATCH",
-    headers: { Prefer: "return=minimal" },
-    body: JSON.stringify({ unsubscribed_at: new Date().toISOString(), unsubscribe_reason: "user" }),
-  });
-  if (!response.ok) return page("Service indisponible", "Réessayez dans quelques instants.");
+  // Le jeton appartient soit à un inscrit de l'édition en cours, soit à une personne invitée.
+  const maintenant = new Date().toISOString();
+  const [inscrit, invite] = await Promise.all([
+    supabaseRequest(`participations?unsubscribe_token=eq.${t}&unsubscribed_at=is.null`, {
+      method: "PATCH",
+      headers: { Prefer: "return=minimal" },
+      body: JSON.stringify({ unsubscribed_at: maintenant, unsubscribe_reason: "user" }),
+    }),
+    supabaseRequest(`invitations?unsubscribe_token=eq.${t}&unsubscribed_at=is.null`, {
+      method: "PATCH",
+      headers: { Prefer: "return=minimal" },
+      body: JSON.stringify({ unsubscribed_at: maintenant }),
+    }),
+  ]);
+  if (!inscrit.ok || !invite.ok) return page("Service indisponible", "Réessayez dans quelques instants.");
   return page("Désabonnement confirmé", "Vous ne recevrez plus de rappels. Merci pour votre participation 🌹");
 }
