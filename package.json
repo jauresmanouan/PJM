@@ -26,6 +26,7 @@
     "emailjs-com": "^3.2.0",
     "firebase": "^10.14.0",
     "framer-motion": "^12.23.22",
+    "libphonenumber-js": "^1.13.15",
     "lucide-react": "^0.447.0",
     "motion": "^12.23.22",
     "react": "^18.3.1",
