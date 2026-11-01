@@ -5,14 +5,12 @@ const BLEU = "#0A71B8";
 const JAUNE = "#F39200";
 const POLICE = "Inter, system-ui, -apple-system, Helvetica, Arial, sans-serif";
 
-const roses = (n: number) => `${n} rose${n > 1 ? "s" : ""}`;
-
-export const texteDePartage = (n: number) =>
-  `J'offre ${roses(n)} à Marie le ${DATE}, pour sa joie 🌹 Rejoignez-moi : ${SITE}`;
+// L'invitation ne mentionne pas le nombre de roses offertes : chacun donne ce qu'il veut.
+export const texteDePartage = () =>
+  `Offrons des roses à Marie le ${DATE}, pour sa joie 🌹 Rejoignez-moi : ${SITE}`;
 
 // Ouvre WhatsApp sur le choix d'un contact, message prérempli.
-export const lienWhatsApp = (n: number) =>
-  `https://wa.me/?text=${encodeURIComponent(texteDePartage(n))}`;
+export const lienWhatsApp = () => `https://wa.me/?text=${encodeURIComponent(texteDePartage())}`;
 
 function chargerImage(src: string) {
   return new Promise<HTMLImageElement | null>((resolve) => {
@@ -29,7 +27,7 @@ function rectangleArrondi(ctx: CanvasRenderingContext2D, x: number, y: number, w
   ctx.closePath();
 }
 
-export async function genererImage(n: number): Promise<Blob> {
+export async function genererImage(): Promise<Blob> {
   const W = 1080;
   const H = 1920;
   const canvas = document.createElement("canvas");
@@ -49,19 +47,20 @@ export async function genererImage(n: number): Promise<Blob> {
   const logo = await chargerImage("/images/email/logo-v2.png");
   if (logo) ctx.drawImage(logo, 220, 300, 640, 485);
 
-  ctx.fillStyle = JAUNE;
-  ctx.font = `900 ${n > 99 ? 300 : 360}px ${POLICE}`;
-  ctx.fillText(String(n), W / 2, 1090);
-
   ctx.fillStyle = BLEU;
-  ctx.font = `900 96px ${POLICE}`;
-  ctx.fillText(n > 1 ? "roses pour Marie" : "rose pour Marie", W / 2, 1210);
+  ctx.font = `900 100px ${POLICE}`;
+  ctx.fillText("Offrons des roses", W / 2, 990);
+  ctx.fillText("à Marie", W / 2, 1110);
+
+  ctx.fillStyle = JAUNE;
+  ctx.font = `900 124px ${POLICE}`;
+  ctx.fillText("le 8 décembre", W / 2, 1270);
 
   ctx.fillStyle = "#1f2d3a";
   ctx.font = `600 52px ${POLICE}`;
-  ctx.fillText(`le ${DATE}`, W / 2, 1320);
+  ctx.fillText("Fête de l'Immaculée Conception", W / 2, 1360);
   ctx.font = `64px ${POLICE}`;
-  ctx.fillText("🌹 🌹 🌹", W / 2, 1450);
+  ctx.fillText("🌹 🌹 🌹", W / 2, 1480);
 
   // Appel à rejoindre
   ctx.fillStyle = JAUNE;
@@ -81,11 +80,11 @@ export async function genererImage(n: number): Promise<Blob> {
 export type ResultatPartage = "partage" | "telecharge" | "annule";
 
 // Feuille de partage du téléphone (WhatsApp > « Mon statut ») ; sur ordinateur, l'image est téléchargée.
-export async function partagerEnStatut(image: Blob, n: number): Promise<ResultatPartage> {
+export async function partagerEnStatut(image: Blob): Promise<ResultatPartage> {
   const fichier = new File([image], "pour-la-joie-de-marie.png", { type: "image/png" });
   if (navigator.canShare?.({ files: [fichier] })) {
     try {
-      await navigator.share({ files: [fichier], text: texteDePartage(n) });
+      await navigator.share({ files: [fichier], text: texteDePartage() });
       return "partage";
     } catch (erreur) {
       if ((erreur as DOMException).name === "AbortError") return "annule";

@@ -37,7 +37,7 @@ export default function Confirmation({
   useEffect(() => {
     let url: string | null = null;
     let actif = true;
-    genererImage(quantity)
+    genererImage()
       .then((blob) => {
         if (!actif) return;
         url = URL.createObjectURL(blob);
@@ -49,18 +49,18 @@ export default function Confirmation({
       actif = false;
       if (url) URL.revokeObjectURL(url);
     };
-  }, [quantity]);
+  }, []);
 
   const partagerStatut = async () => {
     if (!image) return;
-    const resultat = await partagerEnStatut(image, quantity);
+    const resultat = await partagerEnStatut(image);
     if (resultat === "telecharge") setMessage("Image enregistrée : publiez-la dans votre statut.");
     if (resultat === "partage") setMessage("Merci de faire connaître l'initiative 🌹");
   };
 
   const copierLien = async () => {
     try {
-      await navigator.clipboard.writeText(texteDePartage(quantity));
+      await navigator.clipboard.writeText(texteDePartage());
       setCopie(true);
       setTimeout(() => setCopie(false), 2000);
     } catch {
@@ -139,7 +139,7 @@ export default function Confirmation({
               <Share2 className="h-4 w-4" /> Partager en statut
             </Button>
             <a
-              href={lienWhatsApp(quantity)}
+              href={lienWhatsApp()}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex h-11 w-full items-center justify-center rounded-lg bg-white px-3 text-sm font-bold text-bleu active:scale-[0.97] transition-transform duration-150"
