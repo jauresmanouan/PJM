@@ -32,7 +32,7 @@ function App() {
     <Context.Provider value={contextValue}>
       <div className="flex flex-col justify-center items-center min-h-svh w-screen">
         {isClicked && (
-          <div className="flex justify-center items-center min-h-svh w-screen bg-bleu">
+          <div className="flex justify-center items-center min-h-svh w-screen bg-bleu py-3">
             <FormPage
               actionId={"Roses"}
               actionName={"Nombres de roses"}

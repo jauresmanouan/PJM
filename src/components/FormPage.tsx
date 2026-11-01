@@ -15,7 +15,7 @@ import { Toaster, toast } from "sonner";
 
 const ease = [0.23, 1, 0.32, 1] as const;
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const ROSES_VISIBLES = 10;
+const ROSES_VISIBLES = 6;
 
 // Chaque champ apparaît avec un léger décalage : le formulaire se « déroule » à l'ouverture.
 function Apparition({ index, className, children }: { index: number; className?: string; children: React.ReactNode }) {
@@ -56,13 +56,14 @@ function Valide({ ok }: { ok: boolean }) {
   );
 }
 
-// Le bouquet grandit avec le nombre de roses saisi.
+// Le bouquet grandit avec le nombre de roses saisi (une seule ligne, pour rester compact).
 function Bouquet({ quantity }: { quantity: number | undefined }) {
   const reduire = useReducedMotion();
   const n = quantity && quantity >= 1 ? Math.min(Math.floor(quantity), 1000) : 0;
   return (
-    <div className="flex min-h-8 flex-wrap items-center gap-x-0.5 text-lg" aria-live="polite">
-      {n === 0 && <span className="text-sm text-gray-400">Votre bouquet apparaîtra ici</span>}
+    <div className="flex min-w-0 flex-1 items-center overflow-hidden whitespace-nowrap text-base" aria-live="polite">
+      <span className="sr-only">{n} rose{n > 1 ? "s" : ""}</span>
+      {n === 0 && <span className="text-xs text-gray-400">Votre bouquet</span>}
       <AnimatePresence initial={false}>
         {Array.from({ length: Math.min(n, ROSES_VISIBLES) }, (_, i) => (
           <motion.span
@@ -77,12 +78,7 @@ function Bouquet({ quantity }: { quantity: number | undefined }) {
           </motion.span>
         ))}
       </AnimatePresence>
-      {n > ROSES_VISIBLES && <span className="text-sm font-bold text-jaune">+{n - ROSES_VISIBLES}</span>}
-      {n > 0 && (
-        <span className="basis-full text-sm font-bold text-bleu">
-          {n} rose{n > 1 ? "s" : ""}
-        </span>
-      )}
+      {n > ROSES_VISIBLES && <span className="ml-1 text-xs font-bold text-jaune">+{n - ROSES_VISIBLES}</span>}
     </div>
   );
 }
@@ -171,8 +167,8 @@ export default function FormPage({
           },
         }}
       />
-      <Card className="w-full max-w-xs md:max-w-lg font-Raleway font-normal mx-auto p-1 md:p-8 m-5 md:m-0">
-        <CardContent className="relative p-8">
+      <Card className="w-full max-w-md md:max-w-lg font-Raleway font-normal mx-auto p-0 md:p-8 m-3 md:m-0">
+        <CardContent className="relative p-4 md:p-8">
           <CircleX
             onClick={handleClosedForm}
             className="text-red-500 absolute w-6 md:w-8 h-6 md:h-8 right-3 md:right-0 top-3 md:top-0 hover:scale-125 cursor-pointer transition ease-out"
@@ -188,7 +184,7 @@ export default function FormPage({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.15, ease }}
               >
-                <Apparition index={0}>
+                <Apparition index={0} className="pr-8">
                   <div className="flex items-center gap-3" role="progressbar" aria-valuemin={0} aria-valuemax={4} aria-valuenow={remplis} aria-label="Progression du formulaire">
                     <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-100">
                       <motion.div
@@ -202,29 +198,45 @@ export default function FormPage({
                   </div>
                 </Apparition>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Apparition index={1} className="space-y-2">
-                    <Label htmlFor="nom">Nom</Label>
+                <div className="grid grid-cols-2 gap-3">
+                  <Apparition index={1} className="space-y-1">
+                    <Label htmlFor="nom" className="text-xs">Nom</Label>
                     <div className="relative">
-                      <Input id="nom" className="pr-10" placeholder="Votre nom" required autoComplete="family-name" value={firstname} onChange={(event) => setFirstname(event.target.value)} />
+                      <Input id="nom" className="pr-8" placeholder="Votre nom" required autoComplete="family-name" value={firstname} onChange={(event) => setFirstname(event.target.value)} />
                       <Valide ok={ok.nom} />
                     </div>
                   </Apparition>
-                  <Apparition index={2} className="space-y-2">
-                    <Label htmlFor="prenom">Prénom</Label>
+                  <Apparition index={2} className="space-y-1">
+                    <Label htmlFor="prenom" className="text-xs">Prénom</Label>
                     <div className="relative">
-                      <Input id="prenom" className="pr-10" placeholder="Votre prénom" required autoComplete="given-name" value={name} onChange={(event) => setName(event.target.value)} />
+                      <Input id="prenom" className="pr-8" placeholder="Votre prénom" required autoComplete="given-name" value={name} onChange={(event) => setName(event.target.value)} />
                       <Valide ok={ok.prenom} />
                     </div>
                   </Apparition>
                 </div>
 
-                <Apparition index={3} className="space-y-2">
-                  <Label htmlFor={actionId}>{actionName}</Label>
+                <Apparition index={3} className="space-y-1">
+                  <Label htmlFor="email" className="text-xs">Email</Label>
                   <div className="relative">
+                    <Input id="email" className="pr-10" type="email" autoComplete="email" placeholder="votre@email.com" required value={email} onChange={(event) => setEmail(event.target.value)} />
+                    <Valide ok={ok.email} />
+                  </div>
+                </Apparition>
+
+                <Apparition index={4} className="space-y-1">
+                  <Label htmlFor={actionId} className="text-xs">{actionName}</Label>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      aria-label="Une rose de moins"
+                      onClick={() => setQuantity((q) => Math.max(1, (q ?? 1) - 1))}
+                      className="h-10 w-10 shrink-0 rounded-md bg-gray-100 p-0 text-xl font-bold text-bleu active:scale-95 transition-transform duration-150"
+                    >
+                      −
+                    </button>
                     <Input
                       id={actionId}
-                      className="pr-10"
+                      className="w-20 shrink-0 px-1 text-center [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                       type="number"
                       inputMode="numeric"
                       min="1"
@@ -234,21 +246,20 @@ export default function FormPage({
                       value={quantity ?? ""}
                       onChange={(event) => setQuantity(event.target.value === "" ? undefined : Number(event.target.value))}
                     />
-                    <Valide ok={ok.quantite} />
+                    <button
+                      type="button"
+                      aria-label="Une rose de plus"
+                      onClick={() => setQuantity((q) => Math.min(1000, (q ?? 0) + 1))}
+                      className="h-10 w-10 shrink-0 rounded-md bg-gray-100 p-0 text-xl font-bold text-bleu active:scale-95 transition-transform duration-150"
+                    >
+                      +
+                    </button>
+                    <Bouquet quantity={ok.quantite ? quantity : undefined} />
                   </div>
-                  <Bouquet quantity={ok.quantite ? quantity : undefined} />
                 </Apparition>
 
-                <Apparition index={4} className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <div className="relative">
-                    <Input id="email" className="pr-10" type="email" autoComplete="email" placeholder="votre@email.com" required value={email} onChange={(event) => setEmail(event.target.value)} />
-                    <Valide ok={ok.email} />
-                  </div>
-                </Apparition>
-
-                <Apparition index={5} className="relative z-10 space-y-2">
-                  <Label htmlFor="pays">Pays</Label>
+                <Apparition index={5} className="relative z-10 space-y-1">
+                  <Label htmlFor="pays" className="text-xs">Pays</Label>
                   <Select>
                     <ReactFlagsSelect
                       id="flags-select"
@@ -264,22 +275,27 @@ export default function FormPage({
                   </Select>
                 </Apparition>
 
-                <Apparition index={6} className="space-y-2">
-                  <Label>Méthode de contact préférée</Label>
-                  <div className="flex space-x-4">
-                    <Button type="button" variant={contactMethod === "whatsapp" ? "default" : "outline"} onClick={() => setContactMethod("whatsapp")}>
-                      WhatsApp
-                    </Button>
-                    <Button type="button" variant={contactMethod === "telegram" ? "default" : "outline"} onClick={() => setContactMethod("telegram")}>
-                      Telegram
-                    </Button>
+                <Apparition index={6} className="space-y-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <Label htmlFor="numero" className="text-xs">Numéro de contact</Label>
+                    <div role="group" aria-label="Application de contact" className="flex gap-1">
+                      {(["whatsapp", "telegram"] as const).map((methode) => (
+                        <button
+                          key={methode}
+                          type="button"
+                          aria-pressed={contactMethod === methode}
+                          onClick={() => setContactMethod(methode)}
+                          className={`h-7 rounded-full px-3 text-xs font-bold transition-colors duration-150 ${
+                            contactMethod === methode ? "bg-jaune text-white" : "bg-gray-100 text-bleu"
+                          }`}
+                        >
+                          {methode === "whatsapp" ? "WhatsApp" : "Telegram"}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </Apparition>
-
-                <Apparition index={7} className="space-y-2">
-                  <Label htmlFor="numero">Numéro {contactMethod === "whatsapp" ? "WhatsApp" : "Telegram"}</Label>
                   <div className="flex gap-2">
-                    <span className="inline-flex h-10 min-w-[4.5rem] items-center justify-center overflow-hidden rounded-md bg-gray-100 px-3 text-sm font-bold text-bleu" aria-label="Indicatif du pays">
+                    <span className="inline-flex h-10 min-w-[4rem] items-center justify-center overflow-hidden rounded-md bg-gray-100 px-3 text-sm font-bold text-bleu" aria-label="Indicatif du pays">
                       <AnimatePresence mode="wait" initial={false}>
                         <motion.span
                           key={indicatif}
@@ -313,7 +329,7 @@ export default function FormPage({
                   )}
                 </Apparition>
 
-                <Apparition index={8} className="flex flex-col justify-center items-center gap-2">
+                <Apparition index={7} className="flex flex-col justify-center items-center gap-2">
                   <Button type="submit" disabled={envoi} className="w-full gap-2 bg-bleu active:scale-[0.97] transition-transform duration-150">
                     {envoi ? (
                       <>
