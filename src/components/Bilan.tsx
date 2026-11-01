@@ -2,30 +2,56 @@ import { useState } from "react";
 import { AnimatedNumber } from "./ui/skiper-ui/AnimatedNumber";
 import { Badge } from "./ui/badge";
 
-type Pays = { code: string; name: string; count: number };
+type Pays = { code: string; count: number; roses: number };
 
-// Drapeau emoji à partir du code pays ISO.
+// Drapeau emoji et nom français à partir du code pays ISO.
 const flag = (code: string) =>
   String.fromCodePoint(...[...code].map((c) => 127397 + c.charCodeAt(0)));
+const regions = new Intl.DisplayNames(["fr"], { type: "region" });
+const nom = (code: string) => regions.of(code) ?? code;
 
-// 2024 : chiffres de l'ancien bilan. 2025 : collection Firestore "users" (relevé du 31/10/2026).
+// Chiffres issus des exports des participants (PJM-2024 et PJM-2025, non versionnés : données personnelles).
+// 2024 : la colonne « pays » n'existait pas, le pays est déduit de l'indicatif des numéros de téléphone
+// (méthode contrôlée sur 2025 : 93 numéros sur 93 donnent le bon pays). `inconnu` = numéro absent ou ambigu.
 const editions = [
-  { year: 2024, roses: 1187, participants: 123, pays: 12, detail: [] as Pays[] },
+  {
+    year: 2024,
+    roses: 1187,
+    participants: 123,
+    detail: [
+      { code: "CI", count: 89, roses: 782 },
+      { code: "CM", count: 13, roses: 200 },
+      { code: "FR", count: 4, roses: 25 },
+      { code: "US", count: 4, roses: 84 },
+      { code: "BF", count: 3, roses: 24 },
+      { code: "CA", count: 1, roses: 20 },
+      { code: "CD", count: 1, roses: 10 },
+      { code: "IT", count: 1, roses: 10 },
+      { code: "SN", count: 1, roses: 4 },
+    ] as Pays[],
+    inconnu: 6,
+    inconnuRoses: 28,
+    deduit: true,
+    fideles: undefined as number | undefined,
+  },
   {
     year: 2025,
     roses: 752,
     participants: 93,
-    pays: 8,
     detail: [
-      { code: "CI", name: "Côte d'Ivoire", count: 80 },
-      { code: "CM", name: "Cameroun", count: 6 },
-      { code: "US", name: "États-Unis", count: 2 },
-      { code: "BF", name: "Burkina Faso", count: 1 },
-      { code: "FR", name: "France", count: 1 },
-      { code: "GA", name: "Gabon", count: 1 },
-      { code: "IT", name: "Italie", count: 1 },
-      { code: "SN", name: "Sénégal", count: 1 },
+      { code: "CI", count: 80, roses: 659 },
+      { code: "CM", count: 6, roses: 43 },
+      { code: "US", count: 2, roses: 13 },
+      { code: "FR", count: 1, roses: 10 },
+      { code: "SN", count: 1, roses: 10 },
+      { code: "GA", count: 1, roses: 7 },
+      { code: "BF", count: 1, roses: 5 },
+      { code: "IT", count: 1, roses: 5 },
     ] as Pays[],
+    inconnu: 0,
+    inconnuRoses: 0,
+    deduit: false,
+    fideles: 53, // participants de 2025 déjà inscrits en 2024 (même adresse email)
   },
 ];
 
@@ -35,7 +61,8 @@ export default function Bilan() {
   const [top, ...others] = e.detail;
   const medium = others.filter((p) => p.count > 1);
   const singles = others.filter((p) => p.count === 1);
-  const part = (p: Pays) => Math.round((p.count / e.participants) * 100);
+  const pays = e.detail.length;
+  const pct = (n: number, total: number) => Math.round((n / total) * 100);
 
   return (
     <section
@@ -85,28 +112,38 @@ export default function Bilan() {
             <p className="text-bleu text-sm md:text-2xl mt-2">participants</p>
           </div>
           <div className="bg-white rounded-2xl py-5 md:py-8">
-            <p className="text-jaune text-4xl md:text-6xl">{e.pays}</p>
+            <p className="text-jaune text-4xl md:text-6xl">{pays}</p>
             <p className="text-bleu text-sm md:text-2xl mt-2">pays</p>
           </div>
         </div>
 
+        {e.fideles !== undefined && (
+          <div className="grid grid-cols-2 gap-3 md:gap-5 w-full mt-3 md:mt-5">
+            <div className="bg-white rounded-2xl py-5 md:py-8">
+              <p className="text-jaune text-4xl md:text-6xl">{e.fideles}</p>
+              <p className="text-bleu text-sm md:text-2xl mt-2 px-2">déjà là en 2024</p>
+            </div>
+            <div className="bg-white rounded-2xl py-5 md:py-8">
+              <p className="text-jaune text-4xl md:text-6xl">{e.participants - e.fideles}</p>
+              <p className="text-bleu text-sm md:text-2xl mt-2 px-2">nouveaux</p>
+            </div>
+          </div>
+        )}
+
         <div className="w-full mt-8 text-left">
           <p className="text-white text-xl md:text-3xl">D'où venaient les participants</p>
-          {e.detail.length === 0 ? (
-            <p className="text-white/80 font-medium text-sm md:text-lg mt-3 leading-snug">
-              Le détail par pays n'a pas été conservé pour {e.year}.
-            </p>
-          ) : (
-            <div key={year} className="flex flex-col gap-3 mt-5">
+          <div key={year} className="flex flex-col gap-3 mt-5">
               <div className="bg-white rounded-2xl p-5 md:p-8 flex items-center gap-4 md:gap-8">
                 <span aria-hidden="true" className="text-6xl md:text-8xl leading-none">
                   {flag(top.code)}
                 </span>
                 <div>
                   <p className="text-jaune text-5xl md:text-7xl leading-none">{top.count}</p>
-                  <p className="text-bleu text-base md:text-2xl mt-2">{top.name}</p>
-                  <p className="text-bleu/70 font-medium text-xs md:text-lg">
-                    {part(top)} % des participants
+                  <p className="text-bleu text-base md:text-2xl mt-2">{nom(top.code)}</p>
+                  <p className="text-bleu/70 font-medium text-xs md:text-lg mt-1 leading-snug">
+                    {pct(top.count, e.participants)} % des participants
+                    <br />
+                    {top.roses} roses, {pct(top.roses, e.roses)} % du bouquet
                   </p>
                 </div>
               </div>
@@ -118,26 +155,35 @@ export default function Bilan() {
                       {flag(p.code)}
                     </span>
                     <p className="text-jaune text-3xl md:text-5xl leading-none mt-3">{p.count}</p>
-                    <p className="text-bleu text-sm md:text-xl mt-1">{p.name}</p>
+                    <p className="text-bleu text-sm md:text-xl mt-1">{nom(p.code)}</p>
+                    <p className="text-bleu/70 font-medium text-xs md:text-base mt-1">{p.roses} roses</p>
                   </div>
                 ))}
               </div>
 
-              <p className="text-white/80 font-medium text-xs md:text-base mt-2">
-                1 participant chacun
-              </p>
+              {singles.length > 0 && (
+                <p className="text-white/80 font-medium text-xs md:text-base mt-2">
+                  1 participant chacun
+                </p>
+              )}
               <div className="flex flex-wrap gap-2">
                 {singles.map((p) => (
                   <span
                     key={p.code}
                     className="bg-white/15 text-white rounded-full px-4 py-2 text-sm md:text-lg"
                   >
-                    <span aria-hidden="true">{flag(p.code)}</span> {p.name}
+                    <span aria-hidden="true">{flag(p.code)}</span> {nom(p.code)}
                   </span>
                 ))}
               </div>
-            </div>
-          )}
+
+              {(e.inconnu > 0 || e.deduit) && (
+                <p className="text-white/70 font-medium text-xs md:text-sm mt-2 leading-snug">
+                  {e.deduit && "Pays déduits des indicatifs téléphoniques. "}
+                  {e.inconnu > 0 && `${e.inconnu} participants sans pays identifiable (${e.inconnuRoses} roses).`}
+                </p>
+              )}
+          </div>
         </div>
       </div>
 
