@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { AnimatedNumber } from "./ui/skiper-ui/AnimatedNumber";
-import { Badge } from "./ui/badge";
 
 type Pays = { code: string; count: number; roses: number };
 
@@ -62,14 +61,9 @@ export default function Bilan() {
       id="bilan"
       className="scroll-mt-16 font-Raleway font-black leading-none flex flex-col items-center text-center bg-white px-4 md:px-20 py-16 md:py-24"
     >
-      <Badge
-        variant="jaune"
-        className="text-sm md:text-lg px-4 py-2 rounded-full shadow-md"
-      >
-        Bilan
-      </Badge>
-      <p className="text-bleu text-2xl md:text-5xl mt-6 leading-tight">
-        Revenir sur nos éditions
+      <h2 className="text-bleu text-3xl md:text-6xl leading-tight">Bilan {year}</h2>
+      <p className="text-jaune font-bold text-sm md:text-3xl mt-3 leading-snug">
+        Revenir sur une année de ferveur
       </p>
 
       <div className="w-full max-w-3xl mt-10 bg-bleu rounded-3xl p-6 md:p-12 flex flex-col items-center">
