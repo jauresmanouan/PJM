@@ -155,3 +155,107 @@ revoke all on function public.participants_due(integer, text, interval, interval
   from public, anon, authenticated;
 grant execute on function public.participation_stats(integer) to service_role;
 grant execute on function public.participants_due(integer, text, interval, interval) to service_role;
+
+
+-- 6. Statistiques en direct : répartition par pays ---------------------------------
+-- Indicatifs téléphoniques internationaux -> pays (sert quand le pays n'est pas renseigné).
+create table if not exists public.dial_codes (
+  prefix text primary key,
+  iso char(2) not null
+);
+alter table public.dial_codes enable row level security;
+revoke all on public.dial_codes from anon, authenticated;
+insert into public.dial_codes (prefix, iso) values
+  ('225', 'CI'),
+  ('237', 'CM'),
+  ('226', 'BF'),
+  ('221', 'SN'),
+  ('241', 'GA'),
+  ('229', 'BJ'),
+  ('228', 'TG'),
+  ('223', 'ML'),
+  ('224', 'GN'),
+  ('227', 'NE'),
+  ('243', 'CD'),
+  ('242', 'CG'),
+  ('235', 'TD'),
+  ('236', 'CF'),
+  ('212', 'MA'),
+  ('213', 'DZ'),
+  ('216', 'TN'),
+  ('234', 'NG'),
+  ('233', 'GH'),
+  ('238', 'CV'),
+  ('240', 'GQ'),
+  ('250', 'RW'),
+  ('257', 'BI'),
+  ('261', 'MG'),
+  ('33', 'FR'),
+  ('32', 'BE'),
+  ('41', 'CH'),
+  ('44', 'GB'),
+  ('49', 'DE'),
+  ('39', 'IT'),
+  ('34', 'ES'),
+  ('351', 'PT'),
+  ('352', 'LU'),
+  ('31', 'NL'),
+  ('1', 'US'),
+  ('7', 'RU')
+on conflict (prefix) do nothing;
+
+-- Pays d'un participant : pays déclaré, sinon déduit du numéro (méthode validée sur l'édition 2025 : 93 sur 93).
+create or replace function public.infer_country(p_country text, p_contact text)
+returns char(2)
+language sql
+stable
+security invoker
+as $$
+  with n as (
+    select case
+      when regexp_replace(coalesce(p_contact, ''), '[^0-9+]', '', 'g') like '00%'
+        then '+' || substr(regexp_replace(coalesce(p_contact, ''), '[^0-9+]', '', 'g'), 3)
+      else regexp_replace(coalesce(p_contact, ''), '[^0-9+]', '', 'g')
+    end as v
+  )
+  select coalesce(
+    nullif(upper(trim(coalesce(p_country, ''))), '')::char(2),
+    (select d.iso from public.dial_codes d, n
+       where n.v like '+%' and substr(n.v, 2) like d.prefix || '%'
+       order by length(d.prefix) desc limit 1),
+    (select d.iso from public.dial_codes d, n
+       where n.v not like '+%' and length(n.v) >= 11 and n.v like d.prefix || '%'
+       order by length(d.prefix) desc limit 1),
+    (select 'FR'::char(2) from n where n.v not like '+%' and length(n.v) = 10 and left(n.v, 2) = '06'),
+    (select 'CI'::char(2) from n where n.v not like '+%' and length(n.v) = 10 and left(n.v, 2) in ('01', '05', '07')),
+    (select 'CM'::char(2) from n where n.v not like '+%' and length(n.v) = 9 and left(n.v, 1) = '6')
+  );
+$$;
+
+-- Tout ce qu'affiche le bilan d'une édition, en un appel.
+create or replace function public.edition_breakdown(p_year integer)
+returns jsonb
+language sql
+stable
+security invoker
+as $$
+  with p as (
+    select quantity, public.infer_country(country, contact) as pays
+    from public.participations
+    where edition_year = p_year
+  )
+  select jsonb_build_object(
+    'participants', (select count(*) from p),
+    'total_quantity', (select coalesce(sum(quantity), 0) from p),
+    'countries', coalesce((
+      select jsonb_agg(jsonb_build_object('code', pays, 'count', n, 'roses', r) order by n desc, r desc, pays)
+      from (select pays, count(*) as n, sum(quantity) as r from p where pays is not null group by pays) g
+    ), '[]'::jsonb),
+    'unknown', (select jsonb_build_object('count', count(*), 'roses', coalesce(sum(quantity), 0)) from p where pays is null)
+  );
+$$;
+
+revoke all on function public.infer_country(text, text) from public, anon, authenticated;
+revoke all on function public.edition_breakdown(integer) from public, anon, authenticated;
+grant execute on function public.infer_country(text, text) to service_role;
+grant execute on function public.edition_breakdown(integer) to service_role;
