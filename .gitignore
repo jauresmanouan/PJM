@@ -24,3 +24,8 @@ dist-ssr
 *.sw?
 .vercel
 .env
+
+# Exports de participants (données personnelles : emails, téléphones)
+PJM-2024/
+PJM-2025/
+~$*
