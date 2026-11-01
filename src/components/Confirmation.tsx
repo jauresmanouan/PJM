@@ -112,8 +112,8 @@ export default function Confirmation({
         Merci {prenom} !
       </h2>
       <p className="mt-2 text-base md:text-lg text-bleu" aria-live="polite">
-        Vos <strong className="text-jaune font-black">{quantity} rose{quantity > 1 ? "s" : ""}</strong>{" "}
-        {quantity > 1 ? "sont promises" : "est promise"} à Marie.
+        {quantity > 1 ? "Vos " : "Votre "}
+        <strong className="text-jaune font-black">{quantity > 1 ? `${quantity} roses` : "rose"}</strong>, pour le bouquet du 8 décembre.
       </p>
       <p className="mt-2 text-sm text-gray-600">
         {emailSent
