@@ -127,6 +127,7 @@ export default function FormPage({
                 id={actionId}
                 type="number"
                 min="1"
+                max="1000"
                 placeholder={actionQuantity}
                 required
                 value={quantity}

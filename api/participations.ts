@@ -7,8 +7,28 @@ type Input = {
   country?: unknown; contactMethod?: unknown; contact?: unknown; website?: unknown;
 };
 
+// Retire les caractères de contrôle (retours à la ligne, etc.) : le nom finit dans l'objet des emails.
 function clean(value: unknown, max: number) {
-  return typeof value === "string" ? value.trim().slice(0, max) : "";
+  return typeof value === "string" ? value.replace(/[\u0000-\u001f\u007f]/g, " ").trim().slice(0, max) : "";
+}
+
+const MAX_ROSES = 1000; // la plus grosse participation connue : 100
+const COOLDOWN_MS = 10 * 60 * 1000; // une confirmation par adresse et par tranche de 10 minutes
+const HOURLY_CAP = 300; // plafond global de confirmations par heure (2025 : 93 inscrits en tout)
+
+// Protège le domaine d'envoi : sans ça, le formulaire pourrait servir à inonder une boîte mail
+// ou à envoyer des milliers d'emails depuis contact@. L'inscription est toujours enregistrée.
+async function confirmationAllowed(year: number, email: string) {
+  const since = (ms: number) => encodeURIComponent(new Date(Date.now() - ms).toISOString());
+  const recent = await supabaseRequest(
+    `email_logs?edition_year=eq.${year}&email=eq.${encodeURIComponent(email)}&kind=eq.confirmation&sent_at=gt.${since(COOLDOWN_MS)}&select=id&limit=1`
+  );
+  if (recent.ok && (await recent.json()).length > 0) return false;
+  const hour = await supabaseRequest(`email_logs?kind=eq.confirmation&sent_at=gt.${since(3600_000)}&select=id`, {
+    headers: { Prefer: "count=exact", Range: "0-0" },
+  });
+  const total = Number(hour.headers.get("content-range")?.split("/")[1]);
+  return !(total >= HOURLY_CAP);
 }
 
 export function OPTIONS(request: Request) {
@@ -35,7 +55,7 @@ async function register(request: Request) {
   const contact = clean(input.contact, 40);
   const contactMethod = input.contactMethod === "telegram" ? "telegram" : "whatsapp";
   const quantity = Number(input.quantity);
-  if (!firstname || !name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !Number.isInteger(quantity) || quantity < 1 || quantity > 100000 || (country && !/^[A-Z]{2}$/.test(country))) {
+  if (!firstname || !name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !Number.isInteger(quantity) || quantity < 1 || quantity > MAX_ROSES || (country && !/^[A-Z]{2}$/.test(country))) {
     return Response.json({ error: "Vérifiez votre nom, votre email et le nombre de roses." }, { status: 400 });
   }
 
@@ -67,6 +87,7 @@ async function register(request: Request) {
   }
 
   if (!saved) return Response.json({ emailSent: false });
+  if (!(await confirmationAllowed(edition.year, email))) return Response.json({ emailSent: false });
   const result = await deliver(edition, "confirmation", [saved]);
   return Response.json({ emailSent: result.sent === 1 });
 }

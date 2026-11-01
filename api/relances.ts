@@ -1,3 +1,4 @@
+import { timingSafeEqual } from "node:crypto";
 import { configured, supabaseRequest } from "./_supabase.js";
 import { deliver, editionStats, type Edition, type Recipient } from "./_deliver.js";
 import { RULES, daysLeft, isCampaignKind, kindForDays } from "./_schedule.js";
@@ -7,7 +8,9 @@ import { RULES, daysLeft, isCampaignKind, kindForDays } from "./_schedule.js";
 //                                  ?kind=relance_j7  force un type d'email (règles de délai conservées)
 export async function GET(request: Request) {
   const secret = process.env.CRON_SECRET;
-  if (!secret || request.headers.get("authorization") !== `Bearer ${secret}`) {
+  const given = Buffer.from(request.headers.get("authorization") ?? "");
+  const expected = Buffer.from(`Bearer ${secret}`);
+  if (!secret || given.length !== expected.length || !timingSafeEqual(given, expected)) {
     return Response.json({ error: "Non autorisé" }, { status: 401 });
   }
   if (!configured()) return Response.json({ error: "Supabase non configuré" }, { status: 503 });
