@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useSpring } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const AnimatedNumber = ({
   value,
@@ -25,7 +25,14 @@ export const AnimatedNumber = ({
     setDisplaySubs(Math.round(value));
   });
 
+  // Visible à l'écran ? Alors une nouvelle valeur (stats en direct) s'anime aussi.
+  const visible = useRef(false);
+  useEffect(() => {
+    if (visible.current) springSubCount.set(finalCount);
+  }, [finalCount, springSubCount]);
+
   const animate = () => {
+    visible.current = true;
     springSubCount.set(finalCount);
   };
 
@@ -34,6 +41,7 @@ export const AnimatedNumber = ({
       <motion.div
         onViewportEnter={animate}
         onViewportLeave={() => {
+          visible.current = false;
           springSubCount.set(0);
         }}
         className={`font-Raleway ${textSize} ${textColor} tracking-tight`}

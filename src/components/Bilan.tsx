@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AnimatedNumber } from "./ui/skiper-ui/AnimatedNumber";
+import { getUser, type StatsEnDirect } from "../api/users";
+import Context from "@/context/Context";
+import { Button } from "@/components/reusable-ui/button";
 
 type Pays = { code: string; count: number; roses: number };
 
@@ -49,9 +52,41 @@ const editions = [
   },
 ];
 
+const EDITION_EN_COURS = 2026;
+const ACTUALISATION_MS = 30_000;
+
 export default function Bilan() {
   const [year, setYear] = useState(2025);
-  const e = editions.find((x) => x.year === year)!;
+  const [live, setLive] = useState<StatsEnDirect | null>(null);
+  const { handleClicked } = useContext(Context);
+  const enDirect = year === EDITION_EN_COURS;
+
+  // Stats de l'édition en cours : chargées une fois, puis actualisées toutes les 30 s tant que l'onglet est affiché.
+  useEffect(() => {
+    let actif = true;
+    const charger = () =>
+      getUser()
+        .then((stats) => actif && setLive(stats))
+        .catch(() => {});
+    charger();
+    if (!enDirect) return () => { actif = false; };
+    const minuteur = setInterval(() => document.visibilityState === "visible" && charger(), ACTUALISATION_MS);
+    return () => {
+      actif = false;
+      clearInterval(minuteur);
+    };
+  }, [enDirect]);
+
+  const tabs = [...editions.map((x) => x.year), EDITION_EN_COURS];
+  const e = enDirect
+    ? {
+        year,
+        roses: live?.totalQuantity ?? 0,
+        participants: live?.participants ?? 0,
+        detail: (live?.countries ?? []) as Pays[],
+        fideles: undefined as number | undefined,
+      }
+    : editions.find((x) => x.year === year)!;
   const [top, ...others] = e.detail;
   const pays = e.detail.length;
   const pct = (n: number, total: number) => Math.round((n / total) * 100);
@@ -61,25 +96,34 @@ export default function Bilan() {
       id="bilan"
       className="scroll-mt-16 font-Raleway font-black leading-none flex flex-col items-center text-center bg-white px-4 md:px-20 py-16 md:py-24"
     >
-      <h2 className="text-bleu text-3xl md:text-6xl leading-tight">Bilan {year}</h2>
+      <h2 className="text-bleu text-3xl md:text-6xl leading-tight">
+        {enDirect ? `${year} en direct` : `Bilan ${year}`}
+      </h2>
       <p className="text-jaune font-bold text-sm md:text-3xl mt-3 leading-snug">
-        Revenir sur une année de ferveur
+        {enDirect ? "L'édition en cours, mise à jour en temps réel" : "Revenir sur une année de ferveur"}
       </p>
 
       <div className="w-full max-w-3xl mt-10 bg-bleu rounded-3xl p-6 md:p-12 flex flex-col items-center">
         <div className="flex gap-3">
-          {editions.map((x) => (
+          {tabs.map((annee) => (
             <button
-              key={x.year}
-              onClick={() => setYear(x.year)}
-              aria-pressed={x.year === year}
-              className={`rounded-full px-6 py-2 text-base md:text-xl transition-colors duration-200 ${
-                x.year === year
+              key={annee}
+              onClick={() => setYear(annee)}
+              aria-pressed={annee === year}
+              className={`inline-flex items-center gap-2 rounded-full px-5 py-2 text-base md:text-xl transition-colors duration-200 ${
+                annee === year
                   ? "bg-jaune text-white"
                   : "bg-white/15 text-white active:bg-white/25"
               }`}
             >
-              {x.year}
+              {annee}
+              {annee === EDITION_EN_COURS && (
+                <span
+                  className="h-2.5 w-2.5 animate-pulse rounded-full bg-green-400"
+                  role="img"
+                  aria-label="En direct"
+                />
+              )}
             </button>
           ))}
         </div>
@@ -90,7 +134,7 @@ export default function Bilan() {
             textColor="text-jaune"
             textSize="text-[24vw] md:text-[12vw]"
           />
-          <p className="text-white text-[9vw] md:text-[4vw] mt-1">roses offertes</p>
+          <p className="text-white text-[9vw] md:text-[4vw] mt-1">{enDirect ? "roses promises" : "roses offertes"}</p>
         </div>
 
         <div className="grid grid-cols-2 gap-3 md:gap-5 w-full mt-8">
@@ -118,8 +162,9 @@ export default function Bilan() {
         )}
 
         <div className="w-full mt-8 text-left">
-          <p className="text-white text-xl md:text-3xl">D'où venaient les participants</p>
-          <div key={year} className="flex flex-col gap-3 mt-5">
+          <p className="text-white text-xl md:text-3xl">{enDirect ? "D'où viennent les participants" : "D'où venaient les participants"}</p>
+          {top ? (
+            <div key={year} className="flex flex-col gap-3 mt-5">
               <div className="bg-white rounded-2xl p-5 md:p-8 flex items-center gap-4 md:gap-8">
                 <span aria-hidden="true" className="text-6xl md:text-8xl leading-none">
                   {flag(top.code)}
@@ -137,7 +182,7 @@ export default function Bilan() {
 
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {others.map((p) => (
-                  <div key={p.code} className="bg-white rounded-2xl p-4 md:p-6">
+                  <div key={p.code} className="bg-white rounded-2xl p-4 md:p-6 animate-in fade-in zoom-in-95 duration-300">
                     <span aria-hidden="true" className="text-4xl md:text-6xl leading-none">
                       {flag(p.code)}
                     </span>
@@ -149,7 +194,21 @@ export default function Bilan() {
                   </div>
                 ))}
               </div>
-          </div>
+            </div>
+          ) : (
+            <div className="mt-5 flex flex-col items-center gap-4 rounded-2xl bg-white/10 p-6 text-center">
+              <p className="text-white text-base md:text-xl leading-snug">
+                {live === null
+                  ? "Chargement des participants…"
+                  : "Les premières roses de 2026 arrivent : soyez le premier à participer."}
+              </p>
+              {live !== null && (
+                <Button onClick={handleClicked} className="h-11 w-48 active:scale-[0.97] transition-transform duration-150">
+                  Participer
+                </Button>
+              )}
+            </div>
+          )}
         </div>
       </div>
 

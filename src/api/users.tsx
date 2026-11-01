@@ -4,10 +4,15 @@ const API = import.meta.env.VITE_API_URL ?? "";
 // Les inscriptions et les statistiques passent par l'API (api/participations.ts, api/stats.ts) :
 // Supabase et Resend ne sont jamais appelés depuis le navigateur.
 
-export const getUser = async (): Promise<{
+export type StatsEnDirect = {
+  year: number;
   participants: number;
   totalQuantity: number;
-}> => {
+  countries: { code: string; count: number; roses: number }[];
+  unknown: { count: number; roses: number };
+};
+
+export const getUser = async (): Promise<StatsEnDirect> => {
   const response = await fetch(`${API}/api/stats`);
   if (!response.ok) throw new Error("Statistiques indisponibles");
   return response.json();
