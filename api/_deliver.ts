@@ -78,7 +78,7 @@ export async function deliver(
   for (let i = 0; i < recipients.length; i += 50) {
     const chunk = recipients.slice(i, i + 50);
     const messages: Message[] = chunk.map((r) => {
-      const unsubscribeUrl = `${config.siteUrl}/api/unsubscribe?t=${r.unsubscribe_token}`;
+      const unsubscribeUrl = `${config.apiUrl}/api/unsubscribe?t=${r.unsubscribe_token}`;
       const { subject, html, text } = render(kind, {
         name: r.name, quantity: r.quantity, days, eventLabel,
         totalRoses: roses, siteUrl: config.siteUrl, unsubscribeUrl,

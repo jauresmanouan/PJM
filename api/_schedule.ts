@@ -4,9 +4,10 @@ export type Kind =
   | "relance_j7"
   | "relance_j1"
   | "jour_j"
-  | "merci";
+  | "merci"
+  | "invitation"; // lancement de l'édition : envoi manuel à d'anciens participants, jamais planifié
 
-export type CampaignKind = Exclude<Kind, "confirmation">;
+export type CampaignKind = Exclude<Kind, "confirmation" | "invitation">;
 
 // Règles d'envoi des campagnes (voir participants_due dans supabase/schema.sql).
 //   minAge   : ancienneté minimale de l'inscription (ne pas relancer quelqu'un qui vient de s'inscrire)

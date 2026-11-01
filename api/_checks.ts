@@ -30,6 +30,9 @@ for (const kind of ["confirmation", "relance_j14", "relance_j1", "jour_j", "merc
   const m = render(kind, { ...ctx, quantity: 3 });
   assert.ok(m.subject && m.html.includes("Ne plus recevoir") && m.text.includes("3 roses"), kind);
 }
+const invitation = render("invitation", ctx);
+assert.ok(invitation.subject.includes("2026") && invitation.html.includes("Je participe") && !invitation.text.includes("undefined"), "invitation");
+assert.ok(!isCampaignKind("invitation") && !isCampaignKind("confirmation"), "invitation et confirmation ne sont jamais planifiées");
 
 // Webhook Svix : signature valide acceptée, corps altéré ou vieux timestamp refusés.
 const secret = "whsec_" + Buffer.from("secret-de-test").toString("base64");

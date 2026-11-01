@@ -1,7 +1,16 @@
 import { configured, supabaseRequest } from "./_supabase.js";
+import { preflight, withCors } from "./_cors.js";
 import { currentEdition } from "./_deliver.js";
 
-export async function GET() {
+export function OPTIONS(request: Request) {
+  return preflight(request);
+}
+
+export async function GET(request: Request) {
+  return withCors(request, await stats());
+}
+
+async function stats() {
   if (!configured()) return Response.json({ error: "Statistiques indisponibles" }, { status: 503 });
   try {
     const edition = await currentEdition();

@@ -1,4 +1,5 @@
 import { configured, supabaseRequest } from "./_supabase.js";
+import { preflight, withCors } from "./_cors.js";
 import { currentEdition, deliver, type Recipient } from "./_deliver.js";
 
 type Input = {
@@ -10,7 +11,15 @@ function clean(value: unknown, max: number) {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
 }
 
+export function OPTIONS(request: Request) {
+  return preflight(request);
+}
+
 export async function POST(request: Request) {
+  return withCors(request, await register(request));
+}
+
+async function register(request: Request) {
   if (!configured()) return Response.json({ error: "Inscriptions temporairement indisponibles." }, { status: 503 });
   if (!request.headers.get("content-type")?.includes("application/json")) return Response.json({ error: "Format invalide." }, { status: 415 });
   const raw = await request.text();

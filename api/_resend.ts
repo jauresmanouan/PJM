@@ -1,17 +1,20 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 
-export type MailConfig = { key: string; from: string; replyTo: string; siteUrl: string };
+export type MailConfig = { key: string; from: string; replyTo: string; siteUrl: string; apiUrl: string };
 
 // RESEND_FROM_EMAIL : ex. « Pour la Joie de Marie <contact@pourlajoiedemarie.com> » (domaine vérifié dans Resend).
 export function mailConfig(): MailConfig | null {
   const key = process.env.RESEND_API_KEY;
   const from = process.env.RESEND_FROM_EMAIL;
   if (!key || !from) return null;
+  const siteUrl = (process.env.SITE_URL || "https://pourlajoiedemarie.com").replace(/\/$/, "");
   return {
     key,
     from,
     replyTo: process.env.RESEND_REPLY_TO || "contact@pourlajoiedemarie.com",
-    siteUrl: (process.env.SITE_URL || "https://pourlajoiedemarie.com").replace(/\/$/, ""),
+    siteUrl,
+    // Adresse publique de l'API (désabonnement). Le site est chez Hostinger, l'API sur Vercel : api.<domaine>.
+    apiUrl: (process.env.API_URL || siteUrl).replace(/\/$/, ""),
   };
 }
 

@@ -73,6 +73,18 @@ function content(kind: Kind, c: EmailContext): Content {
           `Nous sommes unis spirituellement dans ce geste offert pour la joie de Marie.`,
         ],
       };
+    case "invitation":
+      return {
+        subject: "Rejoignez le bouquet 2026 pour la Joie de Marie 🌹",
+        paragraphs: [
+          hello,
+          `Vous avez déjà offert des roses à Marie lors d'une édition précédente : merci de tout cœur.`,
+          `Le ${c.eventLabel}, jour de l'Immaculée Conception, nous déposerons à nouveau ensemble nos roses, chacun dans sa paroisse.`,
+          bouquet,
+          `Inscrivez-vous en une minute et indiquez le nombre de roses que vous offrirez.`,
+        ].filter(Boolean),
+        cta: { label: "Je participe", url: c.siteUrl },
+      };
     case "merci":
       return {
         subject: "Merci pour ce bouquet 🌹",
