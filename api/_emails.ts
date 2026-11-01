@@ -44,6 +44,13 @@ const titleCase = (nom: string) =>
     ? nom.toLocaleLowerCase("fr").replace(/(^|[\s'’-])(\p{L})/gu, (_, avant, lettre) => avant + lettre.toLocaleUpperCase("fr"))
     : nom;
 
+// Prénom d'usage : les champs contiennent parfois un nom complet (« Kossia Virginie epse Adjoumani »).
+const prenomUsuel = (nom: string) => {
+  const sansMention = nom.replace(/\s+(epse|ép\.?|épouse|née|nee|veuve|vve)\b.*$/iu, "").trim();
+  const mots = sansMention.split(/\s+/).filter(Boolean);
+  return mots.length > 2 ? mots[0] : mots.join(" ");
+};
+
 const roses = (n: number) => `${n} rose${n > 1 ? "s" : ""}`;
 const nombre = (n: number) => n.toLocaleString("fr-FR");
 
@@ -280,7 +287,7 @@ function renderText(blocks: Block[]) {
 }
 
 export function render(kind: Kind, contexte: EmailContext) {
-  const c = { ...contexte, name: titleCase(contexte.name) };
+  const c = { ...contexte, name: titleCase(prenomUsuel(contexte.name.trim())) };
   const { subject, preheader, blocks } = content(kind, c);
 
   const html = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>${escapeHtml(subject)}</title></head>
