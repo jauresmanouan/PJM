@@ -12,7 +12,8 @@ const nom = (code: string) => regions.of(code) ?? code;
 
 // Chiffres issus des exports des participants (PJM-2024 et PJM-2025, non versionnés : données personnelles).
 // 2024 : la colonne « pays » n'existait pas, le pays est déduit de l'indicatif des numéros de téléphone
-// (méthode contrôlée sur 2025 : 93 numéros sur 93 donnent le bon pays). `inconnu` = numéro absent ou ambigu.
+// (méthode contrôlée sur 2025 : 93 numéros sur 93 donnent le bon pays).
+// 6 participants de 2024 (28 roses) n'ont aucun pays identifiable : ils ne figurent pas dans `detail`.
 const editions = [
   {
     year: 2024,
@@ -29,9 +30,6 @@ const editions = [
       { code: "IT", count: 1, roses: 10 },
       { code: "SN", count: 1, roses: 4 },
     ] as Pays[],
-    inconnu: 6,
-    inconnuRoses: 28,
-    deduit: true,
     fideles: undefined as number | undefined,
   },
   {
@@ -48,9 +46,6 @@ const editions = [
       { code: "BF", count: 1, roses: 5 },
       { code: "IT", count: 1, roses: 5 },
     ] as Pays[],
-    inconnu: 0,
-    inconnuRoses: 0,
-    deduit: false,
     fideles: 53, // participants de 2025 déjà inscrits en 2024 (même adresse email)
   },
 ];
@@ -59,8 +54,6 @@ export default function Bilan() {
   const [year, setYear] = useState(2025);
   const e = editions.find((x) => x.year === year)!;
   const [top, ...others] = e.detail;
-  const medium = others.filter((p) => p.count > 1);
-  const singles = others.filter((p) => p.count === 1);
   const pays = e.detail.length;
   const pct = (n: number, total: number) => Math.round((n / total) * 100);
 
@@ -148,41 +141,20 @@ export default function Bilan() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                {medium.map((p) => (
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {others.map((p) => (
                   <div key={p.code} className="bg-white rounded-2xl p-4 md:p-6">
                     <span aria-hidden="true" className="text-4xl md:text-6xl leading-none">
                       {flag(p.code)}
                     </span>
                     <p className="text-jaune text-3xl md:text-5xl leading-none mt-3">{p.count}</p>
                     <p className="text-bleu text-sm md:text-xl mt-1">{nom(p.code)}</p>
-                    <p className="text-bleu/70 font-medium text-xs md:text-base mt-1">{p.roses} roses</p>
+                    <p className="text-bleu/70 font-medium text-xs md:text-base mt-1">
+                      {p.roses} roses
+                    </p>
                   </div>
                 ))}
               </div>
-
-              {singles.length > 0 && (
-                <p className="text-white/80 font-medium text-xs md:text-base mt-2">
-                  1 participant chacun
-                </p>
-              )}
-              <div className="flex flex-wrap gap-2">
-                {singles.map((p) => (
-                  <span
-                    key={p.code}
-                    className="bg-white/15 text-white rounded-full px-4 py-2 text-sm md:text-lg"
-                  >
-                    <span aria-hidden="true">{flag(p.code)}</span> {nom(p.code)}
-                  </span>
-                ))}
-              </div>
-
-              {(e.inconnu > 0 || e.deduit) && (
-                <p className="text-white/70 font-medium text-xs md:text-sm mt-2 leading-snug">
-                  {e.deduit && "Pays déduits des indicatifs téléphoniques. "}
-                  {e.inconnu > 0 && `${e.inconnu} participants sans pays identifiable (${e.inconnuRoses} roses).`}
-                </p>
-              )}
           </div>
         </div>
       </div>
