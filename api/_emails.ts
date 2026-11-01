@@ -26,7 +26,6 @@ type Block =
   | { t: "p"; text: string }
   | { t: "hero"; big: string; label: string }
   | { t: "tips"; title?: string; items: [string, string][] }
-  | { t: "stats"; items: [string, string][] }
   | { t: "button"; label: string; url: string; style?: "jaune" | "bleu" };
 
 type Content = { subject: string; preheader: string; blocks: Block[] };
@@ -198,7 +197,6 @@ function content(kind: Kind, c: EmailContext): Content {
             text: `Le **${c.eventLabel}**, nous fêterons l'Immaculée Conception, et nous voulons former un grand bouquet, fait de nos prières et de nos efforts, avec pour seul objectif de réjouir le Cœur uni de Jésus et Marie.`,
           },
           { t: "p", text: "Chaque rose constituera une oraison silencieuse, une action de grâce à Celle qui nous conduit au Verbe." },
-          { t: "stats", items: [["1 187", "roses en 2024"], ["752", "roses en 2025"]] },
           { t: "p", text: "Joignez votre rose aux nôtres : l'inscription prend une minute." },
           { t: "button", label: "Joindre ma rose aux nôtres", style: "jaune", url: c.siteUrl },
         ],
@@ -220,13 +218,6 @@ function renderBlock(b: Block): string {
       return `<p style="margin:0 0 18px;font-size:17px;line-height:1.6;color:${TEXTE}">${inline(b.text)}</p>`;
     case "hero":
       return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:6px 0 22px"><tr><td align="center" style="background:${JAUNE};border-radius:16px;padding:22px 16px"><div style="font-size:52px;line-height:1.05;font-weight:900;color:#ffffff">${escapeHtml(b.big)}</div><div style="margin-top:8px;font-size:17px;font-weight:700;color:#ffffff">${escapeHtml(b.label)}</div></td></tr></table>`;
-    case "stats":
-      return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:6px 0 22px"><tr>${b.items
-        .map(
-          ([big, label], i) =>
-            `<td width="50%" align="center" style="background:${BLEU};border-radius:14px;padding:18px 8px"><div style="font-size:34px;line-height:1.1;font-weight:900;color:${JAUNE}">${escapeHtml(big)}</div><div style="margin-top:4px;font-size:14px;font-weight:700;color:#ffffff">${escapeHtml(label)}</div></td>${i < b.items.length - 1 ? '<td width="12">&nbsp;</td>' : ""}`
-        )
-        .join("")}</tr></table>`;
     case "tips":
       return `${b.title ? `<p style="margin:6px 0 10px;font-size:18px;font-weight:700;color:${BLEU}">${escapeHtml(b.title)}</p>` : ""}<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px">${b.items
         .map(
@@ -252,8 +243,6 @@ function renderText(blocks: Block[]) {
           return plain(b.text);
         case "hero":
           return `${b.big} ${b.label}`;
-        case "stats":
-          return b.items.map(([big, label]) => `${big} ${label}`).join(" | ");
         case "tips":
           return [b.title, ...b.items.map(([e, t]) => `${e} ${plain(t)}`)].filter(Boolean).join("\n");
         case "button":
@@ -275,7 +264,7 @@ export function render(kind: Kind, c: EmailContext) {
 <tr><td style="padding:12px 32px 12px">${blocks.map(renderBlock).join("")}</td></tr>
 <tr><td align="center" style="background:${JAUNE};padding:22px 24px"><div style="font-size:17px;font-weight:700;color:#ffffff">Pour la Joie de Marie</div><div style="margin-top:6px;font-size:14px;color:#ffffff">« Portée par la Petite Thérèse et Carlo Acutis 🌹 »</div></td></tr>
 </table>
-<p style="margin:18px 0 0;font-size:12px;line-height:1.6;color:#d6e7f5;text-align:center">contact@pourlajoiedemarie.com<br><a href="${escapeHtml(c.unsubscribeUrl)}" style="color:#ffffff;text-decoration:underline">Ne plus recevoir ces emails</a></p>
+<p style="margin:18px 0 0;font-size:12px;line-height:1.6;color:#ffffff;text-align:center"><a href="mailto:contact@pourlajoiedemarie.com" style="color:#ffffff;text-decoration:none">contact@pourlajoiedemarie.com</a><br><a href="${escapeHtml(c.unsubscribeUrl)}" style="color:#ffffff;text-decoration:underline">Ne plus recevoir ces emails</a></p>
 </td></tr></table></body></html>`;
 
   const text = [
