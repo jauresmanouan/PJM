@@ -1,6 +1,6 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 
-export type MailConfig = { key: string; from: string; replyTo: string; siteUrl: string; apiUrl: string };
+export type MailConfig = { key: string; from: string; replyTo: string; siteUrl: string; apiUrl: string; logoUrl: string };
 
 // RESEND_FROM_EMAIL : ex. « Pour la Joie de Marie <contact@pourlajoiedemarie.com> » (domaine vérifié dans Resend).
 export function mailConfig(): MailConfig | null {
@@ -15,6 +15,10 @@ export function mailConfig(): MailConfig | null {
     siteUrl,
     // Adresse publique de l'API (désabonnement). Le site est chez Hostinger, l'API sur Vercel : api.<domaine>.
     apiUrl: (process.env.API_URL || siteUrl).replace(/\/$/, ""),
+    // Le logo des emails est dans un bucket public Supabase : indépendant de l'hébergement du site.
+    logoUrl:
+      process.env.EMAIL_LOGO_URL ||
+      `${(process.env.SUPABASE_URL ?? "").replace(/\/$/, "")}/storage/v1/object/public/email-assets/logo-v2.png`,
   };
 }
 

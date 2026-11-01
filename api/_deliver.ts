@@ -23,14 +23,16 @@ export async function currentEdition(): Promise<Edition | null> {
   return rows[0] ?? null;
 }
 
-export async function totalRoses(year: number) {
+export type EditionStats = { roses: number; participants: number };
+
+export async function editionStats(year: number): Promise<EditionStats | undefined> {
   const response = await supabaseRequest("rpc/participation_stats", {
     method: "POST",
     body: JSON.stringify({ edition_year: year }),
   });
   if (!response.ok) return undefined;
   const data = await response.json();
-  return Number(data.total_quantity) || 0;
+  return { roses: Number(data.total_quantity) || 0, participants: Number(data.participants) || 0 };
 }
 
 type LogRow = {
@@ -58,7 +60,7 @@ export async function deliver(
   edition: Edition,
   kind: Kind,
   recipients: Recipient[],
-  roses?: number
+  stats?: EditionStats
 ) {
   const config = mailConfig();
   if (!config) return { sent: 0, failed: 0, skipped: recipients.length, reason: "Resend non configuré" };
@@ -81,7 +83,9 @@ export async function deliver(
       const unsubscribeUrl = `${config.apiUrl}/api/unsubscribe?t=${r.unsubscribe_token}`;
       const { subject, html, text } = render(kind, {
         name: r.name, quantity: r.quantity, days, eventLabel,
-        totalRoses: roses, siteUrl: config.siteUrl, unsubscribeUrl,
+        year: edition.year, goal: edition.goal,
+        totalRoses: stats?.roses, participants: stats?.participants,
+        siteUrl: config.siteUrl, logoUrl: config.logoUrl, unsubscribeUrl,
       });
       return {
         to: r.email, subject, html, text,

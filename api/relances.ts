@@ -1,5 +1,5 @@
 import { configured, supabaseRequest } from "./_supabase.js";
-import { deliver, totalRoses, type Edition, type Recipient } from "./_deliver.js";
+import { deliver, editionStats, type Edition, type Recipient } from "./_deliver.js";
 import { RULES, daysLeft, isCampaignKind, kindForDays } from "./_schedule.js";
 
 // Appelé chaque jour par le cron Vercel (voir vercel.json), qui envoie « Authorization: Bearer $CRON_SECRET ».
@@ -38,7 +38,7 @@ export async function GET(request: Request) {
     const due: Recipient[] = await dueResponse.json();
 
     if (dry) { report.push({ year: edition.year, days, kind, due: due.length }); continue; }
-    const result = due.length ? await deliver(edition, kind, due, await totalRoses(edition.year)) : { sent: 0, failed: 0, skipped: 0 };
+    const result = due.length ? await deliver(edition, kind, due, await editionStats(edition.year)) : { sent: 0, failed: 0, skipped: 0 };
     report.push({ year: edition.year, days, kind, due: due.length, ...result });
   }
 

@@ -28,8 +28,9 @@ const plan: [Kind, number][] = [
 
 const messages = plan.map(([kind, days], i) => {
   const { subject, html, text } = render(kind, {
-    name: "Jaurès", quantity: 12, days, eventLabel, totalRoses: 340,
-    siteUrl: config.siteUrl, unsubscribeUrl,
+    name: "Jaurès", quantity: 12, days, eventLabel, year: 2026, goal: 1000,
+    totalRoses: kind === "merci" ? 1043 : 340, participants: kind === "merci" ? 118 : 41,
+    siteUrl: config.siteUrl, logoUrl: config.logoUrl, unsubscribeUrl,
   });
   return {
     to, subject: `[TEST ${i + 1}/${plan.length}] ${subject}`, html, text,
