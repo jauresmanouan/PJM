@@ -229,7 +229,7 @@ function content(kind: Kind, c: EmailContext): Content {
             text: `Le **${c.eventLabel}**, nous fêterons l'Immaculée Conception, et nous voulons former un grand bouquet, fait de nos prières et de nos efforts, avec pour seul objectif de réjouir le Cœur uni de Jésus et Marie.`,
           },
           { t: "p", text: "Chaque rose constituera une oraison silencieuse, une action de grâce à Celle qui nous conduit au Verbe." },
-          { t: "p", text: "Joignez votre rose aux nôtres : l'inscription prend une minute." },
+          { t: "p", text: "Joignez votre rose à celles des autres : l'inscription prend une minute." },
           { t: "button", label: "Joindre ma rose aux autres", style: "jaune", url: c.siteUrl },
           ...(toussaint ? ([partager(c)] as Block[]) : []),
         ],
