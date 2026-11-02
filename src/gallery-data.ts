@@ -13,11 +13,12 @@ export const galleryYears = [
     ]),
   },
   {
-    // Les photos de 2025 ayant été perdues, cet album reprend des photos de la même collecte non utilisées en 2024.
+    // kamdom.JPG est la seule photo de 2025 retrouvée ; le reste reprend des photos de la même collecte non utilisées en 2024
+    // (photo13, photo4 et photo28 retirées : mêmes scènes que photo9, photo6 et photo30 de 2024).
     year: 2025,
     photos: album("", [
-      "photo34.JPG", "photo14.JPG", "photo31.JPG", "photo39.JPG", "photo13.JPG", "photo27.JPG",
-      "photo24.JPG", "photo21.JPG", "photo28.JPG", "photo4.JPG", "photo3.JPG", "photo25.JPG",
+      "kamdom.JPG", "photo34.JPG", "photo14.JPG", "photo31.JPG", "photo39.JPG", "photo27.JPG",
+      "photo24.JPG", "photo21.JPG", "photo3.JPG", "photo25.JPG",
     ]),
   },
   {
