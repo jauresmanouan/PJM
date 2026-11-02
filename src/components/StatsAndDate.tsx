@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getUser } from "../api/users"; // Importer la fonction pour récupérer les données
 import { Users, Heart, Calendar } from "lucide-react";
+import { AnimatedNumber } from "@/components/ui/skiper-ui/AnimatedNumber";
 
 export default function StatsAndDate() {
   const [participants, setParticipants] = useState(0);
@@ -25,7 +26,7 @@ export default function StatsAndDate() {
       <div className="flex items-center space-x-4">
         <Users className="h-6 w-6 text-jaune" />
         <div>
-          <p className="text-lg md:text-2xl font-semibold">{participants}</p>
+          <AnimatedNumber value={participants} textSize="text-lg md:text-2xl font-semibold" textColor="" />
           <p className="text-xs md:text-sm text-bleu">Participants</p>
         </div>
       </div>
@@ -33,7 +34,7 @@ export default function StatsAndDate() {
       <div className="flex items-center space-x-4">
         <Heart className="h-6 w-6 text-jaune" />
         <div>
-          <p className="text-lg md:text-2xl  font-semibold">{totalQuantity}</p>
+          <AnimatedNumber value={totalQuantity} textSize="text-lg md:text-2xl font-semibold" textColor="" />
           <p className="text-xs md:text-sm text-bleu">Roses promises</p>
         </div>
       </div>
