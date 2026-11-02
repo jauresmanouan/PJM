@@ -16,6 +16,7 @@ import { Toaster, toast } from "sonner";
 const ease = [0.23, 1, 0.32, 1] as const;
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const ROSES_VISIBLES = 6;
+const SEUIL_CONFIRMATION = 20; // au-delà, on demande de confirmer le nombre
 
 // Chaque champ apparaît avec un léger décalage : le formulaire se « déroule » à l'ouverture.
 function Apparition({ index, className, children }: { index: number; className?: string; children: React.ReactNode }) {
@@ -102,6 +103,7 @@ export default function FormPage({
   const [email, setEmail] = useState("");
   const [contact, setContact] = useState<string>("");
   const [envoi, setEnvoi] = useState(false);
+  const [aConfirmer, setAConfirmer] = useState(false);
   const [termine, setTermine] = useState<{ prenom: string; quantity: number; email: string; emailSent: boolean } | null>(null);
   const { setIsClosedForm, setIsClicked } = useContext(context);
   const reduire = useReducedMotion();
@@ -135,6 +137,10 @@ export default function FormPage({
     if (envoi) return;
     if (!ok.quantite || quantity === undefined) {
       toast.error("Indiquez un nombre de roses entre 1 et 1000.");
+      return;
+    }
+    if (quantity >= SEUIL_CONFIRMATION && !aConfirmer) {
+      setAConfirmer(true);
       return;
     }
     setEnvoi(true);
@@ -229,7 +235,7 @@ export default function FormPage({
                     <button
                       type="button"
                       aria-label="Une rose de moins"
-                      onClick={() => setQuantity((q) => Math.max(1, (q ?? 1) - 1))}
+                      onClick={() => { setAConfirmer(false); setQuantity((q) => Math.max(1, (q ?? 1) - 1)); }}
                       className="h-10 w-10 shrink-0 rounded-md bg-gray-100 p-0 text-xl font-bold text-bleu active:scale-95 transition-transform duration-150"
                     >
                       −
@@ -244,12 +250,12 @@ export default function FormPage({
                       placeholder={actionQuantity}
                       required
                       value={quantity ?? ""}
-                      onChange={(event) => setQuantity(event.target.value === "" ? undefined : Number(event.target.value))}
+                      onChange={(event) => { setAConfirmer(false); setQuantity(event.target.value === "" ? undefined : Number(event.target.value)); }}
                     />
                     <button
                       type="button"
                       aria-label="Une rose de plus"
-                      onClick={() => setQuantity((q) => Math.min(1000, (q ?? 0) + 1))}
+                      onClick={() => { setAConfirmer(false); setQuantity((q) => Math.min(1000, (q ?? 0) + 1)); }}
                       className="h-10 w-10 shrink-0 rounded-md bg-gray-100 p-0 text-xl font-bold text-bleu active:scale-95 transition-transform duration-150"
                     >
                       +
@@ -330,15 +336,27 @@ export default function FormPage({
                 </Apparition>
 
                 <Apparition index={7} className="flex flex-col justify-center items-center gap-2">
+                  {aConfirmer && quantity !== undefined && (
+                    <div role="alert" className="w-full rounded-xl bg-jaune/10 p-3 text-center text-sm text-bleu">
+                      Vous offrez <strong>{quantity} roses</strong>. Ce sont des roses naturelles, à offrir à Marie.
+                      <br />
+                      Confirmez-vous ce nombre ?
+                    </div>
+                  )}
                   <Button type="submit" disabled={envoi} className="w-full gap-2 bg-bleu active:scale-[0.97] transition-transform duration-150">
                     {envoi ? (
                       <>
                         <Loader2 className="h-4 w-4 animate-spin" /> Envoi en cours…
                       </>
                     ) : (
-                      "Réjouir Marie"
+                      aConfirmer ? `Oui, offrir ${quantity} roses` : "Réjouir Marie"
                     )}
                   </Button>
+                  {aConfirmer && (
+                    <button type="button" onClick={() => setAConfirmer(false)} className="rounded-lg bg-transparent px-3 py-1 text-sm font-bold text-bleu active:scale-[0.97] transition-transform duration-150">
+                      Corriger le nombre
+                    </button>
+                  )}
                 </Apparition>
               </motion.form>
             )}
