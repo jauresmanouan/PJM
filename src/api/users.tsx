@@ -10,6 +10,7 @@ export type StatsEnDirect = {
   totalQuantity: number;
   countries: { code: string; count: number; roses: number }[];
   unknown: { count: number; roses: number };
+  returning: number;
 };
 
 export const getUser = async (): Promise<StatsEnDirect> => {

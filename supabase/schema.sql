@@ -251,7 +251,13 @@ as $$
       select jsonb_agg(jsonb_build_object('code', pays, 'count', n, 'roses', r) order by n desc, r desc, pays)
       from (select pays, count(*) as n, sum(quantity) as r from p where pays is not null group by pays) g
     ), '[]'::jsonb),
-    'unknown', (select jsonb_build_object('count', count(*), 'roses', coalesce(sum(quantity), 0)) from p where pays is null)
+    'unknown', (select jsonb_build_object('count', count(*), 'roses', coalesce(sum(quantity), 0)) from p where pays is null),
+    -- Participants déjà inscrits à une édition précédente (même adresse email).
+    'returning', (
+      select count(*) from public.participations x
+      where x.edition_year = p_year
+        and exists (select 1 from public.participations o where o.email = x.email and o.edition_year < p_year)
+    )
   );
 $$;
 

@@ -28,6 +28,7 @@ async function stats() {
       countries: (data.countries ?? []).map((c: { code: string; count: number; roses: number }) => ({
         code: c.code, count: Number(c.count) || 0, roses: Number(c.roses) || 0,
       })),
+      returning: Number(data.returning) || 0,
       unknown: { count: Number(data.unknown?.count) || 0, roses: Number(data.unknown?.roses) || 0 },
     }, { headers: { "Cache-Control": "public, s-maxage=15, stale-while-revalidate=30" } });
   } catch {

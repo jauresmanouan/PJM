@@ -84,7 +84,7 @@ export default function Bilan() {
         roses: live?.totalQuantity ?? 0,
         participants: live?.participants ?? 0,
         detail: (live?.countries ?? []) as Pays[],
-        fideles: undefined as number | undefined,
+        fideles: live && live.participants > 0 ? live.returning : undefined,
       }
     : editions.find((x) => x.year === year)!;
   // Classement par nombre de roses (à égalité, par nombre de participants).
@@ -153,7 +153,7 @@ export default function Bilan() {
           <div className="grid grid-cols-2 gap-3 md:gap-5 w-full mt-3 md:mt-5">
             <div className="bg-white rounded-2xl py-5 md:py-8">
               <p className="text-jaune text-4xl md:text-6xl">{e.fideles}</p>
-              <p className="text-bleu text-sm md:text-2xl mt-2 px-2">déjà là en 2024</p>
+              <p className="text-bleu text-sm md:text-2xl mt-2 px-2">{enDirect ? `déjà là avant ${year}` : "déjà là en 2024"}</p>
             </div>
             <div className="bg-white rounded-2xl py-5 md:py-8">
               <p className="text-jaune text-4xl md:text-6xl">{e.participants - e.fideles}</p>
