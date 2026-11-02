@@ -1,11 +1,11 @@
 import { motion, useReducedMotion } from "framer-motion";
 
-// Remplit son parent (qui fixe hauteur, fond et arrondi) et se déploie à l'entrée dans l'écran.
+// Remplit son parent (qui fixe hauteur, fond et arrondi), bout droit plat comme une barre de chargement, et se déploie à l'entrée dans l'écran.
 export default function Barre({ pct, className }: { pct: number; className: string }) {
   const reduce = useReducedMotion();
   return (
     <motion.div
-      className={`h-full rounded-full origin-left ${className}`}
+      className={`h-full rounded-l-full origin-left ${className}`}
       style={{ width: `${Math.min(Math.max(pct, 2), 100)}%` }}
       initial={reduce ? false : { transform: "scaleX(0)" }}
       whileInView={{ transform: "scaleX(1)" }}

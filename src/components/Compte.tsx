@@ -35,7 +35,7 @@ export default function Compte() {
             <span className="text-jaune">{roses}</span> / {OBJECTIF}
           </p>
         </div>
-        <div className="h-4 md:h-6 rounded-full bg-white mt-4">
+        <div className="h-4 md:h-6 overflow-hidden rounded-full bg-white mt-4">
           <Barre pct={(roses / OBJECTIF) * 100} className="bg-jaune" />
         </div>
         <p className="text-white font-medium text-xs md:text-lg mt-4 text-left">
