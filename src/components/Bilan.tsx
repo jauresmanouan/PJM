@@ -87,7 +87,8 @@ export default function Bilan() {
         fideles: undefined as number | undefined,
       }
     : editions.find((x) => x.year === year)!;
-  const [top, ...others] = e.detail;
+  // Classement par nombre de roses (à égalité, par nombre de participants).
+  const [top, ...others] = [...e.detail].sort((a, b) => b.roses - a.roses || b.count - a.count);
   const pays = e.detail.length;
   const pct = (n: number, total: number) => Math.round((n / total) * 100);
 
@@ -162,7 +163,7 @@ export default function Bilan() {
         )}
 
         <div className="w-full mt-8 text-left">
-          <p className="text-white text-xl md:text-3xl">{enDirect ? "D'où viennent les participants" : "D'où venaient les participants"}</p>
+          <p className="text-white text-xl md:text-3xl">{enDirect ? "D'où viennent les roses" : "D'où venaient les roses"}</p>
           {top ? (
             <div key={year} className="flex flex-col gap-3 mt-5">
               <div className="bg-white rounded-2xl p-5 md:p-8 flex items-center gap-4 md:gap-8">
@@ -170,12 +171,12 @@ export default function Bilan() {
                   {flag(top.code)}
                 </span>
                 <div>
-                  <p className="text-jaune text-5xl md:text-7xl leading-none">{top.count}</p>
+                  <p className="text-jaune text-5xl md:text-7xl leading-none">{top.roses}</p>
                   <p className="text-bleu text-base md:text-2xl mt-2">{nom(top.code)}</p>
                   <p className="text-bleu/70 font-medium text-xs md:text-lg mt-1 leading-snug">
-                    {pct(top.count, e.participants)} % des participants
+                    {top.roses > 1 ? "roses" : "rose"} · {pct(top.roses, e.roses)} % du bouquet
                     <br />
-                    {top.roses} roses, {pct(top.roses, e.roses)} % du bouquet
+                    {top.count} participant{top.count > 1 ? "s" : ""}
                   </p>
                 </div>
               </div>
@@ -186,10 +187,10 @@ export default function Bilan() {
                     <span aria-hidden="true" className="text-4xl md:text-6xl leading-none">
                       {flag(p.code)}
                     </span>
-                    <p className="text-jaune text-3xl md:text-5xl leading-none mt-3">{p.count}</p>
+                    <p className="text-jaune text-3xl md:text-5xl leading-none mt-3">{p.roses}</p>
                     <p className="text-bleu text-sm md:text-xl mt-1">{nom(p.code)}</p>
                     <p className="text-bleu/70 font-medium text-xs md:text-base mt-1">
-                      {p.roses} roses
+                      {p.roses > 1 ? "roses" : "rose"} · {p.count} participant{p.count > 1 ? "s" : ""}
                     </p>
                   </div>
                 ))}
