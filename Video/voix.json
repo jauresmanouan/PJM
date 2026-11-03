@@ -1,0 +1,19 @@
+[
+  {"id": "01", "debut": 0.6, "fin": 6.8, "texte": "Chaque année, un même jour... pour une Mère... des milliers de roses."},
+  {"id": "02", "debut": 9.6, "fin": 14.6, "texte": "C'est « Pour la Joie de Marie ». Et en deux mille vingt-six, nous revenons."},
+  {"id": "03", "debut": 15.5, "fin": 19.2, "texte": "En deux éditions, près de deux mille roses offertes."},
+  {"id": "04", "debut": 20.0, "fin": 24.6, "texte": "Depuis neuf pays... un seul et même bouquet."},
+  {"id": "05", "debut": 26.0, "fin": 31.4, "texte": "Dans chaque paroisse, une rose devient prière."},
+  {"id": "06", "debut": 32.2, "fin": 36.2, "texte": "Cette année... c'est votre tour."},
+  {"id": "07", "debut": 37.4, "fin": 39.8, "texte": "Trois gestes. C'est tout."},
+  {"id": "08", "debut": 40.4, "fin": 45.7, "texte": "Un : vous vous inscrivez, avec le nombre de roses à offrir."},
+  {"id": "09", "debut": 46.4, "fin": 51.7, "texte": "Deux : vous achetez vous-même vos roses. Aucun argent à nous envoyer."},
+  {"id": "10", "debut": 52.4, "fin": 57.7, "texte": "Trois : vous les déposez dans votre paroisse, le huit décembre."},
+  {"id": "11a", "debut": 59.5, "fin": 60.5, "texte": "Vos roses."},
+  {"id": "11b", "debut": 60.5, "fin": 61.65, "texte": "Votre paroisse."},
+  {"id": "11c", "debut": 61.65, "fin": 62.6, "texte": "Votre cœur."},
+  {"id": "12", "debut": 62.7, "fin": 65.8, "texte": "Le même jour, unis partout dans le monde."},
+  {"id": "13", "debut": 66.3, "fin": 69.6, "texte": "Le huit décembre deux mille vingt-six."},
+  {"id": "14", "debut": 70.4, "fin": 72.8, "texte": "Objectif : mille roses."},
+  {"id": "15", "debut": 73.6, "fin": 79.4, "texte": "Joignez votre rose aux nôtres. Inscrivez-vous sur pour la joie de marie point com."}
+]

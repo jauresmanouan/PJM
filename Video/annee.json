@@ -1,0 +1,10 @@
+{
+  "annee": 2026,
+  "editions": "EN DEUX ÉDITIONS",
+  "rosesOffertes": 1939,
+  "nbPays": 9,
+  "pays": ["CÔTE D'IVOIRE", "CAMEROUN", "FRANCE", "ÉTATS-UNIS", "BURKINA FASO", "CANADA", "RD CONGO", "ITALIE", "SÉNÉGAL"],
+  "objectif": 1000,
+  "site": "pourlajoiedemarie.com",
+  "photos": ["photo1", "photo11", "photo12", "kamdom", "photo17", "photo19", "photo22", "photo24", "photo25", "photo3", "photo31", "photo32", "photo33", "photo34", "photo35", "photo36", "photo37", "photo38", "photo39", "photo14", "photo15", "photo30", "photo29", "photo6"]
+}

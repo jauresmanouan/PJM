@@ -29,3 +29,9 @@ dist-ssr
 PJM-2024/
 PJM-2025/
 ~$*
+
+# Vidéo : rendus et voix provisoires (régénérables)
+Video/*.mp4
+Video/*.wav
+Video/still-*.jpg
+Video/voix/test-*

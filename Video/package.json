@@ -1,0 +1,13 @@
+{
+  "name": "pjm-video",
+  "private": true,
+  "scripts": {
+    "images": "node render.js video muet.mp4 30",
+    "son": "node audio.js son.wav",
+    "mix": "node mixer.js",
+    "test-voix": "node mixer.js --test"
+  },
+  "dependencies": {
+    "puppeteer-core": "23.11.1"
+  }
+}
