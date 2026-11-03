@@ -4,7 +4,7 @@
 const fs = require('fs'), path = require('path'), { execFileSync } = require('child_process');
 const D = __dirname, CFG = require('./annee.json'), VOIX = require('./voix.json');
 const test = process.argv.includes('--test');
-const GAIN = +(process.env.GAIN_VOIX || 1); // ponytail: gain fixe ; ajuster si la voix ElevenLabs sort plus faible ou plus forte
+const GAIN = +(process.env.GAIN_VOIX || 1.8); // ponytail: gain fixe ; ajuster si la voix ElevenLabs sort plus faible ou plus forte
 const duree = f => +execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', f]).toString();
 
 const clips = [];
@@ -25,7 +25,7 @@ const inputs = ['-i', path.join(D, 'muet.mp4'), '-i', path.join(D, 'son.wav')];
 let fc = '';
 clips.forEach((c, i) => { inputs.push('-i', c.f); fc += `[${i + 2}:a]aresample=44100,aformat=channel_layouts=stereo,adelay=${c.ms}:all=1[v${i}];`; });
 fc += clips.map((_, i) => `[v${i}]`).join('') + `amix=inputs=${clips.length}:normalize=0,volume=${GAIN},asplit[va][vb];`;
-fc += `[1:a][va]sidechaincompress=threshold=0.02:ratio=8:attack=15:release=400[mus];`;
+fc += `[1:a][va]sidechaincompress=threshold=0.01:ratio=14:attack=20:release=500:mix=0.8[mus];`;
 fc += `[mus][vb]amix=inputs=2:normalize=0,alimiter=limit=0.95[out]`;
 const out = path.join(D, `PJM-${CFG.annee}-inscription-voix${test ? '-test' : ''}.mp4`);
 execFileSync('ffmpeg', ['-y', '-loglevel', 'error', ...inputs, '-filter_complex', fc, '-map', '0:v', '-map', '[out]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '256k', '-movflags', '+faststart', out], { stdio: 'inherit' });

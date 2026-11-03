@@ -30,8 +30,12 @@ Vidéo motion design de 80 s (1080p, 30 i/s) produite entièrement par du code :
 4. **Rendre le son** : `npm run son` (quelques secondes).
 5. **Voix off** : adapter `voix.json` (l'année, les chiffres, en toutes lettres), puis :
    - `npm run test-voix` produit une version avec une voix provisoire du Mac, pour vérifier le calage ;
-   - générer les phrases dans ElevenLabs (voir `voix-off.md`), les déposer dans `voix/01.mp3`, `voix/02.mp3`…
-   - `npm run mix` produit `PJM-<année>-inscription-voix.mp4`.
+   - générer les phrases avec ElevenLabs :
+     ```bash
+     VOICE_ID=JBFqnCBsd6RMkjVDRZzb npm run voix
+     ```
+     La clé va dans `Video/.env.local` (`ELEVENLABS_API_KEY=...`), avec les permissions *Text to Speech* et *Voices (Read)*. En 2026 : voix « George », modèle `eleven_v3`, texte déclaré en français. Le script garde la prise brute dans `voix/brut/` (supprimer un fichier pour régénérer cette phrase seulement). Il retire les silences et accélère d'au plus 15 %, sans changer la hauteur, les phrases qui débordent de leur plan. On peut aussi déposer des MP3 faits sur le site d'ElevenLabs dans `voix/01.mp3`, `voix/02.mp3`…
+   - `npm run mix` produit `PJM-<année>-inscription-voix.mp4`. La musique baisse sous la voix (la voix passe 9 à 17 LU au-dessus) ; `GAIN_VOIX=1.5 npm run mix` pour ajuster.
 
 Sans voix off, la vidéo seule s'obtient avec :
 ```bash
