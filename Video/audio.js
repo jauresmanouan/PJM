@@ -1,6 +1,6 @@
-// Bande-son synthétisée, calée sur scene.html (120 BPM, temps = 0,5 s). node audio.js son.wav
+// Bande-son synthétisée, calée sur scene.html et la voix (120 BPM, temps = 0,5 s). node audio.js son.wav
 const fs = require('fs'), CFG = require('./annee.json');
-const SR = 44100, DUR = 80, N = (DUR + 1) * SR;
+const SR = 44100, DUR = CFG.duree, HK = CFG.hook, N = (DUR + 1) * SR;
 const L = new Float32Array(N), R = new Float32Array(N);      // sec
 const RL = new Float32Array(N), RR = new Float32Array(N);    // envoi réverbe
 const duck = new Float32Array(N).fill(1);                    // sidechain du kick
@@ -67,61 +67,84 @@ const eOut = x => 1 - Math.pow(1 - x, 3);
 // ré majeur : D – A – Bm – G, une mesure (2 s) par accord
 const CH = [[62, 66, 69], [61, 64, 69], [62, 66, 71], [62, 67, 71]], ROOT = [38, 45, 47, 43];
 const PENTA = [74, 76, 78, 81, 83, 86, 88, 90, 93, 95, 98, 100, 102];
-const sect = t => t < 7 ? 'intro' : t < 15 ? 'logo' : t < 25 ? 'stats' : t < 37 ? 'galerie' : t < 58 ? 'etapes' : t < 63.5 ? 'cuts' : t < 66 ? 'unis' : t < 73 ? 'drop' : 'fin';
-for (let bar = 0; bar < 40; bar++) {
+const sect = t => t < HK ? 'hook' : t < 20 ? 'intro' : t < 28 ? 'logo' : t < 37 ? 'stats' : t < 52 ? 'galerie' : t < 71 ? 'etapes' : t < 81 ? 'drop' : 'fin';
+for (let bar = 0; bar < DUR / 2; bar++) {
   const t = bar * 2, c = bar % 4, S = sect(t);
-  const bright = { intro: 2, logo: 4, galerie: 4, unis: 3, fin: 4 }[S] || 6;
-  const pg = S === 'intro' ? .05 + bar * .006 : S === 'cuts' ? .03 : .07;
-  if (t < 78) CH[c].forEach((m, j) => note(t, 2, m - (S === 'intro' ? 12 : 0), pg, (j - 1) * .5, bright));
+  if (S === 'hook') continue; // le hook ne vit que de ses coups, puis d'un silence
+  const bright = { intro: 2, logo: 4, galerie: 4, fin: 4 }[S] || 6;
+  const pg = S === 'intro' ? Math.min(.07, .04 + bar * .003) : .07;
+  if (t < DUR - 5) CH[c].forEach((m, j) => note(t, 2, m - (S === 'intro' ? 12 : 0), pg, (j - 1) * .5, bright));
   else CH[0].forEach((m, j) => note(t, 1.4, m, .07, (j - 1) * .5, 4, .6));
-  if (S !== 'intro' && S !== 'logo' && S !== 'unis' && t < 78) for (let b = 0; b < 4; b++) bass(t + b * .5, .45, ROOT[c], S === 'galerie' ? .22 : .32);
+  if (S !== 'intro' && S !== 'logo' && t < DUR - 5) for (let b = 0; b < 4; b++) bass(t + b * .5, .45, ROOT[c], S === 'galerie' ? .22 : .32);
   for (let b = 0; b < 4; b++) {
     const bt = t + b * .5;
-    const full = ['stats', 'etapes', 'cuts', 'drop'].includes(S) || (S === 'galerie' && bt >= 31) || (S === 'fin' && bt < 78);
-    if (full || (S === 'logo' && bt >= 11)) kick(bt, S === 'logo' ? .5 : .85);
+    const full = ['stats', 'etapes', 'drop'].includes(S) || (S === 'galerie' && bt >= 47) || (S === 'fin' && bt < DUR - 5);
+    if (full || S === 'logo') kick(bt, S === 'logo' ? .5 : .85);
     if (['etapes', 'drop', 'stats'].includes(S)) hat(bt + .25);
     if (['etapes', 'drop'].includes(S) && b % 2) clap(bt, .22);
   }
-  if (['logo', 'stats', 'galerie', 'etapes', 'drop', 'fin'].includes(S) && t >= 9 && t < 79) // arpège en double-croches
+  if (['logo', 'stats', 'galerie', 'etapes', 'drop', 'fin'].includes(S) && t < DUR - 3) // arpège en double-croches
     for (let k = 0; k < 16; k++) { const m = CH[c][k % 3] + 12 * (1 + (k >> 2) % 2); pluck(t + k * .125, m, k % 4 ? .045 : .07, Math.sin(k) * .6); }
 }
 
 // ---------- bruitages calés sur l'image ----------
-whoosh(.8, 1.2, .25, 1, 200, 2500); impact(1.0, .35);                 // « Un jour. »
-whoosh(3.3, 1.0, .25, -1, 200, 2500); impact(3.3, .4);                // « Une Mère. »
-whoosh(5.4, 1.0, .3, 1, 200, 3000); impact(5.4, .45);                 // « Des milliers de roses. »
-riser(4.4, 7.0, .3);
-impact(7.0, .8, 1.3); crash(7.0, .3);                                  // flash → logo
-riser(7.2, 9.6, .1);                                                   // tracé du logo
-for (let j = 0; j < 13; j++) bell(9.9 + j * .09, mtof(PENTA[j]), .07, (j / 12 - .5) * 1.2); // étoiles
-whoosh(11.5, .9, .25, -1, 400, 4000);                                  // titre
-pop(12.75, .3); bell(12.9, mtof(86), .08);                             // pastille 2026
-riser(13.6, 15, .25); whoosh(15, .8, .35); impact(15.0, .6); crash(15, .2);
-counter(15.4, 17.6, CFG.rosesOffertes, CFG.rosesOffertes / 40, eOut); impact(17.6, .5); bell(17.6, mtof(93), .12); bell(17.62, mtof(86), .1);
-whoosh(19.4, .5, .45, -1, 500, 6000);                                  // panoramique
-whoosh(19.8, .5, .2, 1, 300, 2000); hit(20.1, .5); pop(20.9, .2); pop(21.2, .25);
-riser(23.7, 25, .3); whoosh(25, .5, .45, -1, 500, 6000);
-bell(26, mtof(81), .08); bell(27.5, mtof(86), .08);                    // galerie
-whoosh(31.7, .8, .3, 1, 300, 3000); impact(33.0, .5); bell(33, mtof(90), .1);
-riser(35.4, 37, .35); whoosh(37, .8, .4); impact(37, .6); crash(37, .2);
-pop(37.3, .3); hit(37.6, .5); hit(38.4, .45);                          // « 3 gestes. C'est tout. »
-for (const T of [40, 46, 52]) { whoosh(T, .5, .45, -1, 500, 6000); impact(T + .2, .55); whoosh(T + .55, .5, .15, 1, 800, 5000); bell(T + 1.0, mtof(T === 46 ? 88 : 86), .06); }
-riser(56.6, 58, .3); whoosh(58, .8, .4); impact(58, .55);
-for (const T of [58, 59.5, 60.5, 61.5, 62.5]) hit(T, .6);              // coupes cinétiques
-impact(63.5, .7, 1.2); crash(63.5, .25); bell(63.5, mtof(81), .1); bell(63.55, mtof(88), .08);
-riser(64.4, 66, .4);
-impact(66, 1, 1.5); crash(66, .35);                                    // le « 8 »
-whoosh(66.65, .6, .35, -1, 400, 5000); whoosh(67.25, .6, .3, -1, 400, 5000);
-for (let k = 0; k < 6; k++) key(68.0 + k * .08 + (k > 2 ? .08 : 0));
-whoosh(70.05, .6, .4, 1, 300, 4500);                                   // panoramique vertical
-counter(70.3, 72.0, CFG.objectif, CFG.objectif / 40, eOut); impact(72.0, .8); crash(72, .3);
-for (let j = 0; j < 9; j++) bell(72.0 + j * .06, mtof(PENTA[12 - j]), .05, (rnd() - .5) * 1.4);
-riser(71.6, 73, .2); whoosh(73, .8, .35); impact(73, .5);
-for (let j = 0; j < 13; j++) bell(73.2 + j * .09, mtof(PENTA[j]), .045, (j / 12 - .5) * 1.2);
-whoosh(73.7, .9, .2, -1, 400, 3000); whoosh(74.5, .9, .15, 1, 400, 3000);
-pop(75.15, .45); impact(75.2, .35); bell(75.3, mtof(86), .1);          // bouton Participer
-for (const T of [76, 77.4, 78.8]) bell(T, mtof(93), .05);
-for (let k = 0; k < 21; k++) key(75.8 + k * 1.2 / 21);                 // URL tapée
+// hook (temps film) : trois coups, puis tout s'arrête sur « Il manque encore la vôtre. »
+counter(.05, .7, CFG.rosesOffertes, CFG.rosesOffertes / 24, eOut);
+for (const T of [0, .75, 1.5]) { hit(T, .85); impact(T, .6); crash(T, .15); }
+whoosh(.75, .4, .4, 1, 500, 6000); whoosh(1.5, .4, .4, -1, 500, 6000);
+impact(2.25, 1, 1.6); whoosh(2.25, .5, .3, 1, 300, 3000);
+bell(2.95, mtof(81), .13); bell(2.97, mtof(88), .09);                  // « la vôtre. »
+bell(HK, mtof(86), .07);                                               // la voix entre, la rose s'ouvre
+
+// le reste en temps voix, comme scene.html et voix/mots.json
+const V = t => t / CFG.vitesseVoix + HK;
+const hitV = (t, g) => hit(V(t), g), popV = (t, g) => pop(V(t), g), bellV = (t, m, g, pan) => bell(V(t), mtof(m), g, pan), impactV = (t, g, l) => impact(V(t), g, l);
+const whooshV = (t, d, g, dir, f0, f1) => whoosh(V(t), d, g, dir, f0, f1), riserV = (a, b, g) => riser(V(a), V(b), g), crashV = (t, g) => crash(V(t), g);
+const vague = T => { riserV(T - 1, T, .18); whooshV(T - .1, 1.1, .4, 1, 300, 5000); impactV(T, .4); }; // vague de pétales
+const whip = T => whooshV(T, .5, .45, -1, 500, 6000);
+const zoomT = T => { riserV(T - 1.2, T, .28); whooshV(T, .8, .35); impactV(T, .55); crashV(T, .18); };
+
+bellV(4.0, 74, .06); bellV(5.24, 78, .06); bellV(6.39, 81, .07);       // intention, prière, merci
+riserV(8.9, 10.5, .08);
+for (let j = 0; j < 13; j++) bellV(9.7 + j * .09, PENTA[j], .05, (j / 12 - .5) * 1.2); // étoiles de Marie
+vague(10.55); impactV(10.95, .7, 1.3); crashV(10.95, .2); whooshV(11.16, .6, .3, -1, 400, 5000); // le « 8 »
+bellV(12.46, 81, .06); bellV(13.08, 86, .07);                          // Immaculée Conception
+vague(15.7);
+for (let j = 0; j < 22; j++) popV(16.4 + j * .15, .05 + j * .004);     // les roses arrivent
+impactV(19.56, .8, 1.2); crashV(19.56, .25);                           // le bouquet est là
+for (let j = 0; j < 9; j++) bellV(19.6 + j * .08, PENTA[j + 2], .05, (rnd() - .5) * 1.2);
+bellV(22.9, 86, .08);
+vague(23.6); bellV(24.8, 81, .07);
+zoomT(26.05);
+counter(V(26.7), V(28.0), CFG.rosesOffertes, CFG.rosesOffertes / 40, eOut); impactV(28.0, .55); bellV(28.0, 93, .12); bellV(28.02, 86, .1);
+whip(29.95); hitV(30.16, .5); popV(30.78, .2); popV(31.46, .3); popV(31.78, .2);
+riserV(32.3, 32.85, .2); whip(32.85);
+riserV(33, 35, .1);
+for (let j = 0; j < 13; j++) bellV(34.7 + j * .09, PENTA[j], .06, (j / 12 - .5) * 1.2);
+popV(34.68, .3); whooshV(35.85, .9, .25, -1, 400, 4000);
+vague(39.1); bellV(39.27, 81, .07); bellV(40.54, 86, .08);
+bellV(43.1, 88, .07); vague(45.7); impactV(46.7, .5); bellV(46.7, 90, .1);
+riserV(47.2, 48.45, .2);
+zoomT(48.45); popV(48.62, .25); hitV(49.8, .5); hitV(50.55, .4);
+for (const [T, N] of [[51.5, 51.74], [56.6, 56.75], [63.4, 63.64]]) { whip(T); impactV(N, .55); whooshV(N + .35, .5, .15, 1, 800, 5000); }
+for (let k = 0; k < 21; k++) key(V(52.92 + k * 1.46 / 21));            // l'adresse se tape
+popV(52.62, .25); bellV(55.82, 86, .06); bellV(60.44, 88, .06);
+impactV(61.49, .6); whooshV(61.4, .5, .35, -1, 500, 5000);             // aucun argent à envoyer
+zoomT(67.25); hitV(67.4, .6); hitV(67.98, .7);
+impactV(68.85, 1, 1.5); crashV(68.85, .35); whooshV(69.06, .6, .35, -1, 400, 5000); whooshV(69.7, .6, .3, -1, 400, 5000);
+bellV(71.24, 86, .08);
+whip(72.5);
+vague(74.95);
+counter(V(75.3), V(76.3), CFG.objectif, CFG.objectif / 40, eOut); impactV(76.3, .8); crashV(76.3, .3);
+for (let j = 0; j < 9; j++) bellV(76.3 + j * .06, PENTA[12 - j], .05, (rnd() - .5) * 1.4);
+zoomT(77.6);
+for (let j = 0; j < 13; j++) bellV(77.7 + j * .09, PENTA[j], .04, (j / 12 - .5) * 1.2);
+for (let j = 0; j < 24; j++) popV(78 + j * .23, .04);                  // le bouquet se remplit
+bellV(82.8, 86, .07); bellV(83.58, 90, .08);
+whip(84.1);
+for (let k = 0; k < 21; k++) key(V(85.18 + k * 1.56 / 21));
+popV(86.6, .45); impactV(86.7, .35); bellV(86.8, 86, .1);              // bouton Participer
+for (const T of [87, 87.9, 88.4]) bellV(T, 93, .05);
 
 // ---------- réverbe (combs + allpass) ----------
 function reverb(inp, out, off) {

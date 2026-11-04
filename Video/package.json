@@ -5,8 +5,7 @@
     "images": "node render.js video muet.mp4 30",
     "son": "node audio.js son.wav",
     "mix": "node mixer.js",
-    "test-voix": "node mixer.js --test",
-    "voix": "node voix-eleven.js"
+    "aligner": "python3 aligner.py voix/voix-off.mp3"
   },
   "dependencies": {
     "puppeteer-core": "23.11.1"

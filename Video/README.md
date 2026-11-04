@@ -1,15 +1,16 @@
 # Vidéo d'inscription — méthode
 
-Vidéo motion design de 80 s (1080p, 30 i/s) produite entièrement par du code : aucune banque d'images ni de sons, aucun logiciel de montage.
+Vidéo motion design de 90 s (1080p, 30 i/s) produite entièrement par du code : aucune banque d'images ni de sons, aucun logiciel de montage.
 
 | Fichier | Rôle |
 |---|---|
 | `annee.json` | **Tout ce qui change chaque année** : année, chiffres, pays, objectif, photos |
+| `roses/` | Vraies roses détourées (6 formes × 4 couleurs), bouton, rose ouverte, photo du bouquet |
 | `scene.html` | L'animation. Chaque image est une fonction du temps `seek(t)` dessinée sur un canvas |
-| `render.js` | Ouvre `scene.html` dans Chrome sans interface, capture les 2 400 images, encode `muet.mp4` |
+| `render.js` | Ouvre `scene.html` dans Chrome sans interface, capture toutes les images, encode `muet.mp4` |
 | `audio.js` | Synthétise la musique (120 BPM, ré majeur) et les bruitages calés sur l'image → `son.wav` |
-| `voix.json` | Texte de la voix off, avec le début et la durée disponible de chaque phrase |
-| `voix-off.md` | Le texte à donner à ElevenLabs, avec le ton et les réglages |
+| `voix/voix-off.mp3` | La voix off enregistrée sur ElevenLabs : **le film est construit sur elle** |
+| `aligner.py` | Horodate chaque mot de la voix avec Whisper → `voix/mots.json` |
 | `mixer.js` | Pose la voix, baisse la musique sous la voix, assemble la vidéo finale |
 
 ## Prérequis
@@ -20,22 +21,12 @@ Vidéo motion design de 80 s (1080p, 30 i/s) produite entièrement par du code :
 
 ## Refaire la vidéo une nouvelle année
 
-1. **Mettre à jour `annee.json`** : `annee`, `rosesOffertes` (somme des éditions passées, voir `Bilan.tsx`), `editions` (« EN TROIS ÉDITIONS »…), `nbPays` et `pays`, `objectif`, et la liste `photos` (noms sans `.JPG`, pris dans `public/images/photos/`).
-2. **Vérifier quelques images** sans tout rendre :
-   ```bash
-   node render.js still 13 17.5 22 30 49 67.5 72 76.5
-   ```
-   Cela produit `still-<t>.jpg`. Regardez si un texte déborde (un nom de pays ou un chiffre plus long qu'avant, par exemple).
-3. **Rendre l'image** : `npm run images` (environ 4 minutes).
-4. **Rendre le son** : `npm run son` (quelques secondes).
-5. **Voix off** : adapter `voix.json` (l'année, les chiffres, en toutes lettres), puis :
-   - `npm run test-voix` produit une version avec une voix provisoire du Mac, pour vérifier le calage ;
-   - générer les phrases avec ElevenLabs :
-     ```bash
-     VOICE_ID=JBFqnCBsd6RMkjVDRZzb npm run voix
-     ```
-     La clé va dans `Video/.env.local` (`ELEVENLABS_API_KEY=...`), avec les permissions *Text to Speech* et *Voices (Read)*. En 2026 : voix « George », modèle `eleven_v3`, texte déclaré en français. Le script garde la prise brute dans `voix/brut/` (supprimer un fichier pour régénérer cette phrase seulement). Il retire les silences et accélère d'au plus 15 %, sans changer la hauteur, les phrases qui débordent de leur plan. On peut aussi déposer des MP3 faits sur le site d'ElevenLabs dans `voix/01.mp3`, `voix/02.mp3`…
-   - `npm run mix` produit `PJM-<année>-inscription-voix.mp4`. La musique baisse sous la voix (la voix passe 9 à 17 LU au-dessus) ; `GAIN_VOIX=1.5 npm run mix` pour ajuster.
+1. **Écrire le texte et enregistrer la voix** sur ElevenLabs (2026 : voix « Manon », nombres en toutes lettres), puis la déposer dans `voix/voix-off.mp3`.
+2. **Horodater la voix** : `pip install faster-whisper`, puis `npm run aligner`. On obtient `voix/mots.json` : chaque mot avec son instant. Whisper place parfois un mot un peu tôt après un silence : vérifier les débuts de phrase avec `ffmpeg -i voix/voix-off.mp3 -af silencedetect=n=-38dB:d=0.28 -f null -`.
+3. **Mettre à jour `annee.json`** : `annee`, `rosesOffertes` (somme des éditions passées, voir `Bilan.tsx`), `editions` (« EN TROIS ÉDITIONS »…), `nbPays` et `pays`, `objectif`, la liste `photos` (noms sans `.JPG`, pris dans `public/images/photos/`), `hook` (durée de l'accroche avant la voix) `duree` et `vitesseVoix` (la voix est accélérée de ce facteur, sans changer sa hauteur : `hook` + durée de la voix / `vitesseVoix` + 1,5 s = `duree` ; rester sous 1,05 pour que cela ne s'entende pas).
+4. **Recaler `scene.html` et `audio.js` sur la voix** : les scènes `sceneV(a, b, …)` et les bruitages `…V(t)` sont écrits en temps voix. Reporter dans chaque `letters(…, v, instant)` l'instant du mot dans `mots.json`.
+5. **Vérifier quelques images** sans tout rendre : `node render.js still 1 8 20 50` (temps film = temps voix / `vitesseVoix` + `hook`) produit `still-<t>.jpg`.
+6. **Rendre** : `npm run images` (environ 5 minutes), `npm run son`, `npm run mix` → `PJM-<année>-inscription-voix.mp4`. La musique baisse sous la voix ; `GAIN_VOIX=2.5 npm run mix` pour ajuster.
 
 Sans voix off, la vidéo seule s'obtient avec :
 ```bash
@@ -44,9 +35,9 @@ ffmpeg -i muet.mp4 -i son.wav -c:v copy -c:a aac -b:a 256k -shortest PJM-2026-in
 
 ## Modifier l'animation
 
-- Le film est une suite de scènes déclarées dans `scene.html` par `scene(début, fin, dessin, transition)`. La transition (`whip` : panoramique avec traînée, `zoom` : zoom flou et flash, `flash`, `cut`) se joue à l'entrée de la scène.
-- Outils de dessin réutilisables : `letters` (révélation lettre par lettre avec flou), `words` (mot par mot), `txt` (texte avec flou, traînée de vitesse, contour), `logo` (tracé progressif et étoiles), `card` (photo encadrée), `petals`, `bokeh`, `rays`, `warp`, `ring`.
-- **Si vous déplacez un instant dans `scene.html`, déplacez le bruitage correspondant dans `audio.js`** (section « bruitages calés sur l'image ») et la phrase dans `voix.json`. Les trois fichiers partagent la même horloge en secondes ; un temps musical vaut 0,5 s.
+- Le film est une suite de scènes déclarées dans `scene.html` par `sceneV(début, fin, dessin, transition)`. La transition (`petales` : vague de pétales aux changements de chapitre, `whip` : panoramique avec traînée, `zoom` : zoom flou et flash, `flash`, `cut`) se joue à l'entrée de la scène.
+- Outils de dessin réutilisables : `letters` (révélation lettre par lettre avec flou), `words` (mot par mot), `txt` (texte avec flou, traînée de vitesse, contour), `logo` (tracé progressif et étoiles), `sprite` et `roseHero` (roses de `roses/`, du bouton à la fleur ouverte), `card` (photo encadrée), `plaque` (photo plein écran teintée), `galerie`, `petals`, `bokeh`, `rays`, `warp`, `ring`.
+- **Si vous déplacez un instant dans `scene.html`, déplacez le bruitage correspondant dans `audio.js`** (section « bruitages calés sur l'image »). Les deux fichiers partagent la même horloge en secondes ; un temps musical vaut 0,5 s.
 - Couleurs : celles du site (`bleu #0A71B8`, `jaune #F39200`), dans l'objet `C` en tête de `scene.html`.
 - Le logo est lu directement dans `public/images/logoPJM3.svg` : un nouveau logo au même format s'anime tout seul.
 
