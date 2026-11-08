@@ -1,4 +1,4 @@
-// Le site (Hostinger) et l'API (Vercel, api.<domaine>) sont sur deux origines : le navigateur exige ces en-têtes.
+// Le site et l'API sont sur deux origines (pourlajoiedemarie.com et api.<domaine>, deux domaines du même projet Vercel) : le navigateur exige ces en-têtes.
 const ALLOWED = [
   "https://pourlajoiedemarie.com",
   "https://www.pourlajoiedemarie.com",

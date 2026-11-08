@@ -19,7 +19,7 @@ export type EmailContext = {
   siteUrl: string;
   logoUrl: string;
   unsubscribeUrl: string;
-  occasion?: "toussaint"; // vœux ajoutés à l'invitation
+  occasion?: "toussaint" | "rappel"; // toussaint : vœux ajoutés à l'invitation ; rappel : relance des invités sans inscription
   annees?: number[]; // éditions auxquelles la personne a déjà participé
 };
 
@@ -202,6 +202,21 @@ function content(kind: Kind, c: EmailContext): Content {
     }
 
     case "invitation": {
+      if (c.occasion === "rappel") {
+        return {
+          subject: `Une rose pour Marie le ${c.eventLabel.replace(/^\S+ /, "")} ? 🌹`,
+          preheader: `Il reste ${c.days} jours pour joindre votre rose aux autres.`,
+          blocks: [
+            salut,
+            { t: "p", text: "Nous vous avons écrit début novembre pour vous inviter à offrir des roses à Marie. Si ce message s'est perdu dans votre boîte, voici un petit rappel 🌹" },
+            { t: "p", text: `Le **${c.eventLabel}**, jour de l'Immaculée Conception, nous formerons un grand bouquet de prières. Il reste **${c.days} jours** pour vous inscrire.` },
+            { t: "p", text: "L'inscription prend une minute : vous choisissez le nombre de roses, et c'est fait." },
+            { t: "button", label: "Joindre ma rose aux autres", style: "jaune", url: c.siteUrl },
+            { t: "p", text: "Vous êtes déjà inscrit(e) ? Merci de tout cœur, et ne tenez pas compte de ce message." },
+            partager(c),
+          ],
+        };
+      }
       const toussaint = c.occasion === "toussaint";
       const passe = c.annees?.length
         ? c.annees.length > 1

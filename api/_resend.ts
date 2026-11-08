@@ -13,7 +13,7 @@ export function mailConfig(): MailConfig | null {
     from,
     replyTo: process.env.RESEND_REPLY_TO || "contact@pourlajoiedemarie.com",
     siteUrl,
-    // Adresse publique de l'API (désabonnement). Le site est chez Hostinger, l'API sur Vercel : api.<domaine>.
+    // Adresse publique de l'API (désabonnement). L'API est servie sur api.<domaine>.
     apiUrl: (process.env.API_URL || siteUrl).replace(/\/$/, ""),
     // Le logo des emails est dans un bucket public Supabase : indépendant de l'hébergement du site.
     logoUrl:

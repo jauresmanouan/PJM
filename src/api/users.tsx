@@ -1,4 +1,4 @@
-// En production le site est chez Hostinger et l'API sur Vercel : VITE_API_URL (voir .env.production).
+// Le site et l'API sont sur le même projet Vercel mais sur deux origines : VITE_API_URL (voir .env.production) désigne l'API.
 const API = import.meta.env.VITE_API_URL ?? "";
 
 // Les inscriptions et les statistiques passent par l'API (api/participations.ts, api/stats.ts) :
