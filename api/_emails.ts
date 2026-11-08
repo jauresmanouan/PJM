@@ -204,16 +204,31 @@ function content(kind: Kind, c: EmailContext): Content {
     case "invitation": {
       if (c.occasion === "rappel") {
         return {
-          subject: `Une rose pour Marie le ${c.eventLabel.replace(/^\S+ /, "")} ? 🌹`,
-          preheader: `Il reste ${c.days} jours pour joindre votre rose aux autres.`,
+          subject: `Et si votre rose faisait partie du bouquet ? 🌹`,
+          preheader: `Il ne reste plus que ${c.days} jours pour nous rejoindre.`,
           blocks: [
             salut,
-            { t: "p", text: "Nous vous avons écrit début novembre pour vous inviter à offrir des roses à Marie. Si ce message s'est perdu dans votre boîte, voici un petit rappel 🌹" },
-            { t: "p", text: `Le **${c.eventLabel}**, jour de l'Immaculée Conception, nous formerons un grand bouquet de prières. Il reste **${c.days} jours** pour vous inscrire.` },
-            { t: "p", text: "L'inscription prend une minute : vous choisissez le nombre de roses, et c'est fait." },
+            { t: "p", text: "Il y a quelques semaines, nous vous invitions à prendre part à une belle offrande : réunir nos roses pour former un immense bouquet en l'honneur de Marie, à l'occasion de la fête de l'Immaculée Conception." },
+            { t: "p", text: "Aujourd'hui, nous revenons vers vous avec une petite invitation : **et si votre rose faisait partie du bouquet ?** 🌹" },
+            { t: "p", text: `Le ${c.eventLabel}, des participants de plusieurs pays uniront leurs roses dans leurs paroisses respectives, pour une même offrande à notre tendre Mère.` },
+            { t: "p", text: `**Il ne reste plus que ${c.days} jours pour nous rejoindre !**` },
+            {
+              t: "tips",
+              title: "Participer est très simple :",
+              items: [
+                ["1️⃣", "Rendez-vous sur notre site et remplissez le formulaire d'inscription."],
+                ["2️⃣", "Indiquez le nombre de roses que vous souhaitez offrir et achetez vos roses naturelles."],
+                ["3️⃣", "Le 8 décembre, déposez-les dans votre paroisse."],
+              ],
+            },
+            { t: "p", text: "Aucun argent n'est à envoyer sur le site." },
             { t: "button", label: "Joindre ma rose aux autres", style: "jaune", url: c.siteUrl },
-            { t: "p", text: "Vous êtes déjà inscrit(e) ? Merci de tout cœur, et ne tenez pas compte de ce message." },
+            { t: "p", text: "Vous êtes déjà inscrit(e) ? Alors, merci du fond du cœur ! Vous pouvez également contribuer à faire grandir ce bouquet en invitant un proche à participer." },
             partager(c),
+            { t: "p", text: "Une rose, une prière, un cœur qui aime." },
+            { t: "p", text: "Ensemble, faisons fleurir ce bouquet qui saura faire la joie de Marie, pour la joie de Jésus !" },
+            { t: "p", text: "Avec toute notre affection," },
+            { t: "p", text: "**L'équipe Pour la Joie de Marie**" },
           ],
         };
       }

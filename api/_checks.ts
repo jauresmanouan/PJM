@@ -33,6 +33,8 @@ for (const kind of ["confirmation", "relance_j14", "relance_j1", "jour_j", "merc
   assert.ok(!/undefined|NaN|\*\*/.test(m.html + m.text), `${kind} : texte invalide`);
 }
 assert.ok(render("jour_j", { ...ctx, quantity: 3 }).text.includes("3 roses"), "jour J");
+const rappel = render("invitation", { ...ctx, name: "Jaurès", days: 29, occasion: "rappel" });
+assert.ok(rappel.text.includes("29 jours") && rappel.text.includes("Ave Maria, Jaurès") && rappel.html.includes(ctx.unsubscribeUrl), "rappel");
 assert.ok(render("merci", { ...ctx, totalRoses: 752, participants: 93 }).text.includes("n'a pas été atteint"), "objectif non atteint");
 assert.ok(render("merci", { ...ctx, totalRoses: 1043, participants: 118 }).text.includes("est atteint"), "objectif atteint");
 assert.ok(render("invitation", ctx).html.includes("Joindre ma rose aux autres"), "invitation");

@@ -11,7 +11,8 @@
     "email": "email dev --dir src/emails",
     "check:mail": "esbuild api/_checks.ts --bundle --platform=node --format=esm | node --input-type=module",
     "mail:test": "esbuild api/_send-test.ts --bundle --platform=node --format=esm | node --env-file=.env.local --input-type=module -",
-    "invitations": "esbuild api/_invitations.ts --bundle --platform=node --format=esm | node --env-file=.env.local --input-type=module -"
+    "invitations": "esbuild api/_invitations.ts --bundle --platform=node --format=esm | node --env-file=.env.local --input-type=module -",
+    "rappel": "esbuild api/_rappel.ts --bundle --platform=node --format=esm | node --env-file=.env.local --input-type=module -"
   },
   "dependencies": {
     "@number-flow/react": "^0.5.10",
