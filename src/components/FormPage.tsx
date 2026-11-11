@@ -135,10 +135,14 @@ export default function FormPage({
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (envoi) return;
+    if (!ok.nom || !ok.prenom) return void toast.error("Indiquez votre nom et votre prénom.");
+    if (!ok.email) return void toast.error("Indiquez une adresse e-mail valide.");
     if (!ok.quantite || quantity === undefined) {
       toast.error("Indiquez un nombre de roses entre 1 et 1000.");
       return;
     }
+    if (!pays) return void toast.error("Choisissez votre pays.");
+    if (!numeroValide) return void toast.error("Indiquez un numéro de contact valide.");
     if (quantity >= SEUIL_CONFIRMATION && !aConfirmer) {
       setAConfirmer(true);
       return;
@@ -322,6 +326,7 @@ export default function FormPage({
                         inputMode="tel"
                         autoComplete="tel-national"
                         placeholder={`Votre numéro ${contactMethod === "whatsapp" ? "WhatsApp" : "Telegram"}`}
+                        required
                         value={contact}
                         onChange={(event) => saisirNumero(event.target.value)}
                       />

@@ -1,3 +1,4 @@
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { configured, supabaseRequest } from "./_supabase.js";
 import { preflight, withCors } from "./_cors.js";
 import { currentEdition, deliver, type Recipient } from "./_deliver.js";
@@ -55,8 +56,12 @@ async function register(request: Request) {
   const contact = clean(input.contact, 40);
   const contactMethod = input.contactMethod === "telegram" ? "telegram" : "whatsapp";
   const quantity = Number(input.quantity);
-  if (!firstname || !name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !Number.isInteger(quantity) || quantity < 1 || quantity > MAX_ROSES || (country && !/^[A-Z]{2}$/.test(country))) {
+  if (!firstname || !name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !Number.isInteger(quantity) || quantity < 1 || quantity > MAX_ROSES) {
     return Response.json({ error: "Vérifiez votre nom, votre email et le nombre de roses." }, { status: 400 });
+  }
+  // Pays et numéro obligatoires : sans eux, impossible de joindre la personne si l'adresse e-mail est fausse.
+  if (!/^[A-Z]{2}$/.test(country) || !parsePhoneNumberFromString(contact)?.isValid()) {
+    return Response.json({ error: "Indiquez votre pays et un numéro de contact valide." }, { status: 400 });
   }
 
   let edition;

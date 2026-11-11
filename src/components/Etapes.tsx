@@ -4,7 +4,7 @@ const etapes = [
   {
     titre: "Je m'inscris",
     texte:
-      "Je remplis le formulaire avec le nombre de roses que je veux offrir. Un email confirme ma participation.",
+      "Je remplis le formulaire avec le nombre de roses que je veux offrir.",
   },
   {
     titre: "J'achète mes roses",
@@ -14,7 +14,7 @@ const etapes = [
   {
     titre: "Je les dépose le 8 décembre",
     texte:
-      "Dans ma paroisse, le jour de l'Immaculée Conception. Le lundi 7 est possible. Nous sommes unis spirituellement.",
+      "Dans ma paroisse, le jour de l'Immaculée Conception.",
   },
 ];
 
@@ -31,7 +31,7 @@ export default function Etapes() {
         Comment participer
       </Badge>
       <p className="text-white font-black text-2xl md:text-5xl text-center mt-6 leading-tight">
-        Trois gestes pour un bouquet
+        Trois gestes pour participer.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8 w-full max-w-5xl mt-10">
